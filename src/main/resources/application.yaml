@@ -3,4 +3,4 @@ server:
 
 logging:
   file:
-    name: "logs.log"
+    name: "logs/logs.log"
