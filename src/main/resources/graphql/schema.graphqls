@@ -4,20 +4,43 @@ type Query {
     userById(id: ID!): Users
 }
 
+type Mutation {
+  createUser(user: UsersInput): Users
+  updateUser(user: UsersInput, id: ID!): Users
+  deleteUser(id: ID!): Users
+}
+
 type Users{
-    id: ID
-    nickname: String
-    name: String
-    lastname: String
+    id: ID!
+    nickname: String!
+    name: String!
+    lastname: String!
     picture_id: String
-    nationality: String
-    email: String
+    nationality: String!
+    email: String!
     web_site: String
     biography: String
     twitter_link: String
     linkedin_link: String
     facebook_link: String
     created_at: String
-    updates_at: String
+    updated_at: String
+    # ya se imaginan que va
+}
+
+input UsersInput{
+    nickname: String!
+    name: String!
+    lastname: String!
+    picture_id: String
+    nationality: String!
+    email: String!
+    web_site: String
+    biography: String
+    twitter_link: String
+    linkedin_link: String
+    facebook_link: String
+    created_at: String
+    updated_at: String
     # ya se imaginan que va
 }
