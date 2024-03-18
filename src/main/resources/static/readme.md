@@ -1,0 +1,1 @@
+Las carpetas vacias son malas
