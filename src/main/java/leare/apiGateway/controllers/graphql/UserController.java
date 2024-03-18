@@ -12,11 +12,11 @@ public class UserController {
     private final WebClient webClient;
 
     public UserController() {
-        this.webClient = WebClient.create("http://localhost:3012");
+        this.webClient = WebClient.create("http://localhost:3001");
     }
 
     @QueryMapping
-    public Users userById(@Argument Long id) {
+    public Users userById(@Argument String id) {
         System.out.println("llega a query de ql");
         return webClient.get()
                         .uri("/users/{id}", id)
