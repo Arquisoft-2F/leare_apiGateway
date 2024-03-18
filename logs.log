@@ -1,0 +1,816 @@
+2024-03-18T14:21:44.970-05:00  INFO 616 --- [apiGateway] [main] l.apiGateway.ApiGatewayApplicationTests  : Starting ApiGatewayApplicationTests using Java 21.0.1 with PID 616 (started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:21:44.978-05:00  INFO 616 --- [apiGateway] [main] l.apiGateway.ApiGatewayApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:21:50.247-05:00  INFO 616 --- [apiGateway] [main] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:21:51.189-05:00  INFO 616 --- [apiGateway] [main] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:21:51.256-05:00  INFO 616 --- [apiGateway] [main] .b.a.g.r.GraphQlWebFluxAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:21:52.328-05:00  INFO 616 --- [apiGateway] [main] l.apiGateway.ApiGatewayApplicationTests  : Started ApiGatewayApplicationTests in 8.656 seconds (process running for 12.149)
+2024-03-18T14:22:16.073-05:00  INFO 9444 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 9444 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:22:16.080-05:00  INFO 9444 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:22:16.282-05:00  INFO 9444 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-03-18T14:22:16.284-05:00  INFO 9444 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-03-18T14:22:20.188-05:00  INFO 9444 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:22:20.921-05:00  INFO 9444 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:22:20.968-05:00  INFO 9444 --- [apiGateway] [restartedMain] .b.a.g.r.GraphQlWebFluxAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:22:21.839-05:00  INFO 9444 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:22:22.506-05:00  INFO 9444 --- [apiGateway] [restartedMain] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 3000
+2024-03-18T14:22:22.535-05:00  INFO 9444 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 7.941 seconds (process running for 9.26)
+2024-03-18T14:23:23.418-05:00  WARN 9444 --- [apiGateway] [reactor-http-nio-8] notprivacysafe.graphql.GraphQL           : Query did not validate : 'query {
+  userById(id: 1) {
+    id
+    name
+  }
+}
+'
+2024-03-18T14:39:51.135-05:00  INFO 15932 --- [apiGateway] [main] l.apiGateway.ApiGatewayApplicationTests  : Starting ApiGatewayApplicationTests using Java 21.0.1 with PID 15932 (started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:39:51.140-05:00  INFO 15932 --- [apiGateway] [main] l.apiGateway.ApiGatewayApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:39:57.498-05:00  INFO 15932 --- [apiGateway] [main] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:39:58.414-05:00  INFO 15932 --- [apiGateway] [main] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:39:58.537-05:00  INFO 15932 --- [apiGateway] [main] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:39:59.332-05:00  INFO 15932 --- [apiGateway] [main] l.apiGateway.ApiGatewayApplicationTests  : Started ApiGatewayApplicationTests in 9.626 seconds (process running for 13.333)
+2024-03-18T14:40:25.412-05:00  INFO 14656 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 14656 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:40:25.420-05:00  INFO 14656 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:40:25.606-05:00  INFO 14656 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-03-18T14:40:25.608-05:00  INFO 14656 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-03-18T14:40:29.405-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:40:29.448-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:40:29.451-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:40:29.652-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:40:29.655-05:00  INFO 14656 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4043 ms
+2024-03-18T14:40:31.957-05:00  INFO 14656 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:40:32.602-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:40:32.666-05:00  INFO 14656 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:40:33.270-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:40:33.412-05:00  INFO 14656 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:40:33.454-05:00  INFO 14656 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 9.523 seconds (process running for 10.983)
+2024-03-18T14:40:34.607-05:00  INFO 14656 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:40:34.609-05:00  INFO 14656 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:40:34.612-05:00  INFO 14656 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-03-18T14:40:50.532-05:00  INFO 14656 --- [apiGateway] [http-nio-3000-exec-4] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 396 ms
+2024-03-18T14:45:06.865-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:45:06.872-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:45:07.044-05:00  INFO 4976 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-03-18T14:45:07.045-05:00  INFO 4976 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-03-18T14:45:11.063-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:45:11.136-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:45:11.139-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:45:11.384-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:45:11.387-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4338 ms
+2024-03-18T14:45:13.901-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:45:14.019-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:45:14.061-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 8.614 seconds (process running for 9.934)
+2024-03-18T14:45:18.221-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:45:18.224-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:45:18.228-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-03-18T14:45:26.734-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (1 addition, 1 deletion, 0 modifications)
+2024-03-18T14:45:27.118-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:45:27.122-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:45:28.186-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:45:28.190-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:45:28.191-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:45:28.259-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:45:28.261-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1124 ms
+2024-03-18T14:45:29.109-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:45:29.816-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:45:29.874-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:45:30.058-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:45:30.087-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:45:30.106-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 3.141 seconds (process running for 25.979)
+2024-03-18T14:45:30.123-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   GraphQlAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'graphql.GraphQL', 'org.springframework.graphql.execution.GraphQlSource' (OnClassCondition)
+      - @ConditionalOnGraphQlSchema found schema 'file [C:\David\nacional\arquisoft\apiGateway\target\classes\graphql\schema.graphqls]'; @ConditionalOnGraphQlSchema did not find GraphQlSourceBuilderCustomizer (DefaultGraphQlSchemaCondition)
+
+   GraphQlAutoConfiguration#annotatedControllerConfigurer matched:
+      - @ConditionalOnMissingBean (types: org.springframework.graphql.data.method.annotation.support.AnnotatedControllerConfigurer; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   GraphQlAutoConfiguration#batchLoaderRegistry matched:
+      - @ConditionalOnMissingBean (types: org.springframework.graphql.execution.BatchLoaderRegistry; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   GraphQlAutoConfiguration#executionGraphQlService matched:
+      - @ConditionalOnMissingBean (types: org.springframework.graphql.ExecutionGraphQlService; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   GraphQlAutoConfiguration#graphQlSource matched:
+      - @ConditionalOnMissingBean (types: org.springframework.graphql.execution.GraphQlSource; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   GraphQlWebMvcAutoConfiguration matched:
+      - @ConditionalOnClass found required classes 'graphql.GraphQL', 'org.springframework.graphql.server.webmvc.GraphQlHttpHandler' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - @ConditionalOnBean (types: org.springframework.graphql.ExecutionGraphQlService; SearchStrategy: all) found bean 'executionGraphQlService' (OnBeanCondition)
+
+   GraphQlWebMvcAutoConfiguration#graphQlHttpHandler matched:
+      - @ConditionalOnMissingBean (types: org.springframework.graphql.server.webmvc.GraphQlHttpHandler; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   GraphQlWebMvcAutoConfiguration#webGraphQlHandler matched:
+      - @ConditionalOnMissingBean (types: org.springframework.graphql.server.WebGraphQlHandler; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2024-03-18T14:45:31.527-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:45:31.756-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:45:31.763-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:45:32.739-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:45:32.741-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:45:32.743-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:45:32.828-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:45:32.829-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1053 ms
+2024-03-18T14:45:33.122-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:45:33.148-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:45:33.158-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:45:33.262-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:45:33.281-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:45:33.294-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.635 seconds (process running for 29.167)
+2024-03-18T14:45:33.297-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:45:47.050-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:45:47.360-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:45:47.363-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:45:48.085-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:45:48.088-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:45:48.090-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:45:48.160-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:45:48.162-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 790 ms
+2024-03-18T14:45:48.376-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:45:48.399-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:45:48.410-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:45:48.521-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:45:48.547-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:45:48.562-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.307 seconds (process running for 44.434)
+2024-03-18T14:45:48.566-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:45:50.998-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:45:51.223-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:45:51.225-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:45:51.866-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:45:51.869-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:45:51.870-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:45:51.925-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:45:51.927-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 690 ms
+2024-03-18T14:45:52.137-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:45:52.167-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {Query.userById=UserController#userById[1 args]}
+	Skipped types: []
+2024-03-18T14:45:52.174-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:45:52.290-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:45:52.318-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:45:52.334-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.207 seconds (process running for 48.208)
+2024-03-18T14:45:52.342-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:45:52.453-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:45:52.455-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:45:52.458-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-03-18T14:50:02.935-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:50:03.138-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:50:03.141-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:50:03.977-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:50:03.980-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:50:03.982-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:50:04.037-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:50:04.039-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 889 ms
+2024-03-18T14:50:04.283-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:50:04.303-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {}
+	Skipped types: []
+2024-03-18T14:50:04.308-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:50:04.439-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:50:04.477-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:50:04.497-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.445 seconds (process running for 300.37)
+2024-03-18T14:50:04.505-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:50:17.492-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:50:17.494-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:50:17.499-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-03-18T14:50:23.334-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:50:23.549-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:50:23.551-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:50:24.329-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:50:24.331-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:50:24.333-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:50:24.419-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:50:24.421-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 862 ms
+2024-03-18T14:50:24.993-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:50:25.024-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {}
+	Skipped types: []
+2024-03-18T14:50:25.030-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:50:25.170-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:50:25.304-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:50:25.320-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.857 seconds (process running for 321.193)
+2024-03-18T14:50:25.327-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:50:25.868-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:50:25.869-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:50:25.873-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18T14:50:32.316-05:00  WARN 4976 --- [apiGateway] [http-nio-3000-exec-6] notprivacysafe.graphql.GraphQL           : Query did not parse : 'query{
+userById{
+}'
+2024-03-18T14:50:34.304-05:00  WARN 4976 --- [apiGateway] [http-nio-3000-exec-7] notprivacysafe.graphql.GraphQL           : Query did not parse : 'query{
+userById{}
+}'
+2024-03-18T14:51:05.082-05:00 ERROR 4976 --- [apiGateway] [http-nio-3000-exec-9] s.g.e.ExceptionResolversExceptionHandler : Unresolved WebClientRequestException for executionId d948e8a4-9d50-0d7b-12f3-0b313b3c2a97
+
+org.springframework.web.reactive.function.client.WebClientRequestException: Connection refused: no further information: localhost/127.0.0.1:3012
+	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136) ~[spring-webflux-6.1.4.jar:6.1.4]
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ Request to GET http://localhost:3012/users/1 [DefaultWebClient]
+Original Stack Trace:
+		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136) ~[spring-webflux-6.1.4.jar:6.1.4]
+		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:229) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:279) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.maybeOnError(FluxConcatMapNoPrefetch.java:327) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onNext(FluxConcatMapNoPrefetch.java:212) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SinkManyEmitterProcessor.drain(SinkManyEmitterProcessor.java:476) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SinkManyEmitterProcessor$EmitterInner.drainParent(SinkManyEmitterProcessor.java:620) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPublish$PubSubInner.request(FluxPublish.java:874) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.request(FluxConcatMapNoPrefetch.java:337) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Operators$DeferredSubscription.request(Operators.java:1743) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:196) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:172) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.internal.shaded.reactor.pool.AbstractPool$Borrower.fail(AbstractPool.java:488) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.internal.shaded.reactor.pool.SimpleDequePool.lambda$drainLoop$9(SimpleDequePool.java:436) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.FluxDoOnEach$DoOnEachSubscriber.onError(FluxDoOnEach.java:186) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.resources.DefaultPooledConnectionProvider$PooledConnectionAllocator$PooledConnectionInitializer.onError(DefaultPooledConnectionProvider.java:583) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondError(MonoFlatMap.java:241) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoFlatMap$FlatMapInner.onError(MonoFlatMap.java:315) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:106) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Operators.error(Operators.java:198) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoError.subscribe(MonoError.java:53) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.transport.TransportConnector$MonoChannelPromise.tryFailure(TransportConnector.java:576) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.transport.TransportConnector$MonoChannelPromise.setFailure(TransportConnector.java:522) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.transport.TransportConnector.lambda$doConnect$7(TransportConnector.java:261) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:583) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:559) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.fulfillConnectPromise(AbstractNioChannel.java:322) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:338) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.block(Mono.java:1779) ~[reactor-core-3.6.3.jar:3.6.3]
+		at leare.apiGateway.controllers.graphql.UserController.userById(UserController.java:24) ~[classes/:na]
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+		at org.springframework.graphql.data.method.InvocableHandlerMethodSupport.doInvoke(InvocableHandlerMethodSupport.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.validateAndInvoke(DataFetcherHandlerMethod.java:196) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.invoke(DataFetcherHandlerMethod.java:126) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.invoke(DataFetcherHandlerMethod.java:107) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.AnnotatedControllerConfigurer$SchemaMappingDataFetcher.get(AnnotatedControllerConfigurer.java:680) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.execution.ContextDataFetcherDecorator.lambda$get$0(ContextDataFetcherDecorator.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at io.micrometer.context.ContextSnapshot.lambda$wrap$1(ContextSnapshot.java:106) ~[context-propagation-1.0.6.jar:1.0.6]
+		at org.springframework.graphql.execution.ContextDataFetcherDecorator.get(ContextDataFetcherDecorator.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at graphql.execution.ExecutionStrategy.invokeDataFetcher(ExecutionStrategy.java:311) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.ExecutionStrategy.fetchField(ExecutionStrategy.java:287) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.ExecutionStrategy.resolveFieldWithInfo(ExecutionStrategy.java:213) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:55) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.Execution.executeOperation(Execution.java:161) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.Execution.execute(Execution.java:103) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.execute(GraphQL.java:568) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.lambda$parseValidateAndExecute$13(GraphQL.java:487) ~[graphql-java-21.3.jar:na]
+		at java.base/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187) ~[na:na]
+		at java.base/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2341) ~[na:na]
+		at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:482) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.lambda$executeAsync$9(GraphQL.java:440) ~[graphql-java-21.3.jar:na]
+		at java.base/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187) ~[na:na]
+		at java.base/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2341) ~[na:na]
+		at graphql.GraphQL.executeAsync(GraphQL.java:428) ~[graphql-java-21.3.jar:na]
+		at org.springframework.graphql.execution.DefaultExecutionGraphQlService.lambda$execute$2(DefaultExecutionGraphQlService.java:99) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:47) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribeWith(Mono.java:4629) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.toFuture(Mono.java:5141) ~[reactor-core-3.6.3.jar:3.6.3]
+		at org.springframework.graphql.server.webmvc.GraphQlHttpHandler.handleRequest(GraphQlHttpHandler.java:113) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.web.servlet.function.support.HandlerFunctionAdapter.handle(HandlerFunctionAdapter.java:107) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.19.jar:6.0]
+		at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.19.jar:6.0]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:3012
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:335) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-03-18T14:51:37.332-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:51:37.559-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:51:37.561-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:51:38.415-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:51:38.420-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:51:38.421-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:51:38.480-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:51:38.482-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 910 ms
+2024-03-18T14:51:38.790-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:51:38.812-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {}
+	Skipped types: []
+2024-03-18T14:51:38.825-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:51:38.989-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:51:39.029-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:51:39.042-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.571 seconds (process running for 394.915)
+2024-03-18T14:51:39.047-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:52:03.172-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:52:03.436-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:52:03.439-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:52:04.164-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:52:04.166-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:52:04.167-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:52:04.228-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:52:04.230-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 784 ms
+2024-03-18T14:52:04.577-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:52:04.603-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {}
+	Skipped types: []
+2024-03-18T14:52:04.610-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:52:04.721-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:52:04.755-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:52:04.766-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.418 seconds (process running for 420.64)
+2024-03-18T14:52:04.771-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:52:09.356-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:52:09.357-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:52:09.360-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-03-18T14:52:14.253-05:00 ERROR 4976 --- [apiGateway] [http-nio-3000-exec-6] s.g.e.ExceptionResolversExceptionHandler : Unresolved WebClientRequestException for executionId d0c853cf-4576-dceb-b5e5-0c1d8f7a801d
+
+org.springframework.web.reactive.function.client.WebClientRequestException: Connection refused: no further information: localhost/127.0.0.1:3012
+	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136) ~[spring-webflux-6.1.4.jar:6.1.4]
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ Request to GET http://localhost:3012/users/1 [DefaultWebClient]
+Original Stack Trace:
+		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136) ~[spring-webflux-6.1.4.jar:6.1.4]
+		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:229) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:279) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.maybeOnError(FluxConcatMapNoPrefetch.java:327) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onNext(FluxConcatMapNoPrefetch.java:212) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SinkManyEmitterProcessor.drain(SinkManyEmitterProcessor.java:476) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SinkManyEmitterProcessor$EmitterInner.drainParent(SinkManyEmitterProcessor.java:620) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPublish$PubSubInner.request(FluxPublish.java:874) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.request(FluxConcatMapNoPrefetch.java:337) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Operators$DeferredSubscription.request(Operators.java:1743) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:196) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:172) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.internal.shaded.reactor.pool.AbstractPool$Borrower.fail(AbstractPool.java:488) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.internal.shaded.reactor.pool.SimpleDequePool.lambda$drainLoop$9(SimpleDequePool.java:436) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.FluxDoOnEach$DoOnEachSubscriber.onError(FluxDoOnEach.java:186) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.resources.DefaultPooledConnectionProvider$PooledConnectionAllocator$PooledConnectionInitializer.onError(DefaultPooledConnectionProvider.java:583) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondError(MonoFlatMap.java:241) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoFlatMap$FlatMapInner.onError(MonoFlatMap.java:315) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:106) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Operators.error(Operators.java:198) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoError.subscribe(MonoError.java:53) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.transport.TransportConnector$MonoChannelPromise.tryFailure(TransportConnector.java:576) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.transport.TransportConnector$MonoChannelPromise.setFailure(TransportConnector.java:522) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.transport.TransportConnector.lambda$doConnect$7(TransportConnector.java:261) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:583) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:559) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.fulfillConnectPromise(AbstractNioChannel.java:322) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:338) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.block(Mono.java:1779) ~[reactor-core-3.6.3.jar:3.6.3]
+		at leare.apiGateway.controllers.graphql.UserController.userById(UserController.java:25) ~[classes/:na]
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+		at org.springframework.graphql.data.method.InvocableHandlerMethodSupport.doInvoke(InvocableHandlerMethodSupport.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.validateAndInvoke(DataFetcherHandlerMethod.java:196) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.invoke(DataFetcherHandlerMethod.java:126) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.invoke(DataFetcherHandlerMethod.java:107) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.AnnotatedControllerConfigurer$SchemaMappingDataFetcher.get(AnnotatedControllerConfigurer.java:680) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.execution.ContextDataFetcherDecorator.lambda$get$0(ContextDataFetcherDecorator.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at io.micrometer.context.ContextSnapshot.lambda$wrap$1(ContextSnapshot.java:106) ~[context-propagation-1.0.6.jar:1.0.6]
+		at org.springframework.graphql.execution.ContextDataFetcherDecorator.get(ContextDataFetcherDecorator.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at graphql.execution.ExecutionStrategy.invokeDataFetcher(ExecutionStrategy.java:311) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.ExecutionStrategy.fetchField(ExecutionStrategy.java:287) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.ExecutionStrategy.resolveFieldWithInfo(ExecutionStrategy.java:213) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:55) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.Execution.executeOperation(Execution.java:161) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.Execution.execute(Execution.java:103) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.execute(GraphQL.java:568) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.lambda$parseValidateAndExecute$13(GraphQL.java:487) ~[graphql-java-21.3.jar:na]
+		at java.base/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187) ~[na:na]
+		at java.base/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2341) ~[na:na]
+		at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:482) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.lambda$executeAsync$9(GraphQL.java:440) ~[graphql-java-21.3.jar:na]
+		at java.base/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187) ~[na:na]
+		at java.base/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2341) ~[na:na]
+		at graphql.GraphQL.executeAsync(GraphQL.java:428) ~[graphql-java-21.3.jar:na]
+		at org.springframework.graphql.execution.DefaultExecutionGraphQlService.lambda$execute$2(DefaultExecutionGraphQlService.java:99) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:47) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribeWith(Mono.java:4629) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.toFuture(Mono.java:5141) ~[reactor-core-3.6.3.jar:3.6.3]
+		at org.springframework.graphql.server.webmvc.GraphQlHttpHandler.handleRequest(GraphQlHttpHandler.java:113) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.web.servlet.function.support.HandlerFunctionAdapter.handle(HandlerFunctionAdapter.java:107) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.19.jar:6.0]
+		at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.19.jar:6.0]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:3012
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:335) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-03-18T14:52:14.376-05:00  INFO 4976 --- [apiGateway] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2024-03-18T14:52:14.572-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 4976 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T14:52:14.576-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T14:52:15.378-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T14:52:15.381-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T14:52:15.383-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T14:52:15.442-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T14:52:15.444-05:00  INFO 4976 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 862 ms
+2024-03-18T14:52:15.699-05:00  INFO 4976 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T14:52:15.717-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {}
+	Skipped types: []
+2024-03-18T14:52:15.725-05:00  INFO 4976 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T14:52:15.902-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T14:52:15.928-05:00  INFO 4976 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T14:52:15.946-05:00  INFO 4976 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 1.446 seconds (process running for 431.819)
+2024-03-18T14:52:15.956-05:00  INFO 4976 --- [apiGateway] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-03-18T14:52:18.968-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T14:52:18.970-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T14:52:18.973-05:00  INFO 4976 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-03-18T14:52:19.047-05:00 ERROR 4976 --- [apiGateway] [http-nio-3000-exec-1] s.g.e.ExceptionResolversExceptionHandler : Unresolved WebClientRequestException for executionId 5ecae866-e981-a4c1-3f03-b9ff2c7b9a73
+
+org.springframework.web.reactive.function.client.WebClientRequestException: Connection refused: no further information: localhost/127.0.0.1:3012
+	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136) ~[spring-webflux-6.1.4.jar:6.1.4]
+	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+Error has been observed at the following site(s):
+	*__checkpoint ⇢ Request to GET http://localhost:3012/users/1 [DefaultWebClient]
+Original Stack Trace:
+		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:136) ~[spring-webflux-6.1.4.jar:6.1.4]
+		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:229) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:279) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.maybeOnError(FluxConcatMapNoPrefetch.java:327) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.onNext(FluxConcatMapNoPrefetch.java:212) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onNext(FluxContextWrite.java:107) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SinkManyEmitterProcessor.drain(SinkManyEmitterProcessor.java:476) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.SinkManyEmitterProcessor$EmitterInner.drainParent(SinkManyEmitterProcessor.java:620) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxPublish$PubSubInner.request(FluxPublish.java:874) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxConcatMapNoPrefetch$FluxConcatMapNoPrefetchSubscriber.request(FluxConcatMapNoPrefetch.java:337) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.request(FluxContextWrite.java:136) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Operators$DeferredSubscription.request(Operators.java:1743) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:196) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:172) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.internal.shaded.reactor.pool.AbstractPool$Borrower.fail(AbstractPool.java:488) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.internal.shaded.reactor.pool.SimpleDequePool.lambda$drainLoop$9(SimpleDequePool.java:436) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.FluxDoOnEach$DoOnEachSubscriber.onError(FluxDoOnEach.java:186) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:205) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.resources.DefaultPooledConnectionProvider$PooledConnectionAllocator$PooledConnectionInitializer.onError(DefaultPooledConnectionProvider.java:583) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondError(MonoFlatMap.java:241) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoFlatMap$FlatMapInner.onError(MonoFlatMap.java:315) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:106) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Operators.error(Operators.java:198) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.MonoError.subscribe(MonoError.java:53) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.netty.transport.TransportConnector$MonoChannelPromise.tryFailure(TransportConnector.java:576) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.transport.TransportConnector$MonoChannelPromise.setFailure(TransportConnector.java:522) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at reactor.netty.transport.TransportConnector.lambda$doConnect$7(TransportConnector.java:261) ~[reactor-netty-core-1.1.16.jar:1.1.16]
+		at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:583) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:559) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.fulfillConnectPromise(AbstractNioChannel.java:322) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:338) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+		at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:103) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.block(Mono.java:1779) ~[reactor-core-3.6.3.jar:3.6.3]
+		at leare.apiGateway.controllers.graphql.UserController.userById(UserController.java:25) ~[classes/:na]
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+		at org.springframework.graphql.data.method.InvocableHandlerMethodSupport.doInvoke(InvocableHandlerMethodSupport.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.validateAndInvoke(DataFetcherHandlerMethod.java:196) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.invoke(DataFetcherHandlerMethod.java:126) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.DataFetcherHandlerMethod.invoke(DataFetcherHandlerMethod.java:107) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.data.method.annotation.support.AnnotatedControllerConfigurer$SchemaMappingDataFetcher.get(AnnotatedControllerConfigurer.java:680) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.graphql.execution.ContextDataFetcherDecorator.lambda$get$0(ContextDataFetcherDecorator.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at io.micrometer.context.ContextSnapshot.lambda$wrap$1(ContextSnapshot.java:106) ~[context-propagation-1.0.6.jar:1.0.6]
+		at org.springframework.graphql.execution.ContextDataFetcherDecorator.get(ContextDataFetcherDecorator.java:87) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at graphql.execution.ExecutionStrategy.invokeDataFetcher(ExecutionStrategy.java:311) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.ExecutionStrategy.fetchField(ExecutionStrategy.java:287) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.ExecutionStrategy.resolveFieldWithInfo(ExecutionStrategy.java:213) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.AsyncExecutionStrategy.execute(AsyncExecutionStrategy.java:55) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.Execution.executeOperation(Execution.java:161) ~[graphql-java-21.3.jar:na]
+		at graphql.execution.Execution.execute(Execution.java:103) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.execute(GraphQL.java:568) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.lambda$parseValidateAndExecute$13(GraphQL.java:487) ~[graphql-java-21.3.jar:na]
+		at java.base/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187) ~[na:na]
+		at java.base/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2341) ~[na:na]
+		at graphql.GraphQL.parseValidateAndExecute(GraphQL.java:482) ~[graphql-java-21.3.jar:na]
+		at graphql.GraphQL.lambda$executeAsync$9(GraphQL.java:440) ~[graphql-java-21.3.jar:na]
+		at java.base/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187) ~[na:na]
+		at java.base/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2341) ~[na:na]
+		at graphql.GraphQL.executeAsync(GraphQL.java:428) ~[graphql-java-21.3.jar:na]
+		at org.springframework.graphql.execution.DefaultExecutionGraphQlService.lambda$execute$2(DefaultExecutionGraphQlService.java:99) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:47) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribe(Mono.java:4563) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.subscribeWith(Mono.java:4629) ~[reactor-core-3.6.3.jar:3.6.3]
+		at reactor.core.publisher.Mono.toFuture(Mono.java:5141) ~[reactor-core-3.6.3.jar:3.6.3]
+		at org.springframework.graphql.server.webmvc.GraphQlHttpHandler.handleRequest(GraphQlHttpHandler.java:113) ~[spring-graphql-1.2.5.jar:1.2.5]
+		at org.springframework.web.servlet.function.support.HandlerFunctionAdapter.handle(HandlerFunctionAdapter.java:107) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590) ~[tomcat-embed-core-10.1.19.jar:6.0]
+		at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.4.jar:6.1.4]
+		at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.19.jar:6.0]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.4.jar:6.1.4]
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.19.jar:10.1.19]
+		at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: no further information: localhost/127.0.0.1:3012
+Caused by: java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:973) ~[na:na]
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:335) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.107.Final.jar:4.1.107.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-03-18T15:01:00.635-05:00  INFO 9236 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Starting ApiGatewayApplication using Java 21.0.1 with PID 9236 (C:\David\nacional\arquisoft\apiGateway\target\classes started by david in C:\David\nacional\arquisoft\apiGateway)
+2024-03-18T15:01:00.642-05:00  INFO 9236 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-03-18T15:01:00.866-05:00  INFO 9236 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-03-18T15:01:00.868-05:00  INFO 9236 --- [apiGateway] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-03-18T15:01:05.598-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 3000 (http)
+2024-03-18T15:01:05.665-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-18T15:01:05.667-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-18T15:01:05.905-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-18T15:01:05.907-05:00  INFO 9236 --- [apiGateway] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5036 ms
+2024-03-18T15:01:08.756-05:00  INFO 9236 --- [apiGateway] [restartedMain] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2024-03-18T15:01:09.621-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.s.b.a.g.GraphQlAutoConfiguration       : GraphQL schema inspection:
+	Unmapped fields: {Query=[users]}
+	Unmapped registrations: {}
+	Skipped types: []
+2024-03-18T15:01:09.700-05:00  INFO 9236 --- [apiGateway] [restartedMain] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2024-03-18T15:01:10.393-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-03-18T15:01:10.519-05:00  INFO 9236 --- [apiGateway] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3000 (http) with context path ''
+2024-03-18T15:01:10.550-05:00  INFO 9236 --- [apiGateway] [restartedMain] leare.apiGateway.ApiGatewayApplication   : Started ApiGatewayApplication in 11.719 seconds (process running for 13.451)
+2024-03-18T15:01:35.531-05:00  INFO 9236 --- [apiGateway] [http-nio-3000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-18T15:01:35.533-05:00  INFO 9236 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-03-18T15:01:35.539-05:00  INFO 9236 --- [apiGateway] [http-nio-3000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms

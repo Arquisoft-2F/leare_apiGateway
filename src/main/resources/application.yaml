@@ -1,0 +1,6 @@
+server:
+  port: 3000
+
+logging:
+  file:
+    name: "logs.log"

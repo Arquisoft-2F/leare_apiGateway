@@ -1,0 +1,11 @@
+#este es archivo de graphql de definiciones NO LE CAMBIEN EL NOMBRE  
+type Query {
+    users: [Users]
+    userById(id: ID!): Users
+}
+
+type Users{
+    id: ID! 
+    name: String! 
+    # ya se imaginan que va
+}
