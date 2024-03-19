@@ -1,8 +1,11 @@
 package leare.apiGateway.controllers.graphql;
 
+import leare.apiGateway.models.EnrollInput;
+import leare.apiGateway.models.Enrollment;
 import leare.apiGateway.models.Users;
 import leare.apiGateway.models.UsersInput;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -41,6 +44,16 @@ public class UserController {
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
+    @QueryMapping
+    public Enrollment[] enrollements() {
+        System.out.println("llega a query de ql");
+        return webClient.get()
+                        .uri("/courses_users")
+                        .retrieve()
+                        .bodyToMono(Enrollment[].class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+    }
+
     @MutationMapping
     public Users createUser(@Argument UsersInput user) {
             return webClient.post()
@@ -67,6 +80,37 @@ public class UserController {
                         .uri("/users/{id}", id)
                         .retrieve()
                         .bodyToMono(Users.class)
+                        .block();
+    }
+
+    @MutationMapping
+    public Enrollment createEnrollment(@Argument String course_id, @Argument String user_id) {
+            return webClient.post()
+                        .uri("/courses_users")
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("course_id", course_id);
+                            put("user_id", user_id);}})
+                        .retrieve()
+                        .bodyToMono(Enrollment.class)
+                        .block();
+    }
+
+    @MutationMapping
+    public Enrollment updateEnrollment(@Argument EnrollInput enrollment, @Argument String course_id, @Argument String user_id) {
+            return webClient.patch()
+                        .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
+                        .bodyValue(enrollment)
+                        .retrieve()
+                        .bodyToMono(Enrollment.class)
+                        .block();
+    }
+
+    @MutationMapping
+    public Enrollment deleteEnrollment(@Argument String course_id, @Argument String user_id) {
+            return webClient.delete()
+                        .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
+                        .retrieve()
+                        .bodyToMono(Enrollment.class)
                         .block();
     }
 }

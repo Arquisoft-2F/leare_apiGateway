@@ -2,12 +2,16 @@
 type Query {
     users: [Users]
     userById(id: ID!): Users
+    enrollements: [Enrollment]
 }
 
 type Mutation {
   createUser(user: UsersInput): Users
   updateUser(user: UsersInput, id: ID!): Users
   deleteUser(id: ID!): Users
+  createEnrollment(course_id:String!, user_id:String!): Enrollment
+  updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
+  deleteEnrollment(course_id:String!, user_id:String!): Enrollment
 }
 
 type Users{
@@ -25,7 +29,6 @@ type Users{
     facebook_link: String
     created_at: String
     updated_at: String
-    # ya se imaginan que va
 }
 
 input UsersInput{
@@ -42,5 +45,24 @@ input UsersInput{
     facebook_link: String
     created_at: String
     updated_at: String
-    # ya se imaginan que va
+}
+
+type Enrollment{
+    course_id: ID!
+    progress: Float!
+    score: Float!
+    listed_on: String!
+    last_seen: String!
+    created_at: String
+    updated_at: String
+    user_id: ID!
+}
+
+input EnrollInput{
+    progress: Float
+    score: Float
+    listed_on: String
+    last_seen: String
+    created_at: String
+    updated_at: String
 }
