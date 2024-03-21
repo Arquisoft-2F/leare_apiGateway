@@ -54,6 +54,16 @@ public class UserController {
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
+    @QueryMapping
+    public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id) {
+        System.out.println("llega a query de ql");
+        return webClient.get()
+                        .uri("/users/{user_id}/enroll/{course_id}", user_id, course_id)
+                        .retrieve()
+                        .bodyToMono(Enrollment.class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+    }
+
     @MutationMapping
     public Users createUser(@Argument UsersInput user) {
             return webClient.post()
