@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # Gateway
+  leare_gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./logs:/logs
+    networks:
+      - leare_network
+  # auth_ms
+
+  # chat_ms
+
+
+  # courses_ms
+  courses_db:
+    image: postgres:16.2-alpine
+    volumes:
+      - ../db/leare_courses_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5490:5490"
+    networks:
+      - leare_network
+    
+
+  courses_web:
+    build:
+      context: ../leare_courses_ms
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    depends_on:
+      - courses_db
+    networks:
+      - leare_network
+
+
+  #documents_ms
+  documents_rabbit:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: arquisoft
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - leare_network
+
+
+  documents_server:
+    build:
+      context: ../leare_documents_ms
+      dockerfile: Dockerfile.server
+    ports:
+      - "3012:3012"
+    volumes:
+      - ../leare_documents_ms/temp:/temp
+      - ../leare_documents_ms/logs:/logs
+    networks:
+      - leare_network
+
+  documents_sidecar:
+    build:
+      context: ../leare_documents_ms
+      dockerfile: Dockerfile.sidecar
+    volumes:
+      - ../leare_documents_ms/temp:/temp
+      - ../leare_documents_ms/logs:/logs
+    networks:
+      - leare_network
+
+
+  # search_ms
+
+  # user_ms
+  users_db:
+    image: mariadb
+    volumes:
+      - ../db/leare_users_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: my_app_development
+    ports:
+      - "3307:3307"
+    networks:
+      - leare_network
+
+  users_web:
+    build:
+      context: ../leare_users_ms
+      dockerfile: Dockerfile
+    volumes:
+      - ../leare_users_ms:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - users_db
+    environment:
+      DATABASE_URL: mysql2://root:password@users_db/my_app_development
+    networks:
+      - leare_network
+
+
+
+
+networks:
+  leare_network:
+    driver: bridge
