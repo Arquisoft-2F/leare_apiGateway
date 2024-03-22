@@ -57,23 +57,23 @@ services:
 
   documents_server:
     build:
-      context: ../leare_documents_ms
+      context: ../leare_document_ms
       dockerfile: Dockerfile.server
     ports:
       - "3012:3012"
     volumes:
-      - ../leare_documents_ms/temp:/temp
-      - ../leare_documents_ms/logs:/logs
+      - ../leare_document_ms/temp:/temp
+      - ../leare_document_ms/logs:/logs
     networks:
       - leare_network
 
   documents_sidecar:
     build:
-      context: ../leare_documents_ms
+      context: ../leare_document_ms
       dockerfile: Dockerfile.sidecar
     volumes:
-      - ../leare_documents_ms/temp:/temp
-      - ../leare_documents_ms/logs:/logs
+      - ../leare_document_ms/temp:/temp
+      - ../leare_document_ms/logs:/logs
     networks:
       - leare_network
 
