@@ -1,0 +1,26 @@
+# Step 1: Use a JDK 21 image for the build
+FROM openjdk:21 AS build
+
+# Use microdnf to install Maven
+RUN microdnf install -y maven
+
+WORKDIR /app
+
+# Copy the Maven project files into the image
+COPY pom.xml .
+COPY src ./src
+
+# Build the project
+RUN mvn clean package
+
+# Step 2: Use the same JDK 21 image for running the application
+FROM openjdk:21
+
+WORKDIR /usr/app
+
+# Copy the built JAR file from the previous stage
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 5555
+
+CMD ["java", "-jar", "app.jar"]

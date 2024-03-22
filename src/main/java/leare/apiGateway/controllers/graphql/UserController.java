@@ -6,13 +6,11 @@ import leare.apiGateway.models.Users;
 import leare.apiGateway.models.UsersInput;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Controller
@@ -51,6 +49,16 @@ public class UserController {
                         .uri("/courses_users")
                         .retrieve()
                         .bodyToMono(Enrollment[].class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+    }
+
+    @QueryMapping
+    public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id) {
+        System.out.println("llega a query de ql");
+        return webClient.get()
+                        .uri("/users/{user_id}/enroll/{course_id}", user_id, course_id)
+                        .retrieve()
+                        .bodyToMono(Enrollment.class)
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 

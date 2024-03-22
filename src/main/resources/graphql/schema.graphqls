@@ -14,6 +14,16 @@ type Mutation {
     createEnrollment(course_id:String!, user_id:String!): Enrollment
     updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
     deleteEnrollment(course_id:String!, user_id:String!): Enrollment
+    isEnrolled(user_id:ID!, course_id:ID!): Enrollment
+}
+
+type Mutation {
+    createUser(user: UsersInput): Users
+    updateUser(user: UsersInput, id: ID!): Users
+    deleteUser(id: ID!): Users
+    createEnrollment(course_id:ID!, user_id:ID!): Enrollment
+    updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
+    deleteEnrollment(course_id:ID!, user_id:ID!): Enrollment
 }
 
 type Users{
