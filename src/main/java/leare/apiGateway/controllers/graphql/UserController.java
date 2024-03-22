@@ -1,10 +1,5 @@
 package leare.apiGateway.controllers.graphql;
 
-import leare.apiGateway.models.EnrollInput;
-import leare.apiGateway.models.Enrollment;
-import leare.apiGateway.models.Users;
-import leare.apiGateway.models.UsersInput;
-
 import java.util.HashMap;
 
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -12,6 +7,11 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import leare.apiGateway.models.UserModels.EnrollInput;
+import leare.apiGateway.models.UserModels.Enrollment;
+import leare.apiGateway.models.UserModels.Users;
+import leare.apiGateway.models.UserModels.UsersInput;
 
 @Controller
 public class UserController {

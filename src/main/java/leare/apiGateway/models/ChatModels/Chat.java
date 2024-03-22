@@ -1,4 +1,4 @@
-package leare.apiGateway.models;
+package leare.apiGateway.models.ChatModels;
 
 public class Chat {
     private String user_id;

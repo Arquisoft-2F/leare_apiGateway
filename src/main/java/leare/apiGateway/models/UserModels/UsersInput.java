@@ -1,4 +1,4 @@
-package leare.apiGateway.models;
+package leare.apiGateway.models.UserModels;
 
 public class UsersInput {
     private String nickname;

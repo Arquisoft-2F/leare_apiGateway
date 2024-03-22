@@ -2,8 +2,6 @@ package leare.apiGateway.controllers.graphql;
 
 import org.springframework.stereotype.Controller;
 
-import leare.apiGateway.models.Chat;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +11,8 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import leare.apiGateway.models.ChatModels.Chat;
 
 @Controller
 public class ChatController {
