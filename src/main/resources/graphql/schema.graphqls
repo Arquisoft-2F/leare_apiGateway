@@ -3,15 +3,17 @@ type Query {
     users: [Users]
     userById(id: ID!): Users
     enrollements: [Enrollment]
+    
+    userChats(user_id: ID!): [Chat]
 }
 
 type Mutation {
-  createUser(user: UsersInput): Users
-  updateUser(user: UsersInput, id: ID!): Users
-  deleteUser(id: ID!): Users
-  createEnrollment(course_id:String!, user_id:String!): Enrollment
-  updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
-  deleteEnrollment(course_id:String!, user_id:String!): Enrollment
+    createUser(user: UsersInput): Users
+    updateUser(user: UsersInput, id: ID!): Users
+    deleteUser(id: ID!): Users
+    createEnrollment(course_id:String!, user_id:String!): Enrollment
+    updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
+    deleteEnrollment(course_id:String!, user_id:String!): Enrollment
 }
 
 type Users{
@@ -63,6 +65,30 @@ input EnrollInput{
     score: Float
     listed_on: String
     last_seen: String
+    created_at: String
+    updated_at: String
+}
+
+type Chat{
+    user_id: ID!
+    user_nickname: String!
+    user_is_admin: Boolean!
+    user_last_read: String
+    chat: ChatData
+}
+
+type ChatData{
+    chat_id: ID!
+    chat_name: String!
+    picture_id: String
+    created_at: String
+    last_message: Message
+}
+
+type Message{
+    sender_id: ID!
+    sender_nickname: String!
+    content: String!
     created_at: String
     updated_at: String
 }
