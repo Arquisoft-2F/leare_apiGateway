@@ -1,0 +1,5 @@
+extend type Query {
+    users: [Users]
+    userById(id: ID!): Users
+    enrollements: [Enrollment]
+}
