@@ -1,0 +1,16 @@
+FROM openjdk:21
+
+RUN microdnf install -y maven
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+COPY mvnw .
+COPY .mvn ./.mvn
+
+RUN ./mvnw clean install
+
+EXPOSE 5555
+
+CMD ["./mvnw","spring-boot:run"]
