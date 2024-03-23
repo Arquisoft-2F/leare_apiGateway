@@ -1,69 +1,7 @@
-#este es archivo de graphql de definiciones NO LE CAMBIEN EL NOMBRE  
 type Query {
-    users: [Users]
-    userById(id: ID!): Users
-    enrollements: [Enrollment]
-    isEnrolled(user_id:ID!, course_id:ID!): Enrollment
+
 }
 
 type Mutation {
-  createUser(user: UsersInput): Users
-  updateUser(user: UsersInput, id: ID!): Users
-  deleteUser(id: ID!): Users
-  createEnrollment(course_id:ID!, user_id:ID!): Enrollment
-  updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
-  deleteEnrollment(course_id:ID!, user_id:ID!): Enrollment
-}
-
-type Users{
-    id: ID!
-    nickname: String!
-    name: String!
-    lastname: String!
-    picture_id: String
-    nationality: String!
-    email: String!
-    web_site: String
-    biography: String
-    twitter_link: String
-    linkedin_link: String
-    facebook_link: String
-    created_at: String
-    updated_at: String
-}
-
-input UsersInput{
-    nickname: String!
-    name: String!
-    lastname: String!
-    picture_id: String
-    nationality: String!
-    email: String!
-    web_site: String
-    biography: String
-    twitter_link: String
-    linkedin_link: String
-    facebook_link: String
-    created_at: String
-    updated_at: String
-}
-
-type Enrollment{
-    course_id: ID!
-    progress: Float!
-    score: Float!
-    listed_on: String!
-    last_seen: String!
-    created_at: String
-    updated_at: String
-    user_id: ID!
-}
-
-input EnrollInput{
-    progress: Float
-    score: Float
-    listed_on: String
-    last_seen: String
-    created_at: String
-    updated_at: String
+    
 }
