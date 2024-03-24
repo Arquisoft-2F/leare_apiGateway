@@ -2,4 +2,7 @@ extend type Query {
     users: [Users]
     userById(id: ID!): Users
     enrollements: [Enrollment]
+    myCourses(user_id:ID!): [Enrollment]
+    isEnrolled(user_id:ID!, course_id:ID!): Enrollment
+    getCourses(course_id:ID!): [Students]
 }

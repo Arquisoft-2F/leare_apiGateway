@@ -1,5 +1,6 @@
 package leare.apiGateway.controllers.graphql;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -7,9 +8,11 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
+import leare.apiGateway.models.UserModels.Students;
 import leare.apiGateway.models.UserModels.Users;
 import leare.apiGateway.models.UserModels.UsersInput;
 
@@ -53,6 +56,16 @@ public class UserController {
     }
 
     @QueryMapping
+    public Enrollment[] myCourses(@Argument String user_id) {
+        System.out.println("llega a query de ql");
+        return webClient.get()
+                        .uri("/users/{user_id}/enroll", user_id)
+                        .retrieve()
+                        .bodyToMono(Enrollment[].class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+    }
+
+    @QueryMapping
     public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id) {
         System.out.println("llega a query de ql");
         return webClient.get()
@@ -60,6 +73,26 @@ public class UserController {
                         .retrieve()
                         .bodyToMono(Enrollment.class)
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+    }
+
+    @QueryMapping
+    public Students[] getCourses(@Argument String course_id) {
+        System.out.println("llega a query de ql");
+        Users[] x = webClient.get()
+                        .uri("/courses_users/{course_id}/users", course_id)
+                        .retrieve()
+                        .bodyToMono(Users[].class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        Enrollment[] y = webClient.get()
+                        .uri("/courses_users/{course_id}/users", course_id)
+                        .retrieve()
+                        .bodyToMono(Enrollment[].class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        Students[] result= new Students[x.length];
+        for(int i=0;i<x.length;i++){
+            result[i]=new Students(x[i],y[i]);
+        }
+        return result;
     }
 
     @MutationMapping
@@ -86,6 +119,29 @@ public class UserController {
     public Users deleteUser(@Argument String id) {
             return webClient.delete()
                         .uri("/users/{id}", id)
+                        .retrieve()
+                        .bodyToMono(Users.class)
+                        .block();
+    }
+
+    @MutationMapping
+    public Users updateMe(@Argument UsersInput user, @Argument String id) {
+            return ((RequestBodySpec) webClient.patch()
+                        .uri("/users/me")
+                        .bodyValue(user))
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("id",id);}})
+                        .retrieve()
+                        .bodyToMono(Users.class)
+                        .block();
+    }
+
+    @MutationMapping
+    public Users deleteMe(@Argument String id) {
+            return ((RequestBodySpec) webClient.delete()
+                        .uri("/users/me"))
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("id",id);}})
                         .retrieve()
                         .bodyToMono(Users.class)
                         .block();
