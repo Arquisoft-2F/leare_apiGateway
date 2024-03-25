@@ -19,7 +19,7 @@ public class ChatController {
     private final WebClient webClient;
 
     public ChatController() {
-        this.webClient = WebClient.create("http://localhost:8000");
+        this.webClient = WebClient.create("http://localhost:3002");
     }
 
     @QueryMapping
