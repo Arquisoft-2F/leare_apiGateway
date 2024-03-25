@@ -51,3 +51,8 @@ input EnrollInput{
     created_at: String
     updated_at: String
 }
+
+type Students{
+    user: Users!
+    course: Enrollment!
+}
