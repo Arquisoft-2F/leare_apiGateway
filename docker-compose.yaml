@@ -131,7 +131,7 @@ services:
 
   search_web:
     build:
-      context: .
+      context: ../leare_search_ms
       dockerfile: Dockerfile
     environment:
       - ROCKET_ADDRESS=0.0.0.0
