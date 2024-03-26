@@ -1,18 +1,28 @@
 package leare.apiGateway.models.ChatModels;
 
 public class Message {
+    private String id;
     private String sender_id;
     private String sender_nickname;
     private String content;
     private String created_at;
     private String updated_at;
 
-    public Message(String sender_id, String sender_nickname, String content, String created_at, String updated_at) {
+    public Message(String id, String sender_id, String sender_nickname, String content, String created_at, String updated_at) {
+        this.id = id;
         this.sender_id = sender_id;
         this.sender_nickname = sender_nickname;
         this.content = content;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getSender_id() {

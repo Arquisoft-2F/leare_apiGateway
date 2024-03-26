@@ -13,6 +13,11 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import leare.apiGateway.models.ChatModels.Chat;
+import leare.apiGateway.models.ChatModels.ChatData;
+import leare.apiGateway.models.ChatModels.ChatInput;
+import leare.apiGateway.models.ChatModels.ChatJoinInput;
+import leare.apiGateway.models.ChatModels.ChatUser;
+import leare.apiGateway.models.ChatModels.Message;
 
 @Controller
 public class ChatController {
@@ -21,15 +26,56 @@ public class ChatController {
     public ChatController() {
         String url = "http://chat-web";
         String port = "3002";
-        this.webClient = WebClient.create(url + ":" + port);
+        String prefix = "/chat";
+        this.webClient = WebClient.create(url + ":" + port + prefix);
     }
 
+    // Get user chats
     @QueryMapping
     public Chat[] userChats(@Argument String user_id) {
-        return webClient.get()
-                        .uri("/chat/user/{user_id}", user_id)
-                        .retrieve()
-                        .bodyToMono(Chat[].class)
-                        .block();
+        return webClient
+            .get()
+            .uri("/user/{user_id}", user_id)
+            .retrieve()
+            .bodyToMono(Chat[].class)
+            .block();
+    }
+
+    // Get chat messages
+    @QueryMapping
+    public Message[] chatMessages(@Argument String chat_id, @Argument String user_id) {
+        return webClient
+            .get()
+            .uri("/{chat_id}/messages?user_id={user_id}", chat_id, user_id)
+            .retrieve()
+            .bodyToMono(Message[].class)
+            .block();
+    }
+
+    // Create chat
+    @MutationMapping
+    public ChatData createChat(@Argument ChatInput chat_input) {
+        ChatData chat = webClient
+            .post()
+            .uri("/")
+            .bodyValue(chat_input)
+            .retrieve()
+            .bodyToMono(ChatData.class)
+            .block();
+
+        return chat;
+    }
+
+    // Join chat
+    @MutationMapping
+    public ChatUser joinChat(@Argument ChatJoinInput chat_join_input) {
+        ChatUser chat = webClient
+            .patch()
+            .uri("/{chat_id}/join?user_id={user_id}&user_nickname={user_nickname}", chat_join_input.getChat_id(), chat_join_input.getUser_id(), chat_join_input.getUser_nickname())
+            .retrieve()
+            .bodyToMono(ChatUser.class)
+            .block();
+
+        return chat;
     }
 }

@@ -1,26 +1,26 @@
 package leare.apiGateway.models.ChatModels;
 
 public class ChatData {
-    private String chat_id;
+    private String id;
     private String chat_name;
     private String picture_id;
     private String created_at;
     private Message last_message;
 
-    public ChatData(String chat_id, String chat_name, String picture_id, String created_at, Message last_message) {
-        this.chat_id = chat_id;
+    public ChatData(String id, String chat_name, String picture_id, String created_at, Message last_message) {
+        this.id = id;
         this.chat_name = chat_name;
         this.picture_id = picture_id;
         this.created_at = created_at;
         this.last_message = last_message;
     }
 
-    public String getChat_id() {
-        return chat_id;
+    public String getId() {
+        return id;
     }
 
-    public void setChat_id(String chat_id) {
-        this.chat_id = chat_id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getChat_name() {

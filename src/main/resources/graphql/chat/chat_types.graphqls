@@ -7,17 +7,38 @@ type Chat {
 }
 
 type ChatData {
-    chat_id: ID!
+    id: ID!
     chat_name: String!
     picture_id: String
-    created_at: String
     last_message: Message
+    created_at: String
+}
+
+type ChatUser {
+    id: ID!
+    chat_id: ID!
+    user_id: ID!
+    user_nickname: String!
+    user_is_admin: Boolean!
+    user_last_read: String
 }
 
 type Message {
-    sender_id: ID!
-    sender_nickname: String!
-    content: String!
+    id: ID
+    chat_id: ID
+    sender_id: ID
+    sender_nickname: String
+    content: String
     created_at: String
     updated_at: String
+}
+
+input ChatInput {
+    chat_name: String!
+}
+
+input ChatJoinInput {
+    chat_id: ID!
+    user_id: ID!
+    user_nickname: String!
 }
