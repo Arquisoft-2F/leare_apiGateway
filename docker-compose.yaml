@@ -2,7 +2,7 @@ version: '3'
 
 services:
   # Gateway
-  leare_gateway:
+  leare-gateway:
     build:
       context: .
       # dockerfile: Dockerfile.production
@@ -13,12 +13,12 @@ services:
       - ./logs:/logs
       - .:/app #SOLO PARA DEV
     networks:
-      - leare_network
+      - leare-network
   # auth_ms
 
   # chat_ms
 
-  chat_db:
+  chat-db:
     image: mongo:7.0
     volumes:
       - ../db/leare_chat_db:/data/db
@@ -28,9 +28,9 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - leare_network
+      - leare-network
 
-  chat_web:
+  chat-web:
     build:
       context: ../leare_chat_ms
       dockerfile: Dockerfile
@@ -41,13 +41,13 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
       ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
     depends_on:
-      - chat_db
+      - chat-db
     networks:
-      - leare_network
+      - leare-network
 
 
   # courses_ms
-  courses_db:
+  courses-db:
     image: postgres:16.2-alpine
     volumes:
       - ../db/leare_courses_db:/var/lib/postgresql/data
@@ -56,23 +56,23 @@ services:
     ports:
       - "5490:5490"
     networks:
-      - leare_network
+      - leare-network
     
 
-  courses_web:
+  courses-web:
     build:
       context: ../leare_courses_ms
       dockerfile: Dockerfile
     ports:
       - "3003:3003"
     depends_on:
-      - courses_db
+      - courses-db
     networks:
-      - leare_network
+      - leare-network
 
 
   #document_ms
-  document_rabbit:
+  document-rabbit:
     image: rabbitmq:management
     ports:
       - "5672:5672"
@@ -81,10 +81,10 @@ services:
       RABBITMQ_DEFAULT_USER: arquisoft
       RABBITMQ_DEFAULT_PASS: password
     networks:
-      - leare_network
+      - leare-network
 
 
-  document_server:
+  document-server:
     build:
       context: ../leare_document_ms
       dockerfile: Dockerfile.server
@@ -94,24 +94,26 @@ services:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
     networks:
-      - leare_network
+      - leare-network
 
-  document_sidecar:
+  document-sidecar:
     build:
       context: ../leare_document_ms
       dockerfile: Dockerfile.sidecar
     volumes:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
+    depends_on:
+      - document-rabbit
     networks:
-      - leare_network
+      - leare-network
 
 
   # search_ms
 
-  search_db:
+  search-db:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
-    container_name: search_db
+    container_name: search-db
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -127,30 +129,28 @@ services:
     ports:
       - 9200:9200
     networks:
-      - leare_network
+      - leare-network
 
-  search_web:
+  search-web:
     build:
       context: ../leare_search_ms
       dockerfile: Dockerfile
     environment:
       - ROCKET_ADDRESS=0.0.0.0
       - ROCKET_PORT=3005
-      - ELASTICSEARCH_URL=http://search_db:9200
-      # - ELASTICSEARCH_URL=http://elastic:password@search_db:9200
+      - ELASTICSEARCH_URL=http://search-db:9200
+      # - ELASTICSEARCH_URL=http://elastic:password@search-db:9200
       - ES_USERNAME=elastic
       - ES_PASSWORD=password
     ports:
       - "3005:3005"
     depends_on:
-      - search_db
+      - search-db
     networks:
-      - leare_network
-
-  # ws
+      - leare-network
 
   # user_ms
-  usersDb:
+  users-db:
     image: mariadb
     volumes:
       - ../db/leare_users_db:/var/lib/mysql
@@ -160,9 +160,9 @@ services:
     ports:
       - "3307:3307"
     networks:
-      - leare_network
+      - leare-network
 
-  users_web:
+  users-web:
     build:
       context: ../leare_users_ms
       dockerfile: Dockerfile
@@ -171,11 +171,26 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - usersDb
+      - users-db
     environment:
-      DATABASE_URL: mysql2://root:password@usersDb/my_app_development
+      DATABASE_URL: mysql2://root:password@users-db/my_app_development
     networks:
-      - leare_network
+      - leare-network
+
+
+  # ws
+  ws:
+    build:
+      context: ../leare_ws
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      CHAT_MS_URL: "http://chat-web:3002"
+    depends_on:
+      - chat-web
+    networks:
+      - leare-network
 
 volumes:
   esdata1:
@@ -185,5 +200,5 @@ volumes:
 
 
 networks:
-  leare_network:
+  leare-network:
     driver: bridge

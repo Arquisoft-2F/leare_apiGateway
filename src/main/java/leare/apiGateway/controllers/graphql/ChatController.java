@@ -19,7 +19,9 @@ public class ChatController {
     private final WebClient webClient;
 
     public ChatController() {
-        this.webClient = WebClient.create("http://localhost:3002");
+        String url = "http://chat-web";
+        String port = "3002";
+        this.webClient = WebClient.create(url + ":" + port);
     }
 
     @QueryMapping
