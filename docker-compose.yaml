@@ -33,7 +33,8 @@ services:
   chat-web:
     build:
       context: ../leare_chat_ms
-      dockerfile: Dockerfile
+      # dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "3002:3002"
     environment:
