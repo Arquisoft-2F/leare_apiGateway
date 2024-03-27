@@ -16,6 +16,31 @@ services:
       - leare-network
   # auth_ms
 
+  auth-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    volumes:
+      - ../db/leare_auth_db:/var/opt/mssql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password123
+    ports:
+      - "1433:1433"
+    mem_limit: 2048m
+    networks:
+      - leare-network
+
+  auth-web:
+    build:
+      context: ../leare_auth_ms
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - auth-db
+    networks:
+      - leare-network
+
   # chat_ms
 
   chat-db:
@@ -50,6 +75,7 @@ services:
   # courses_ms
   courses-db:
     image: postgres:16.2-alpine
+    container_name: courses-db
     volumes:
       - ../db/leare_courses_db:/var/lib/postgresql/data
     environment:
@@ -156,8 +182,9 @@ services:
     volumes:
       - ../db/leare_users_db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: my_app_development
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      # MYSQL_ROOT_PASSWORD: password
     ports:
       - "3307:3307"
     networks:
@@ -167,6 +194,7 @@ services:
     build:
       context: ../leare_users_ms
       dockerfile: Dockerfile
+    container_name: users-web
     volumes:
       - ../leare_users_ms:/app
     ports:
@@ -174,7 +202,8 @@ services:
     depends_on:
       - users-db
     environment:
-      DATABASE_URL: mysql2://root:password@users-db/my_app_development
+      DATABASE_URL: mysql2://root@users-db/my_app_development
+      # DATABASE_URL: mysql2://root:password@users-db/my_app_development
     networks:
       - leare-network
 
