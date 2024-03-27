@@ -1,0 +1,24 @@
+
+type RegisterInput{
+    name: String!
+    email: String!
+    password: String!
+    confirm_password: String!
+    role: Number!   
+    user_id: ID!
+}
+
+input RegisterResponse{
+    flag: String
+    message: String
+}
+
+type Login{
+    email: String
+    passsword: String
+}
+
+input RouteRequest{
+    route: String!
+    method: String!
+}
