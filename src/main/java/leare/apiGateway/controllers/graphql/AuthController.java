@@ -26,17 +26,18 @@ public class AuthController {
     }
 
     @QueryMapping
-    public String getRoute(@Argument RouteRequest routeRequest) {
+    public String getRoute(@Argument RouteRequest routeRequest, @Argument String token) {
         System.out.println("llega a query de ql");
         return webClient.post()
                         .uri("/Test/getRoute")
                         .bodyValue(routeRequest)
+                        .header("Authorization", token)
                         .retrieve()
                         .bodyToMono(String.class)
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
-    @MutationMapping
+    @MutationMapping 
     public String login(@Argument Login login) {
         System.out.println("llega a query de ql");
         return webClient.post()
