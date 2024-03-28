@@ -62,26 +62,26 @@ input EditCategoryInput {
 
 input EditCourseInput {
     course_id: ID!
-    course_name: String
-    course_description: String
+    course_name: String!
+    course_description: String!
     creator_id: ID!
-    public: Boolean
+    public: Boolean!
     picture_id: ID!
-    categories: [String]
+    categories: [String]!
 }
 
 input EditModuleInput {
     module_id: ID!
-    module_name: String
-    pos_index: Int
+    module_name: String!
+    pos_index: Int!
 }
 
 input EditSectionInput {
     section_id: ID!
     module_id: ID!
-    section_name: String
-    section_content: String
+    section_name: String!
+    section_content: String!
     video_id: ID!
-    files_array: [ID]
-    pos_index: Int
+    files_array: [ID]!
+    pos_index: Int!
 }
