@@ -4,19 +4,19 @@ public class RegisterInput {
     private String name;
     private String email;
     private String password;
-    private String confirm_password;
+    private String confirmPassword;
     private Number role;
-    private String user_id;
+    private String userId;
 
 
     // Constructor, getters, and setters
-    public RegisterInput(String name, String email, String password, String confirm_password, Number role, String user_id) {
+    public RegisterInput(String name, String email, String password, String confirmPassword, Number role, String userId) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.confirm_password = confirm_password;
+        this.confirmPassword = confirmPassword;
         this.role = role;
-        this.user_id = user_id;
+        this.userId = userId;
     }
 
     public String getName() {
@@ -43,12 +43,12 @@ public class RegisterInput {
         this.password = password;
     }
 
-    public String getConfirm_password() {
-        return confirm_password;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setConfirm_password(String confirm_password) {
-        this.confirm_password = confirm_password;
+    public void setConfirm_password(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Number getRole() {
@@ -59,12 +59,12 @@ public class RegisterInput {
         this.role = role;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUser_id(String userId) {
+        this.userId = userId;
     }
 
 

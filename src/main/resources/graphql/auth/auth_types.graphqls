@@ -3,9 +3,9 @@ input RegisterInput{
     name: String!
     email: String!
     password: String!
-    confirm_password: String!
+    confirmPassword: String!
     role: Int!   
-    user_id: ID!
+    userId: ID!
 }
 
 type RegisterResponse{
@@ -13,12 +13,8 @@ type RegisterResponse{
     message: String
 }
 
-type Login{
-    email: String
-    passsword: String
-}
-
-type RouteRequest{
-    route: String!
-    method: String!
+type LoginResponse{
+    flag: String
+    token: String
+    message: String
 }

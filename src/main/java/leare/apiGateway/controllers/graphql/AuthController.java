@@ -10,11 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 
-import leare.apiGateway.models.AuthModels.Login;
+import leare.apiGateway.models.AuthModels.LoginResponse;
 import leare.apiGateway.models.AuthModels.RegisterInput;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
-import leare.apiGateway.models.AuthModels.RouteRequest;
-
+import leare.apiGateway.models.AuthModels.LoginResponse;
 
 @Controller
 public class AuthController {
@@ -22,15 +21,17 @@ public class AuthController {
     private final WebClient webClient;
 
     public AuthController() {
-        this.webClient = WebClient.create("http://localhost:7202");
+        this.webClient = WebClient.create("http://localhost:5183");
     }
 
     @QueryMapping
-    public String getRoute(@Argument RouteRequest routeRequest, @Argument String token) {
+    public String getRoute(@Argument String route, @Argument String method, @Argument String token) {
         System.out.println("llega a query de ql");
         return webClient.post()
                         .uri("/Test/getRoute")
-                        .bodyValue(routeRequest)
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("route", route);
+                            put("method", method);}})
                         .header("Authorization", token)
                         .retrieve()
                         .bodyToMono(String.class)
@@ -38,13 +39,15 @@ public class AuthController {
     }
 
     @MutationMapping 
-    public String login(@Argument Login login) {
+    public LoginResponse login(@Argument String email, @Argument String password) {
         System.out.println("llega a query de ql");
         return webClient.post()
                         .uri("/api/Account/login")
-                        .bodyValue(login)
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("email", email);
+                            put("password", password);}})
                         .retrieve()
-                        .bodyToMono(String.class)
+                        .bodyToMono(LoginResponse.class)
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
