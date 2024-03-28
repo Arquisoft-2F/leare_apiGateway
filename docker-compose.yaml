@@ -75,15 +75,17 @@ services:
   # courses_ms
   courses-db:
     image: postgres:16.2-alpine
-    container_name: courses-db
+    container_name: real-courses-db
     volumes:
       - ../db/leare_courses_db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: root
+      POSTGRES_PORT: 5490
     ports:
       - "5490:5490"
     networks:
       - leare-network
+    command: -p 5490
     
 
   courses-web:

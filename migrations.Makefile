@@ -3,15 +3,24 @@
 all: migrate-chats migrate-users
 # Build commands
 migrate-chats:
-	@echo "Building the chats application..."
-	start cmd /c "cd server && make"  
+	
+not-used:
+	docker cp ../leare_courses_ms/migrations.sql real-courses-db:/tmp/
+	docker exec -it real-courses-db /bin/bash
+	# inside of that bash terminal i just created
+		su - postgres
+		createdb -p 5490 leare_courses_db
+		exit
+		psql -U postgres -p 5490 -d leare_courses_db < /tmp/migrations.sql
+		exit
 
 migrate-users:
 	@echo "Building the users application..."
-	start cmd /c "docker exec users_web rails db:migrate" 
+	start cmd /c "docker exec users-web rails db:migrate" 
 
 
-docker cp ../leare_courses_ms/migrations.sql courses-db:/tmp/
-docker exec -it courses-db /bin/bash    
-psql -U postgres -d leare_courses_db < /tmp/migrations.sql
-# docker exec -i courses-db psql -U postgres -d leare_courses_db < /tmp/migrations.sql
+
+# docker cp ../leare_courses_ms/migrations.sql courses-db:/tmp/
+# docker exec -it courses-db /bin/bash    
+# psql -U postgres -d leare_courses_db < /tmp/migrations.sql
+# # docker exec -i real-courses-db psql -U postgres -d leare_courses_db < /tmp/migrations.sql
