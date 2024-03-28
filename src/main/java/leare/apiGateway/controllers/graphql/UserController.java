@@ -16,18 +16,13 @@ import leare.apiGateway.models.UserModels.Students;
 import leare.apiGateway.models.UserModels.Users;
 import leare.apiGateway.models.UserModels.UsersInput;
 
-import leare.apiGateway.models.UserModels.EnrollInput;
-import leare.apiGateway.models.UserModels.Enrollment;
-import leare.apiGateway.models.UserModels.Users;
-import leare.apiGateway.models.UserModels.UsersInput;
-
 @Controller
 public class UserController {
 
     private final WebClient webClient;
 
     public UserController() {
-        this.webClient = WebClient.create("http://localhost:3001");
+        this.webClient = WebClient.create("http://users-web:3000");
     }
 
     @QueryMapping
