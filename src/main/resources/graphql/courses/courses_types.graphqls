@@ -1,0 +1,87 @@
+type Category {
+    category_id: ID!
+    category_name: String!
+}
+
+type Course {
+    course_id: ID!
+    course_name: String!
+    course_description: String!
+    creator_id: ID!
+    is_public: Boolean!
+    picture_id: ID!
+    created_at: String
+    updated_at: String
+    modules: [CourseModule]
+    categories: [Category]
+}
+
+type CourseModule {
+    module_id: ID!
+    module_name: String!
+    pos_index: Int!
+    sections: [ModuleSection]
+}
+
+type ModuleSection {
+    section_id: ID!
+    section_name: String!
+    section_content: String!
+    video_id: ID!
+    files_array: [ID]
+    pos_index: Int!
+}
+
+input CreateCourseInput {
+    course_name: String!
+    course_description: String!
+    creator_id: ID!
+    picture_id: ID!
+    categories: [String]!
+}
+
+input CreateModuleInput {
+    module_name: String!
+    course_id: ID!
+    pos_index: Int!
+}
+
+input CreateSectionInput {
+    module_id: ID!
+    section_name: String!
+    section_content: String!
+    video_id: ID!
+    files_array: [ID]
+    pos_index: Int!
+}
+
+input EditCategoryInput {
+    category_id: ID!
+    category_name: String!
+}
+
+input EditCourseInput {
+    course_id: ID!
+    course_name: String!
+    course_description: String!
+    creator_id: ID!
+    is_public: Boolean!
+    picture_id: ID!
+    categories: [String]!
+}
+
+input EditModuleInput {
+    module_id: ID!
+    module_name: String!
+    pos_index: Int!
+}
+
+input EditSectionInput {
+    section_id: ID!
+    module_id: ID!
+    section_name: String!
+    section_content: String!
+    video_id: ID!
+    files_array: [ID]!
+    pos_index: Int!
+}

@@ -82,11 +82,11 @@ public class UserController {
     private final AuthConsumer auth;
 
     public UserController() {
-        // this.webClient = WebClient.create("http://localhost:3001");
-        this.usersClient = WebClient.create("http://users-web:3000");
+        String url = "http://users-web";
+        String port = "3000";
+        this.usersClient = WebClient.create(url + ":" + port);
         this.userValidation = new UserValidation();
         this.auth = new AuthConsumer();
-
     }
 
     @QueryMapping

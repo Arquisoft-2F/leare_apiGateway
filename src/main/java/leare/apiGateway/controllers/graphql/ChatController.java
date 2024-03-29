@@ -1,7 +1,5 @@
 package leare.apiGateway.controllers.graphql;
 
-import org.springframework.stereotype.Controller;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,4 +76,37 @@ public class ChatController {
 
         return chat;
     }
+
+    // Leave chat
+    @MutationMapping
+    public Map<String, String> leaveChat(@Argument String chat_id, @Argument String user_id) {
+        webClient
+            .patch()
+            .uri("/{chat_id}/leave?user_id={user_id}", chat_id, user_id)
+            .retrieve()
+            .bodyToMono(Void.class)
+            .block();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User left chat");
+
+        return response;
+    }
+
+    // Delete chat
+    @MutationMapping
+    public Map<String, String> deleteChat(@Argument String chat_id) {
+        webClient
+            .delete()
+            .uri("/{chat_id}", chat_id)
+            .retrieve()
+            .bodyToMono(Void.class)
+            .block();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Chat deleted");
+
+        return response;
+    }
+
 }
