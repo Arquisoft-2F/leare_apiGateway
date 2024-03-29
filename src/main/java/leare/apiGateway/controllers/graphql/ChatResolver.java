@@ -18,10 +18,10 @@ import leare.apiGateway.models.ChatModels.ChatUser;
 import leare.apiGateway.models.ChatModels.Message;
 
 @Controller
-public class ChatController {
+public class ChatResolver {
     private final WebClient webClient;
 
-    public ChatController() {
+    public ChatResolver() {
         String url = "http://chat-web";
         String port = "3002";
         String prefix = "/chat";

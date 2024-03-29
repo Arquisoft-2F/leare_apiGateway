@@ -76,14 +76,14 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 // }
 
 @Controller
-public class UserController {
+public class UserResolver {
 
     private final WebClient usersClient;
     private final UserValidation userValidation;
     private final AuthConsumer auth;
     private final SearchConsumer search;
 
-    public UserController() {
+    public UserResolver() {
         String url = "http://users-web";
         String port = "3000";
         this.usersClient = WebClient.create(url + ":" + port);
