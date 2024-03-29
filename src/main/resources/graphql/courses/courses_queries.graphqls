@@ -1,0 +1,4 @@
+extend type Query {
+    categories: [Category]
+    categoryById(id: ID!): Category
+}

@@ -1,0 +1,6 @@
+extend type Mutation {
+    createCategory(category_name: String!): Category
+    editCategory(input: EditCategoryInput!): Category
+    deleteCategory(id: ID!): Boolean
+
+}
