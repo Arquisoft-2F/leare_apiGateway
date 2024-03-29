@@ -22,7 +22,9 @@ public class UserController {
     private final WebClient webClient;
 
     public UserController() {
-        this.webClient = WebClient.create("http://users-web:3000");
+        String url = "http://users-web";
+        String port = "3000";
+        this.webClient = WebClient.create(url + ":" + port);
     }
 
     @QueryMapping
