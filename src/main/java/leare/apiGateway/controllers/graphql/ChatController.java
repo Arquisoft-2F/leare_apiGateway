@@ -1,7 +1,5 @@
 package leare.apiGateway.controllers.graphql;
 
-import org.springframework.stereotype.Controller;
-
 import java.util.HashMap;
 import java.util.Map;
 
