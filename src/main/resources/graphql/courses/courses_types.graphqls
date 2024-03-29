@@ -65,7 +65,7 @@ input EditCourseInput {
     course_name: String!
     course_description: String!
     creator_id: ID!
-    public: Boolean!
+    is_public: Boolean!
     picture_id: ID!
     categories: [String]!
 }

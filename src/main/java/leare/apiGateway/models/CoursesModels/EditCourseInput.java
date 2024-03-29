@@ -1,5 +1,7 @@
 package leare.apiGateway.models.CoursesModels;
 
+import java.util.List;
+
 public class EditCourseInput {
     private String course_id;
     private String course_name;
@@ -7,10 +9,11 @@ public class EditCourseInput {
     private String creator_id;
     private Boolean is_public;
     private String picture_id;
-    private String[] categories;
+    private List<String> categories;
 
     public EditCourseInput(String course_id, String course_name, String course_description, String creator_id,
-            Boolean is_public, String picture_id, String[] categories) {
+            Boolean is_public, String picture_id, List<String> categories) {
+
         this.course_id = course_id;
         this.course_name = course_name;
         this.course_description = course_description;
@@ -68,11 +71,11 @@ public class EditCourseInput {
         this.picture_id = picture_id;
     }
 
-    public String[] getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(String[] categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 

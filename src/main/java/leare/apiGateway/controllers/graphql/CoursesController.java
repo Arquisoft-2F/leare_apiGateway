@@ -6,12 +6,18 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 
 import leare.apiGateway.models.CoursesModels.Category;
+import leare.apiGateway.models.CoursesModels.Course;
+import leare.apiGateway.models.CoursesModels.CourseByCategory;
+import leare.apiGateway.models.CoursesModels.CreateCourseInput;
 import leare.apiGateway.models.CoursesModels.EditCategoryInput;
+import leare.apiGateway.models.CoursesModels.EditCourseInput;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,6 +30,8 @@ public class CoursesController {
         String port = "3003";
         this.webClient = webClientBuilder.baseUrl(url + ":" + port).build();
     }
+
+    // CATEGORIES
 
     @QueryMapping
     public Category[] categories() {
@@ -81,6 +89,83 @@ public class CoursesController {
             .retrieve()
             .bodyToMono(Void.class)
             .block();
+        return true;
+    }
+
+    // COURSES
+
+    @QueryMapping
+    public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories) {
+        Map<String, Object> body = Map.of("categories", categories);
+
+        return ((RequestBodySpec) webClient
+            .get()
+            .uri("/courses/categories"))
+            .bodyValue(body)
+            .retrieve()
+            .bodyToMono(CourseByCategory[].class)
+            .block();
+    }
+
+    @QueryMapping
+    public Course[] listCourses(@Argument int page) {
+        return webClient
+            .get()
+            .uri("/listcourses/{page}", page)
+            .retrieve()
+            .bodyToMono(Course[].class)
+            .block();
+    }
+
+    @QueryMapping
+    public Course courseById(@Argument String id) {
+        return webClient
+            .get()
+            .uri("/courses/{id}", id)
+            .retrieve()
+            .bodyToMono(Course.class)
+            .block();  
+    }
+
+    @MutationMapping
+    public Course createCourse(@Argument CreateCourseInput input) {
+        return webClient
+            .post()
+            .uri("/courses")
+            .bodyValue(input)
+            .retrieve()
+            .bodyToMono(Course.class)
+            .block();  
+    }
+
+    @MutationMapping
+    public Course editCourse(@Argument EditCourseInput input) {
+        Map<String, Object> body = new HashMap<>(); // This is neccesary because "public" is a reserved word in Java
+        body.put("course_name", input.getCourse_name());
+        body.put("course_description", input.getCourse_description());
+        body.put("creator_id", input.getCreator_id());
+        body.put("public", input.getIs_public());
+        body.put("picture_id", input.getPicture_id());
+        body.put("categories", input.getCategories());
+
+        return webClient
+            .patch()
+            .uri("/courses/{id}", input.getCourse_id())
+            .bodyValue(body)
+            .retrieve()
+            .bodyToMono(Course.class)
+            .block();  
+    }
+
+    @MutationMapping
+    public Boolean deleteCourse(@Argument String id) {
+        webClient
+            .delete()
+            .uri("/courses/{id}", id)
+            .retrieve()
+            .bodyToMono(Void.class)
+            .block(); 
+            
         return true;
     }
 }

@@ -1,14 +1,16 @@
 package leare.apiGateway.models.CoursesModels;
 
+import java.util.List;
+
 public class CreateCourseInput {
     private String course_name;
     private String course_description;
     private String creator_id;
     private String picture_id;
-    private String[] categories;
+    private List<String> categories;
     
     public CreateCourseInput(String course_name, String course_description, String creator_id, String picture_id,
-            String[] categories) {
+        List<String> categories) {
         this.course_name = course_name;
         this.course_description = course_description;
         this.creator_id = creator_id;
@@ -48,11 +50,11 @@ public class CreateCourseInput {
         this.picture_id = picture_id;
     }
 
-    public String[] getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(String[] categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
     
