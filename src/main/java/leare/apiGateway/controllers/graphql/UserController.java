@@ -58,21 +58,21 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 //     }
 // }
 
-class RequestHeaderInterceptor implements WebGraphQlInterceptor { 
+// class RequestHeaderInterceptor implements WebGraphQlInterceptor { 
 
-    @Override
-    public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
-        System.out.println("7777777777777777777777777777");
-        System.out.println("7777777777777777777777777777");
-        System.out.println("7777777777777777777777777777");
+//     @Override
+//     public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
+//         System.out.println("7777777777777777777777777777");
+//         System.out.println("7777777777777777777777777777");
+//         System.out.println("7777777777777777777777777777");
         
-        String value = request.getHeaders().getFirst("Authorization");
-        System.out.println(value);
-        request.configureExecutionInput((executionInput, builder) ->
-                builder.graphQLContext(Collections.singletonMap("Authorization", value)).build());
-        return chain.next(request);
-    }
-}
+//         String value = request.getHeaders().getFirst("Authorization");
+//         System.out.println(value);
+//         request.configureExecutionInput((executionInput, builder) ->
+//                 builder.graphQLContext(Collections.singletonMap("Authorization", value)).build());
+//         return chain.next(request);
+//     }
+// }
 
 @Controller
 public class UserController {
@@ -104,11 +104,9 @@ public class UserController {
     public UserResponse userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) {
         
         
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(AuthorizationHeader);
         // //String route, String method, String token
-        // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+        // auth.Test();
+        auth.CheckRoute("/user/:id","get",AuthorizationHeader);
         try {
             Users user = usersClient.get()
                     .uri("/users/{id}", id)

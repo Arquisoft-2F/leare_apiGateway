@@ -12,7 +12,6 @@ public class AuthConsumer {
     public AuthConsumer(){
         this.AuthClient = WebClient.create("http://auth-web:8080");
     }
-
     public void Login(){
 
     }
