@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiGatewayApplication {
 
 	public static void main(String[] args) {
-		System.out.println("Test");
 	
 		//call the graphql initiliazier
 		SpringApplication.run(ApiGatewayApplication.class, args);
