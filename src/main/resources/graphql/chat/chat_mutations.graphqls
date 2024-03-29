@@ -1,4 +1,6 @@
 extend type Mutation {
     createChat(chat_input: ChatInput!): ChatData
     joinChat(chat_join_input: ChatJoinInput!): ChatUser
+    leaveChat(chat_id: ID!, user_id: ID!): ResponseMsg
+    deleteChat(chat_id: ID!): ResponseMsg
 }
