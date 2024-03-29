@@ -17,11 +17,11 @@ import leare.apiGateway.models.UserModels.Users;
 import leare.apiGateway.models.UserModels.UsersInput;
 
 @Controller
-public class UserController {
+public class UserResolver {
 
     private final WebClient webClient;
 
-    public UserController() {
+    public UserResolver() {
         String url = "http://users-web";
         String port = "3000";
         this.webClient = WebClient.create(url + ":" + port);

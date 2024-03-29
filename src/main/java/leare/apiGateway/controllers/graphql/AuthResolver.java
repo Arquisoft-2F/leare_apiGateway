@@ -16,11 +16,11 @@ import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.AuthModels.LoginResponse;
 
 @Controller
-public class AuthController {
+public class AuthResolver {
 
     private final WebClient webClient;
 
-    public AuthController() {
+    public AuthResolver() {
         this.webClient = WebClient.create("http://localhost:5183");
     }
 
