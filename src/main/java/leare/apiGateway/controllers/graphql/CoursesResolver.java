@@ -3,6 +3,7 @@ package leare.apiGateway.controllers.graphql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -89,9 +90,7 @@ public class CoursesResolver {
         webClient
             .delete()
             .uri("/categories/{id}", id)
-            .retrieve()
-            .bodyToMono(Void.class)
-            .block();
+            .retrieve();
         return true;
     }
 
@@ -165,10 +164,7 @@ public class CoursesResolver {
         webClient
             .delete()
             .uri("/courses/{id}", id)
-            .retrieve()
-            .bodyToMono(Void.class)
-            .block(); 
-            
+            .retrieve();
         return true;
     }
 
@@ -221,9 +217,7 @@ public class CoursesResolver {
         webClient
             .delete()
             .uri("/modules/{id}", id)
-            .retrieve()
-            .bodyToMono(Void.class)
-            .block();
+            .retrieve();
         return true;
     }
 
