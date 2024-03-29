@@ -1,0 +1,63 @@
+type Query {
+    users: [Users]
+    userById(id: ID!): UsersResponse
+    enrollements: [Enrollment]
+    myCourses(user_id:ID!): [Enrollment]
+    isEnrolled(user_id:ID!, course_id:ID!): Enrollment
+    getCourses(course_id:ID!): [Students]
+}
+
+type UsersResponse {
+    users: Users
+    error: String
+}
+
+
+type Users{
+    id: ID!
+    nickname: String!
+    name: String!
+    lastname: String!
+    picture_id: String
+    nationality: String!
+    email: String!
+    web_site: String
+    biography: String
+    twitter_link: String
+    linkedin_link: String
+    facebook_link: String
+    created_at: String
+    updated_at: String
+}
+
+input UsersInput{
+    nickname: String!
+    name: String!
+    lastname: String!
+    picture_id: String
+    nationality: String!
+    email: String!
+    web_site: String
+    biography: String
+    twitter_link: String
+    linkedin_link: String
+    facebook_link: String
+    created_at: String
+    updated_at: String
+}
+
+type Enrollment{
+    course_id: ID!
+    progress: Float!
+    score: Float!
+    listed_on: String!
+    last_seen: String!
+    created_at: String
+    updated_at: String
+    user_id: ID!
+}
+
+type Students{
+    user: Users!
+    course: Enrollment!
+}

@@ -1,6 +1,6 @@
 extend type Query {
     users: [Users]
-    userById(id: ID!): Users
+    userById(id: ID!): UsersResponse
     enrollements: [Enrollment]
     myCourses(user_id:ID!): [Enrollment]
     isEnrolled(user_id:ID!, course_id:ID!): Enrollment

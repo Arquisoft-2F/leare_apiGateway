@@ -1,0 +1,146 @@
+// Toca cambiarlos a el nuevo esquema 
+mutation createUs {
+  createUser(user:{
+    nickname: "dacas",
+    name: "David",    
+    lastname: "Canas",
+    nationality: "colombia",
+    email:"dacas1@gmail.com"
+  }){
+    id
+    name
+    lastname
+    nickname
+    linkedin_link
+  }
+}
+
+query bookDetails {
+  users {
+    id
+    name
+    nickname
+    lastname
+  }
+}
+
+mutation createUs {
+  updateUser(user:{
+    nickname: "dacas2",
+    name: "David",    
+    lastname: "Canas",
+    nationality: "colombia",
+    email:"dacas1@gmail.com"
+  }, id:"a1efefce-ee18-44a6-a36b-67a653d73edb"){
+    id
+    name
+    lastname
+    nickname
+    linkedin_link
+  }
+}
+
+mutation createUs {
+  updateMe(user:{
+    nickname: "dacas2",
+    name: "David",    
+    lastname: "Canas",
+    nationality: "colombia",
+    email:"dacas1@gmail.com"
+  }, id:"a1efefce-ee18-44a6-a36b-67a653d73edb"){
+    id
+    name
+    lastname
+    nickname
+    linkedin_link
+  }
+}
+
+mutation createUs {
+  deleteUser(id:"a1efefce-ee18-44a6-a36b-67a653d73edb"){
+    id
+    name
+    lastname
+    nickname
+    linkedin_link
+  }
+}
+
+mutation createUs {
+  deleteMe(id:"a1efefce-ee18-44a6-a36b-67a653d73edb"){
+    id
+    name
+    lastname
+    nickname
+    linkedin_link
+  }
+}
+
+query bookDetails {
+  enrollements {
+    user_id
+    course_id
+    score
+    progress
+  }
+}
+
+mutation bookDetails {
+  updateEnrollment(enrollment:{
+    progress: 5.2,
+    score:0.0,
+    listed_on: "2024-03-11",
+    last_seen: "2024-03-11",
+  }, user_id:"70405b18-825e-4cbf-8e07-59ad8fcaa6da",
+  course_id:"b51f5d16-3148-4b2f-a1fa-fe2e4ee83abc"){
+    user_id
+    course_id
+    score
+    progress	
+  }
+}
+
+mutation bookDetails {
+  createEnrollment(user_id:"70405b18-825e-4cbf-8e07-59ad8fcaa6da",
+  course_id:"b51f5d16-3148-4b2f-a1fa-fe2e4ee83abf"){
+    user_id
+    course_id
+    score
+    progress
+  }
+}
+
+mutation bookDetails {
+  deleteEnrollment(user_id:"70405b18-825e-4cbf-8e07-59ad8fcaa6da",
+  course_id:"b51f5d16-3148-4b2f-a1fa-fe2e4ee83abf"){
+    user_id
+    course_id
+    score
+    progress
+  }
+}
+
+query bookDetails {
+  isEnrolled(user_id:"70405b18-825e-4cbf-8e07-59ad8fcaa6da",
+  course_id:"b51f5d16-3148-4b2f-a1fa-fe2e4ee83abf"){
+    user_id
+    course_id
+    score
+    progress
+  }
+}
+
+query createUs {
+  getCourses(course_id:"b51f5d16-3148-4b2f-a1fa-fe2e4ee83abc"){
+    user{
+      name
+      nickname
+      lastname
+    }
+    course{
+      course_id
+      progress
+      score
+    }
+  }
+}
