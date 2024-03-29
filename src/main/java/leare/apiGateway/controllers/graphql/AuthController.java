@@ -21,7 +21,8 @@ public class AuthController {
     private final WebClient webClient;
 
     public AuthController() {
-        this.webClient = WebClient.create("http://localhost:5183");
+        // this.webClient = WebClient.create("http://localhost:5183");
+        this.webClient = WebClient.create("http://auth-web:8080");
     }
 
     @QueryMapping

@@ -1,14 +1,27 @@
 package leare.apiGateway.controllers.graphql;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.server.WebGraphQlInterceptor;
+import org.springframework.graphql.server.WebGraphQlRequest;
+import org.springframework.graphql.server.WebGraphQlResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
@@ -19,167 +32,271 @@ import leare.apiGateway.models.UserModels.UsersInput;
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Users;
-import leare.apiGateway.models.UserModels.UsersInput;
+import leare.apiGateway.models.UserModels.responses.UserResponse;
+import leare.apiGateway.validation.UserValidation;
+import reactor.core.publisher.Mono;
+import leare.apiGateway.controllers.consumers.AuthConsumer;
+
+import graphql.schema.DataFetchingEnvironment;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+
+
+// class RequestHeaderInterceptor implements WebGraphQlInterceptor { 
+
+//     //It never enters here. THat is the problem
+//     @Override
+//     public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
+//         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+//         System.out.println(request.getHeaders());
+//         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+//         String value = request.getHeaders().getFirst("Authorization");
+//         request.configureExecutionInput((executionInput, builder) ->
+//                 builder.graphQLContext(Collections.singletonMap("Authorization", value)).build());
+
+                
+//         return chain.next(request);
+//     }
+// }
+
+class RequestHeaderInterceptor implements WebGraphQlInterceptor { 
+
+    @Override
+    public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
+        System.out.println("7777777777777777777777777777");
+        System.out.println("7777777777777777777777777777");
+        System.out.println("7777777777777777777777777777");
+        
+        String value = request.getHeaders().getFirst("Authorization");
+        System.out.println(value);
+        request.configureExecutionInput((executionInput, builder) ->
+                builder.graphQLContext(Collections.singletonMap("Authorization", value)).build());
+        return chain.next(request);
+    }
+}
 
 @Controller
 public class UserController {
 
-    private final WebClient webClient;
+    private final WebClient usersClient;
+    private final UserValidation userValidation;
+    private final AuthConsumer auth;
 
     public UserController() {
-        this.webClient = WebClient.create("http://localhost:3001");
+        // this.webClient = WebClient.create("http://localhost:3001");
+        this.usersClient = WebClient.create("http://users-web:3000");
+        this.userValidation = new UserValidation();
+        this.auth = new AuthConsumer();
+
     }
 
     @QueryMapping
     public Users[] users() {
-        System.out.println("llega a query de ql");
-        return webClient.get()
-                        .uri("/users")
-                        .retrieve()
-                        .bodyToMono(Users[].class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return usersClient.get()
+                .uri("/users")
+                .retrieve()
+                .bodyToMono(Users[].class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+
     }
 
+    
     @QueryMapping
-    public Users userById(@Argument String id) {
-        System.out.println("llega a query de ql");
-        return webClient.get()
-                        .uri("/users/{id}", id)
-                        .retrieve()
-                        .bodyToMono(Users.class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+    public UserResponse userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) {
+        
+        
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(AuthorizationHeader);
+        // //String route, String method, String token
+        // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+        try {
+            Users user = usersClient.get()
+                    .uri("/users/{id}", id)
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+            return userValidation.DeleteMe(user);
+        } catch (WebClientResponseException ex) {
+            return userValidation.UserClientEx(ex);
+        } catch (Exception ex) {
+            return userValidation.UserEx(ex);
+        }
     }
 
     @QueryMapping
     public Enrollment[] enrollements() {
-        System.out.println("llega a query de ql");
-        return webClient.get()
-                        .uri("/courses_users")
-                        .retrieve()
-                        .bodyToMono(Enrollment[].class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return usersClient.get()
+                .uri("/courses_users")
+                .retrieve()
+                .bodyToMono(Enrollment[].class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
     @QueryMapping
     public Enrollment[] myCourses(@Argument String user_id) {
-        System.out.println("llega a query de ql");
-        return webClient.get()
-                        .uri("/users/{user_id}/enroll", user_id)
-                        .retrieve()
-                        .bodyToMono(Enrollment[].class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return usersClient.get()
+                .uri("/users/{user_id}/enroll", user_id)
+                .retrieve()
+                .bodyToMono(Enrollment[].class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
     @QueryMapping
     public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id) {
-        System.out.println("llega a query de ql");
-        return webClient.get()
-                        .uri("/users/{user_id}/enroll/{course_id}", user_id, course_id)
-                        .retrieve()
-                        .bodyToMono(Enrollment.class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return usersClient.get()
+                .uri("/users/{user_id}/enroll/{course_id}", user_id, course_id)
+                .retrieve()
+                .bodyToMono(Enrollment.class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
     }
 
     @QueryMapping
     public Students[] getCourses(@Argument String course_id) {
-        System.out.println("llega a query de ql");
-        Users[] x = webClient.get()
-                        .uri("/courses_users/{course_id}/users", course_id)
-                        .retrieve()
-                        .bodyToMono(Users[].class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-        Enrollment[] y = webClient.get()
-                        .uri("/courses_users/{course_id}/users", course_id)
-                        .retrieve()
-                        .bodyToMono(Enrollment[].class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-        Students[] result= new Students[x.length];
-        for(int i=0;i<x.length;i++){
-            result[i]=new Students(x[i],y[i]);
+        Users[] x = usersClient.get()
+                .uri("/courses_users/{course_id}/users", course_id)
+                .retrieve()
+                .bodyToMono(Users[].class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        Enrollment[] y = usersClient.get()
+                .uri("/courses_users/{course_id}/users", course_id)
+                .retrieve()
+                .bodyToMono(Enrollment[].class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        Students[] result = new Students[x.length];
+        for (int i = 0; i < x.length; i++) {
+            result[i] = new Students(x[i], y[i]);
         }
         return result;
     }
 
     @MutationMapping
-    public Users createUser(@Argument UsersInput user) {
-            return webClient.post()
-                        .uri("/users")
-                        .bodyValue(user)
-                        .retrieve()
-                        .bodyToMono(Users.class)
-                        .block();
+    public UserResponse createUser(@Argument UsersInput user) {
+        try {
+            Users createdUser = usersClient.post()
+                    .uri("/users")
+                    .bodyValue(user)
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block();
+            return userValidation.DeleteMe(createdUser);
+        } catch (WebClientResponseException ex) {
+            return userValidation.UserClientEx(ex);
+        } catch (Exception ex) {
+            return userValidation.UserEx(ex);
+        }
     }
 
     @MutationMapping
-    public Users updateUser(@Argument UsersInput user, @Argument String id) {
-            return webClient.patch()
-                        .uri("/users/{id}", id)
-                        .bodyValue(user)
-                        .retrieve()
-                        .bodyToMono(Users.class)
-                        .block();
+    public UserResponse updateUser(@Argument UsersInput user, @Argument String id) {
+        try {
+            Users updatedUser = usersClient.patch()
+                    .uri("/users/{id}", id)
+                    .bodyValue(user)
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block();
+            return userValidation.DeleteMe(updatedUser);
+        } catch (WebClientResponseException ex) {
+            return userValidation.UserClientEx(ex);
+        } catch (Exception ex) {
+            return userValidation.UserEx(ex);
+        }
     }
 
     @MutationMapping
-    public Users deleteUser(@Argument String id) {
-            return webClient.delete()
-                        .uri("/users/{id}", id)
-                        .retrieve()
-                        .bodyToMono(Users.class)
-                        .block();
+    public UserResponse deleteUser(@Argument String id) {
+        try {
+            Users deletedUser = usersClient.delete()
+                    .uri("/users/{id}", id)
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block();
+
+            return userValidation.DeleteMe(deletedUser);
+        } catch (WebClientResponseException ex) {
+            return userValidation.UserClientEx(ex);
+        } catch (Exception ex) {
+            return userValidation.UserEx(ex);
+        }
     }
 
     @MutationMapping
-    public Users updateMe(@Argument UsersInput user, @Argument String id) {
-            return ((RequestBodySpec) webClient.patch()
-                        .uri("/users/me")
-                        .bodyValue(user))
-                        .bodyValue(new HashMap<String, String>() {{
-                            put("id",id);}})
-                        .retrieve()
-                        .bodyToMono(Users.class)
-                        .block();
+    public UserResponse updateMe(@Argument UsersInput user, @Argument String id) {
+        try {
+            Users updatedUser = ((RequestBodySpec) usersClient.patch()
+                    .uri("/users/me")
+                    .bodyValue(user))
+                    .bodyValue(new HashMap<String, String>() {
+                        {
+                            put("id", id);
+                        }
+                    })
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block();
+            return userValidation.DeleteMe(updatedUser);
+        } catch (WebClientResponseException ex) {
+            return userValidation.UserClientEx(ex);
+        } catch (Exception ex) {
+            return userValidation.UserEx(ex);
+        }
     }
 
     @MutationMapping
-    public Users deleteMe(@Argument String id) {
-            return ((RequestBodySpec) webClient.delete()
-                        .uri("/users/me"))
-                        .bodyValue(new HashMap<String, String>() {{
-                            put("id",id);}})
-                        .retrieve()
-                        .bodyToMono(Users.class)
-                        .block();
+    public UserResponse deleteMe(@Argument String id) {
+        try {
+
+            Users deletedUser = ((RequestBodySpec) usersClient.delete()
+                    .uri("/users/me"))
+                    .bodyValue(new HashMap<String, String>() {
+                        {
+                            put("id", id);
+                        }
+                    })
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block();
+
+            return userValidation.DeleteMe(deletedUser);
+        } catch (WebClientResponseException ex) {
+            return userValidation.UserClientEx(ex);
+        } catch (Exception ex) {
+            return userValidation.UserEx(ex);
+        }
     }
 
     @MutationMapping
     public Enrollment createEnrollment(@Argument String course_id, @Argument String user_id) {
-            return webClient.post()
-                        .uri("/courses_users")
-                        .bodyValue(new HashMap<String, String>() {{
-                            put("course_id", course_id);
-                            put("user_id", user_id);}})
-                        .retrieve()
-                        .bodyToMono(Enrollment.class)
-                        .block();
+        return usersClient.post()
+                .uri("/courses_users")
+                .bodyValue(new HashMap<String, String>() {
+                    {
+                        put("course_id", course_id);
+                        put("user_id", user_id);
+                    }
+                })
+                .retrieve()
+                .bodyToMono(Enrollment.class)
+                .block();
     }
 
     @MutationMapping
-    public Enrollment updateEnrollment(@Argument EnrollInput enrollment, @Argument String course_id, @Argument String user_id) {
-            return webClient.patch()
-                        .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
-                        .bodyValue(enrollment)
-                        .retrieve()
-                        .bodyToMono(Enrollment.class)
-                        .block();
+    public Enrollment updateEnrollment(@Argument EnrollInput enrollment, @Argument String course_id,
+            @Argument String user_id) {
+        return usersClient.patch()
+                .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
+                .bodyValue(enrollment)
+                .retrieve()
+                .bodyToMono(Enrollment.class)
+                .block();
     }
 
     @MutationMapping
     public Enrollment deleteEnrollment(@Argument String course_id, @Argument String user_id) {
-            return webClient.delete()
-                        .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
-                        .retrieve()
-                        .bodyToMono(Enrollment.class)
-                        .block();
+        return usersClient.delete()
+                .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
+                .retrieve()
+                .bodyToMono(Enrollment.class)
+                .block();
     }
 }
