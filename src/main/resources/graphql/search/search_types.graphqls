@@ -1,3 +1,10 @@
+type Highlight{
+    name: [String]
+    lastname: [String]
+    nickname: [String]
+    description: [String]
+}
+
 type Post{
     id: ID!
     name: String!
@@ -5,9 +12,11 @@ type Post{
     nickname: String
     description: String
     picture: String
+    type: String
 }
 
 type ResponsePost {
-    highlight: Post
+    highlight: Highlight
     post: Post
+    error: String
 }
