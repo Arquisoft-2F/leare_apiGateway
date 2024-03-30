@@ -18,5 +18,4 @@ type Post{
 type ResponsePost {
     highlight: Highlight
     post: Post
-    error: String
 }
