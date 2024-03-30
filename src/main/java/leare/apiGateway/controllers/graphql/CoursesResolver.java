@@ -15,9 +15,12 @@ import leare.apiGateway.models.CoursesModels.CourseByCategory;
 import leare.apiGateway.models.CoursesModels.CourseModule;
 import leare.apiGateway.models.CoursesModels.CreateCourseInput;
 import leare.apiGateway.models.CoursesModels.CreateModuleInput;
+import leare.apiGateway.models.CoursesModels.CreateSectionInput;
 import leare.apiGateway.models.CoursesModels.EditCategoryInput;
 import leare.apiGateway.models.CoursesModels.EditCourseInput;
 import leare.apiGateway.models.CoursesModels.EditModuleInput;
+import leare.apiGateway.models.CoursesModels.EditSectionInput;
+import leare.apiGateway.models.CoursesModels.ModuleSection;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -90,7 +93,9 @@ public class CoursesResolver {
         webClient
             .delete()
             .uri("/categories/{id}", id)
-            .retrieve();
+            .retrieve()
+            .bodyToMono(Boolean.class)
+            .block();
         return true;
     }
 
@@ -164,7 +169,9 @@ public class CoursesResolver {
         webClient
             .delete()
             .uri("/courses/{id}", id)
-            .retrieve();
+            .retrieve()
+            .bodyToMono(Boolean.class)
+            .block();
         return true;
     }
 
@@ -217,7 +224,65 @@ public class CoursesResolver {
         webClient
             .delete()
             .uri("/modules/{id}", id)
-            .retrieve();
+            .retrieve()
+            .bodyToMono(Boolean.class)
+            .block();
+        return true;
+    }
+
+    // SECTIONS
+
+    @QueryMapping
+    public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page) {
+        return webClient
+            .get()
+            .uri("/modules/{module_id}/sections/{page}", module_id, page)
+            .retrieve()
+            .bodyToMono(ModuleSection[].class)
+            .block();
+    }
+
+    @QueryMapping
+    public ModuleSection sectionById(@Argument String id) {
+        return webClient
+            .get()
+            .uri("/sections/{id}", id)
+            .retrieve()
+            .bodyToMono(ModuleSection.class)
+            .block();
+    }
+
+    @MutationMapping
+    public ModuleSection createSection(@Argument CreateSectionInput input) {
+        return webClient
+            .post()
+            .uri("/sections")
+            .bodyValue(input)
+            .retrieve()
+            .bodyToMono(ModuleSection.class)
+            .block();
+    }
+
+    @MutationMapping
+    public ModuleSection editSection(@Argument EditSectionInput input) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + input.getFiles_array());
+        return webClient
+            .patch()
+            .uri("/sections/{id}", input.getSection_id())
+            .bodyValue(input)
+            .retrieve()
+            .bodyToMono(ModuleSection.class)
+            .block();
+    }
+
+    @MutationMapping
+    public Boolean deleteSection(@Argument String id) {
+        webClient
+            .delete()
+            .uri("/sections/{id}", id)
+            .retrieve()
+            .bodyToMono(Boolean.class)
+            .block();
         return true;
     }
 

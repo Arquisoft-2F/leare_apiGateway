@@ -10,4 +10,8 @@ extend type Mutation {
     createModule(input: CreateModuleInput!): CourseModule
     editModule(moduleEdit: EditModuleInput!): CourseModule
     deleteModule(id: ID!): Boolean
+
+    createSection(input: CreateSectionInput!): ModuleSection
+    editSection(input: EditSectionInput!): ModuleSection
+    deleteSection(id: ID!): Boolean
 }

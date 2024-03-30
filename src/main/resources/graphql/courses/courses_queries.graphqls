@@ -8,4 +8,7 @@ extend type Query {
 
     moduleById(id: ID!): CourseModule
     courseModules(course_id: ID!, page: Int!): [CourseModule]
+
+    moduleSections(module_id: ID!, page: Int!): [ModuleSection]
+    sectionById(id: ID!): ModuleSection
 }
