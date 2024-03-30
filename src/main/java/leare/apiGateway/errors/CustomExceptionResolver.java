@@ -39,6 +39,7 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
 
             // Crear un objeto de error personalizado para GraphQL (statusCode y responseBody)
             Map<String, Object> errorMap = new HashMap<>();
+            errorMap.put("uri", ex.getRequest().getURI());
             errorMap.put("statusCode", ex.getStatusCode().value());
             errorMap.put("responseBody", ex.getResponseBodyAsString());
 
