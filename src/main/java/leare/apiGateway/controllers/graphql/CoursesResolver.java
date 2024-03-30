@@ -3,12 +3,10 @@ package leare.apiGateway.controllers.graphql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 
+import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.CoursesModels.CourseByCategory;
@@ -21,269 +19,132 @@ import leare.apiGateway.models.CoursesModels.EditCourseInput;
 import leare.apiGateway.models.CoursesModels.EditModuleInput;
 import leare.apiGateway.models.CoursesModels.EditSectionInput;
 import leare.apiGateway.models.CoursesModels.ModuleSection;
-import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class CoursesResolver {
-    private final WebClient webClient;
+    private final CourseConsumer coursesConsumer;
 
     @Autowired
-    public CoursesResolver(WebClient.Builder webClientBuilder) {
-        String url = "http://courses-web";
-        String port = "3003";
-        this.webClient = webClientBuilder.baseUrl(url + ":" + port).build();
+    public CoursesResolver() {
+        this.coursesConsumer = new CourseConsumer();
     }
 
-    // CATEGORIES
+    // CATEGORY
 
     @QueryMapping
     public Category[] categories() {
-        return webClient
-            .get()
-            .uri("/categories")
-            .retrieve()
-            .bodyToMono(Category[].class)
-            .block();
+        return coursesConsumer.getCategories();
     }
 
     @QueryMapping
     public Category categoryById(@Argument String id) {
-        return webClient
-            .get()
-            .uri("/categories/{id}", id)
-            .retrieve()
-            .bodyToMono(Category.class)
-            .block();
+        return coursesConsumer.getCategoryById(id);
     }
 
     @MutationMapping
     public Category createCategory(@Argument String category_name) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("category_name", category_name);
-
-        return webClient
-            .post()
-            .uri("/categories")
-            .bodyValue(body)
-            .retrieve()
-            .bodyToMono(Category.class)
-            .block();
+        return coursesConsumer.createCategory(category_name);
     }
 
     @MutationMapping
     public Category editCategory(@Argument EditCategoryInput input) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("category_name", input.getCategory_name());
-
-        return webClient
-            .patch()
-            .uri("/categories/{id}", input.getCategory_id())
-            .bodyValue(body)
-            .retrieve()
-            .bodyToMono(Category.class)
-            .block();
+        return coursesConsumer.editCategory(input);
     }
 
     @MutationMapping
     public Boolean deleteCategory(@Argument String id) {
-        webClient
-            .delete()
-            .uri("/categories/{id}", id)
-            .retrieve()
-            .bodyToMono(Boolean.class)
-            .block();
+        coursesConsumer.deleteCategory(id);
         return true;
     }
 
-    // COURSES
+    // COURSE
 
     @QueryMapping
     public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories) {
-        Map<String, Object> body = Map.of("categories", categories);
-
-        return ((RequestBodySpec) webClient
-            .get()
-            .uri("/courses/categories"))
-            .bodyValue(body)
-            .retrieve()
-            .bodyToMono(CourseByCategory[].class)
-            .block();
+        return coursesConsumer.getCoursesByCategory(categories);
     }
 
     @QueryMapping
     public Course[] listCourses(@Argument int page) {
-        return webClient
-            .get()
-            .uri("/listcourses/{page}", page)
-            .retrieve()
-            .bodyToMono(Course[].class)
-            .block();
+        return coursesConsumer.listCourses(page);
     }
 
     @QueryMapping
     public Course courseById(@Argument String id) {
-        return webClient
-            .get()
-            .uri("/courses/{id}", id)
-            .retrieve()
-            .bodyToMono(Course.class)
-            .block();  
+        return coursesConsumer.getCourseById(id);
     }
 
     @MutationMapping
     public Course createCourse(@Argument CreateCourseInput input) {
-        return webClient
-            .post()
-            .uri("/courses")
-            .bodyValue(input)
-            .retrieve()
-            .bodyToMono(Course.class)
-            .block();  
+        return coursesConsumer.createCourse(input);
     }
 
     @MutationMapping
     public Course editCourse(@Argument EditCourseInput input) {
-        Map<String, Object> body = new HashMap<>(); // This is neccesary because "public" is a reserved word in Java
-        body.put("course_name", input.getCourse_name());
-        body.put("course_description", input.getCourse_description());
-        body.put("creator_id", input.getCreator_id());
-        body.put("public", input.getIs_public());
-        body.put("picture_id", input.getPicture_id());
-        body.put("categories", input.getCategories());
-
-        return webClient
-            .patch()
-            .uri("/courses/{id}", input.getCourse_id())
-            .bodyValue(body)
-            .retrieve()
-            .bodyToMono(Course.class)
-            .block();  
+        return coursesConsumer.editCourse(input);
     }
 
     @MutationMapping
     public Boolean deleteCourse(@Argument String id) {
-        webClient
-            .delete()
-            .uri("/courses/{id}", id)
-            .retrieve()
-            .bodyToMono(Boolean.class)
-            .block();
+        coursesConsumer.deleteCourse(id);
         return true;
     }
 
-    // MODULES
+    // MODULE
 
     @QueryMapping
     public CourseModule[] courseModules(@Argument String course_id, @Argument int page) {
-        return webClient
-            .get()
-            .uri("/coursemodules/{course_id}/{page}", course_id, page)
-            .retrieve()
-            .bodyToMono(CourseModule[].class)
-            .block();
+        return coursesConsumer.getCourseModules(course_id, page);
     }
 
     @QueryMapping
     public CourseModule moduleById(@Argument String id) {
-        return webClient
-            .get()
-            .uri("/modules/{id}", id)
-            .retrieve()
-            .bodyToMono(CourseModule.class)
-            .block();
+        return coursesConsumer.getModuleById(id);
     }
 
     @MutationMapping
-    public CourseModule createModule(@Argument CreateModuleInput input) { 
-        return webClient
-            .post()
-            .uri("/modules")
-            .bodyValue(input)
-            .retrieve()
-            .bodyToMono(CourseModule.class)
-            .block();
+    public CourseModule createModule(@Argument CreateModuleInput input) {
+        return coursesConsumer.createModule(input);
     }
 
     @MutationMapping
-    public CourseModule editModule(@Argument EditModuleInput moduleEdit) {
-        return webClient
-            .patch()
-            .uri("/modules/{id}", moduleEdit.getModule_id())
-            .bodyValue(moduleEdit)
-            .retrieve()
-            .bodyToMono(CourseModule.class)
-            .block();
+    public CourseModule editModule(@Argument EditModuleInput input) {
+        return coursesConsumer.editModule(input);
     }
 
     @MutationMapping
     public Boolean deleteModule(@Argument String id) {
-        webClient
-            .delete()
-            .uri("/modules/{id}", id)
-            .retrieve()
-            .bodyToMono(Boolean.class)
-            .block();
+        coursesConsumer.deleteModule(id);
         return true;
     }
 
-    // SECTIONS
+    // SECTION
 
     @QueryMapping
     public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page) {
-        return webClient
-            .get()
-            .uri("/modules/{module_id}/sections/{page}", module_id, page)
-            .retrieve()
-            .bodyToMono(ModuleSection[].class)
-            .block();
+        return coursesConsumer.getModuleSections(module_id, page);
     }
 
     @QueryMapping
     public ModuleSection sectionById(@Argument String id) {
-        return webClient
-            .get()
-            .uri("/sections/{id}", id)
-            .retrieve()
-            .bodyToMono(ModuleSection.class)
-            .block();
+        return coursesConsumer.getSectionById(id);
     }
 
     @MutationMapping
     public ModuleSection createSection(@Argument CreateSectionInput input) {
-        return webClient
-            .post()
-            .uri("/sections")
-            .bodyValue(input)
-            .retrieve()
-            .bodyToMono(ModuleSection.class)
-            .block();
+        return coursesConsumer.createSection(input);
     }
 
     @MutationMapping
     public ModuleSection editSection(@Argument EditSectionInput input) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + input.getFiles_array());
-        return webClient
-            .patch()
-            .uri("/sections/{id}", input.getSection_id())
-            .bodyValue(input)
-            .retrieve()
-            .bodyToMono(ModuleSection.class)
-            .block();
+        return coursesConsumer.editSection(input);
     }
 
     @MutationMapping
     public Boolean deleteSection(@Argument String id) {
-        webClient
-            .delete()
-            .uri("/sections/{id}", id)
-            .retrieve()
-            .bodyToMono(Boolean.class)
-            .block();
+        coursesConsumer.deleteSection(id);
         return true;
     }
-
 }
