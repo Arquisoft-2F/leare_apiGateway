@@ -90,11 +90,13 @@ import java.util.regex.Pattern;
 public class UserResolver {
     private final UserConsumer userConsumer;
     private final DocumentConsumer documentConsumer;
+    private final SearchConsumer searchConsumer;
 
     @Autowired
     public UserResolver() {
         this.userConsumer = new UserConsumer();
         this.documentConsumer = new DocumentConsumer();
+        this.searchConsumer = new SearchConsumer();
     }
 
     @QueryMapping
@@ -182,11 +184,12 @@ public class UserResolver {
 
     @MutationMapping
     public UserResponse createUser(@Argument UsersInput user) {
-        UserResponse newUser= userConsumer.createUser(user);
+        UserResponse newUser = userConsumer.createUser(user);
         if(newUser.getUsers()!=null && newUser.getUsers().getPicture_id()!=null){
             String link = documentConsumer.getDocument(newUser.getUsers().getPicture_id());
             newUser.getUsers().setPicture_id(extractURL(link));
         }
+        
         return newUser;
     }
 

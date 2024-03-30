@@ -24,15 +24,7 @@ public class SearchConsumer {
         this.searchValidation = new SearchValidation();
     }
 
-    public void Login() {
-
-    }
-
-    public void Register() {
-
-    }
-
-    public Boolean AddCourseIndex(String id, String description, String name,String picture){
+    public Boolean AddCourseIndex(String id, String name, String description, String picture){
         try{
 
             String response =  SearchClient.post()
