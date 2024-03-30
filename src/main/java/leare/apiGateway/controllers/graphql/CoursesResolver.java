@@ -52,7 +52,7 @@ public class CoursesResolver {
     public Category editCategory(@Argument EditCategoryInput input) {
         return coursesConsumer.editCategory(input);
     }
-
+    
     @MutationMapping
     public Boolean deleteCategory(@Argument String id) {
         coursesConsumer.deleteCategory(id);

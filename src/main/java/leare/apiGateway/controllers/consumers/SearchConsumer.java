@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import leare.apiGateway.models.SearchModels.ResponsePost;
+import leare.apiGateway.models.SearchModels.ResponsePost.Post;
+
 public class SearchConsumer {
 
     private final WebClient SearchClient;
@@ -186,6 +189,29 @@ public class SearchConsumer {
         }
         catch(Exception e){
             return false;
+        }
+
+
+    }
+
+    public ResponsePost[] getbyIndex(String query){
+        try{
+
+            Post[] response =  SearchClient.get()
+                        .uri("/posts?q="+query)
+                        // .header("Authorization", token)
+                        .retrieve()
+                        .bodyToMono(Post[].class)
+                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+            for(Post x : response){
+                System.out.println(x.getId());
+            }
+            return null;
+
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return null;
         }
 
 

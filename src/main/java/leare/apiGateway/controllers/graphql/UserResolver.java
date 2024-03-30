@@ -1,10 +1,14 @@
 package leare.apiGateway.controllers.graphql;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -37,10 +41,17 @@ import leare.apiGateway.models.UserModels.responses.UserResponse;
 import leare.apiGateway.validation.UserValidation;
 import reactor.core.publisher.Mono;
 import leare.apiGateway.controllers.consumers.AuthConsumer;
+import leare.apiGateway.controllers.consumers.CourseConsumer;
+import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
+import leare.apiGateway.controllers.consumers.UserConsumer;
+import graphql.language.Document;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // class RequestHeaderInterceptor implements WebGraphQlInterceptor { 
 
@@ -77,29 +88,25 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 
 @Controller
 public class UserResolver {
+    private final UserConsumer userConsumer;
+    private final DocumentConsumer documentConsumer;
 
-    private final WebClient usersClient;
-    private final UserValidation userValidation;
-    private final AuthConsumer auth;
-    private final SearchConsumer search;
-
+    @Autowired
     public UserResolver() {
-        String url = "http://users-web";
-        String port = "3000";
-        this.usersClient = WebClient.create(url + ":" + port);
-        this.userValidation = new UserValidation();
-        this.auth = new AuthConsumer();
-        this.search = new SearchConsumer();
+        this.userConsumer = new UserConsumer();
+        this.documentConsumer = new DocumentConsumer();
     }
 
     @QueryMapping
     public Users[] users() {
-        return usersClient.get()
-                .uri("/users")
-                .retrieve()
-                .bodyToMono(Users[].class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-
+        Users[] allUser = userConsumer.users();
+        for (Users user : allUser){
+            if(user!=null && user.getPicture_id()!=null){
+                String link = documentConsumer.getDocument(user.getPicture_id());
+                user.setPicture_id(extractURL(link));
+            }
+        }
+        return allUser;
     }
 
     
@@ -128,194 +135,108 @@ public class UserResolver {
         // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
 
         //!document
-        try {
-            Users user = usersClient.get()
-                    .uri("/users/{id}", id)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-            return userValidation.DeleteMe(user);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
+        UserResponse x= userConsumer.userById(id, AuthorizationHeader);
+        if(x.getUsers()!=null && x.getUsers().getPicture_id()!=null){
+            String link = documentConsumer.getDocument(x.getUsers().getPicture_id());
+            x.getUsers().setPicture_id(extractURL(link));
         }
+        return x;
+    }
+
+    public static String extractURL(String text) {
+        String[] matches = Pattern.compile("https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)")
+                          .matcher(text)
+                          .results()
+                          .map(MatchResult::group)
+                          .toArray(String[]::new);
+        System.out.println(Arrays.toString(matches));
+        return String.join("",matches);
     }
 
     @QueryMapping
     public Enrollment[] enrollements() {
-        return usersClient.get()
-                .uri("/courses_users")
-                .retrieve()
-                .bodyToMono(Enrollment[].class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return userConsumer.enrollements();
     }
 
     @QueryMapping
     public Enrollment[] myCourses(@Argument String user_id) {
-        return usersClient.get()
-                .uri("/users/{user_id}/enroll", user_id)
-                .retrieve()
-                .bodyToMono(Enrollment[].class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return userConsumer.myCourses(user_id);
     }
 
     @QueryMapping
     public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id) {
-        return usersClient.get()
-                .uri("/users/{user_id}/enroll/{course_id}", user_id, course_id)
-                .retrieve()
-                .bodyToMono(Enrollment.class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return userConsumer.isEnrolled(user_id, course_id);
     }
 
     @QueryMapping
     public Students[] getCourses(@Argument String course_id) {
-        Users[] x = usersClient.get()
-                .uri("/courses_users/{course_id}/users", course_id)
-                .retrieve()
-                .bodyToMono(Users[].class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-        Enrollment[] y = usersClient.get()
-                .uri("/courses_users/{course_id}/users", course_id)
-                .retrieve()
-                .bodyToMono(Enrollment[].class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-        Students[] result = new Students[x.length];
-        for (int i = 0; i < x.length; i++) {
-            result[i] = new Students(x[i], y[i]);
+        Students[] students= userConsumer.getCourses(course_id);
+        for(Students student: students){
+            if(student.getUser()!=null && student.getUser().getPicture_id()!=null){
+                String link = documentConsumer.getDocument(student.getUser().getPicture_id());
+                student.getUser().setPicture_id(extractURL(link));
+            }
         }
-        return result;
+        return students;
     }
 
     @MutationMapping
     public UserResponse createUser(@Argument UsersInput user) {
-        try {
-            Users createdUser = usersClient.post()
-                    .uri("/users")
-                    .bodyValue(user)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-            return userValidation.DeleteMe(createdUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
+        UserResponse newUser= userConsumer.createUser(user);
+        if(newUser.getUsers()!=null && newUser.getUsers().getPicture_id()!=null){
+            String link = documentConsumer.getDocument(newUser.getUsers().getPicture_id());
+            newUser.getUsers().setPicture_id(extractURL(link));
         }
+        return newUser;
     }
 
     @MutationMapping
     public UserResponse updateUser(@Argument UsersInput user, @Argument String id) {
-        try {
-            Users updatedUser = usersClient.patch()
-                    .uri("/users/{id}", id)
-                    .bodyValue(user)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-            return userValidation.DeleteMe(updatedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
+        UserResponse editedUser= userConsumer.updateUser(user, id);
+        if(editedUser.getUsers()!=null && editedUser.getUsers().getPicture_id()!=null){
+            String link = documentConsumer.getDocument(editedUser.getUsers().getPicture_id());
+            editedUser.getUsers().setPicture_id(extractURL(link));
         }
+        return editedUser;
     }
 
     @MutationMapping
     public UserResponse deleteUser(@Argument String id) {
-        try {
-            Users deletedUser = usersClient.delete()
-                    .uri("/users/{id}", id)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-
-            return userValidation.DeleteMe(deletedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
+        UserResponse deletedUser= userConsumer.deleteUser(id);
+        if(deletedUser.getUsers()!=null && deletedUser.getUsers().getPicture_id()!=null){
+            documentConsumer.deleteDocument(deletedUser.getUsers().getPicture_id());
         }
+        return deletedUser;
     }
 
     @MutationMapping
     public UserResponse updateMe(@Argument UsersInput user, @Argument String id) {
-        try {
-            Users updatedUser = ((RequestBodySpec) usersClient.patch()
-                    .uri("/users/me")
-                    .bodyValue(user))
-                    .bodyValue(new HashMap<String, String>() {
-                        {
-                            put("id", id);
-                        }
-                    })
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-            return userValidation.DeleteMe(updatedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
+        UserResponse editedUser= userConsumer.updateMe(user, id);
+        if(editedUser.getUsers()!=null && editedUser.getUsers().getPicture_id()!=null){
+            String link = documentConsumer.getDocument(editedUser.getUsers().getPicture_id());
+            editedUser.getUsers().setPicture_id(extractURL(link));
         }
+        return editedUser;
     }
 
     @MutationMapping
     public UserResponse deleteMe(@Argument String id) {
-        try {
-
-            Users deletedUser = ((RequestBodySpec) usersClient.delete()
-                    .uri("/users/me"))
-                    .bodyValue(new HashMap<String, String>() {
-                        {
-                            put("id", id);
-                        }
-                    })
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-
-            return userValidation.DeleteMe(deletedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+        return userConsumer.deleteMe(id);
     }
 
     @MutationMapping
     public Enrollment createEnrollment(@Argument String course_id, @Argument String user_id) {
-        return usersClient.post()
-                .uri("/courses_users")
-                .bodyValue(new HashMap<String, String>() {
-                    {
-                        put("course_id", course_id);
-                        put("user_id", user_id);
-                    }
-                })
-                .retrieve()
-                .bodyToMono(Enrollment.class)
-                .block();
+        return userConsumer.createEnrollment(course_id, user_id);
     }
 
     @MutationMapping
     public Enrollment updateEnrollment(@Argument EnrollInput enrollment, @Argument String course_id,
             @Argument String user_id) {
-        return usersClient.patch()
-                .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
-                .bodyValue(enrollment)
-                .retrieve()
-                .bodyToMono(Enrollment.class)
-                .block();
+        return userConsumer.updateEnrollment(enrollment, course_id, user_id);
     }
 
     @MutationMapping
     public Enrollment deleteEnrollment(@Argument String course_id, @Argument String user_id) {
-        return usersClient.delete()
-                .uri("/courses_users/{course_id}/{user_id}", course_id, user_id)
-                .retrieve()
-                .bodyToMono(Enrollment.class)
-                .block();
+        return userConsumer.deleteEnrollment(course_id, user_id);
     }
 }

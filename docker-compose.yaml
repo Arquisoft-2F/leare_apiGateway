@@ -185,8 +185,8 @@ services:
       - ../db/leare_users_db:/var/lib/mysql
     environment:
       MYSQL_DATABASE: my_app_development
-      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-      # MYSQL_ROOT_PASSWORD: password
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
     ports:
       - "3307:3307"
     networks:
@@ -204,8 +204,8 @@ services:
     depends_on:
       - users-db
     environment:
-      DATABASE_URL: mysql2://root@users-db/my_app_development
-      # DATABASE_URL: mysql2://root:password@users-db/my_app_development
+      # DATABASE_URL: mysql2://root@users-db/my_app_development
+      DATABASE_URL: mysql2://root:password@users-db/my_app_development
     networks:
       - leare-network
 
