@@ -12,16 +12,13 @@ import org.springframework.http.MediaType;
 import leare.apiGateway.models.SearchModels.Highlight;
 import leare.apiGateway.models.SearchModels.Post;
 import leare.apiGateway.models.SearchModels.ResponsePost;
-import leare.apiGateway.validation.SearchValidation;
 
 public class SearchConsumer {
 
     private final WebClient SearchClient;
-    private final SearchValidation searchValidation;
 
     public SearchConsumer() {
         this.SearchClient = WebClient.create("http://search-web:3005");
-        this.searchValidation = new SearchValidation();
     }
 
     public Boolean AddCourseIndex(String id, String name, String description, String picture){
@@ -196,31 +193,25 @@ public class SearchConsumer {
     }
 
     public ResponsePost[] getbyIndex(String query){
-         try{
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            ResponsePost[] response = SearchClient
-                .get()
-                .uri("/posts?q=" + query)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(jsonString -> {
-                    try {
-                        // Deserialize JSON response using Jackson
-                        return objectMapper.readValue(jsonString, ResponsePost[].class);
-                    } catch (Exception e) {
-                        // Handle exception
-                        e.printStackTrace();
-                        return null;
-                    }
-                })
-                .block();
-            return response;
-        } catch (WebClientResponseException ex) {
-            return new ResponsePost[]{searchValidation.SearchClientEx(ex)};
-        }
-            
+        ObjectMapper objectMapper = new ObjectMapper();
+        ResponsePost[] response = SearchClient
+            .get()
+            .uri("/posts?q=" + query)
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .bodyToMono(String.class)
+            .map(jsonString -> {
+                try {
+                    // Deserialize JSON response using Jackson
+                    return objectMapper.readValue(jsonString, ResponsePost[].class);
+                } catch (Exception e) {
+                    // Handle exception
+                    e.printStackTrace();
+                    return null;
+                }
+            })
+            .block();
+        return response;
         //     Highlight[] response =  SearchClient.get()
         //                 .uri("/posts?q="+query)
         //                 // .header("Authorization", token)
