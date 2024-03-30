@@ -190,6 +190,8 @@ public class UserResolver {
             newUser.setPicture_id(extractURL(link));
         }
         
+        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(), newUser.getPicture_id());
+
         return newUser;
     }
 
@@ -200,6 +202,8 @@ public class UserResolver {
             String link = documentConsumer.getDocument(editedUser.getPicture_id());
             editedUser.setPicture_id(extractURL(link));
         }
+        
+        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
 
@@ -209,6 +213,7 @@ public class UserResolver {
         if(deletedUser!=null && deletedUser.getPicture_id()!=null){
             documentConsumer.deleteDocument(deletedUser.getPicture_id());
         }
+        searchConsumer.DeleteIndex(deletedUser.getId());
         return deletedUser;
     }
 
@@ -219,12 +224,18 @@ public class UserResolver {
             String link = documentConsumer.getDocument(editedUser.getPicture_id());
             editedUser.setPicture_id(extractURL(link));
         }
+        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
 
     @MutationMapping
     public Users deleteMe(@Argument String id) {
-        return userConsumer.deleteMe(id);
+        Users userDeleted = userConsumer.deleteMe(id);
+        if(userDeleted!=null && userDeleted.getPicture_id()!=null){
+            documentConsumer.deleteDocument(userDeleted.getPicture_id());
+        }
+        searchConsumer.DeleteIndex(userDeleted.getId());
+        return userDeleted;
     }
 
     @MutationMapping
