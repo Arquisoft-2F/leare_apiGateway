@@ -16,18 +16,17 @@ import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.AuthModels.LoginResponse;
 
 @Controller
-public class AuthController {
+public class AuthResolver {
 
     private final WebClient webClient;
 
-    public AuthController() {
+    public AuthResolver() {
         // this.webClient = WebClient.create("http://localhost:5183");
         this.webClient = WebClient.create("http://auth-web:8080");
     }
 
     @QueryMapping
     public String getRoute(@Argument String route, @Argument String method, @Argument String token) {
-        System.out.println("llega a query de ql");
         return webClient.post()
                         .uri("/Test/getRoute")
                         .bodyValue(new HashMap<String, String>() {{
@@ -41,7 +40,6 @@ public class AuthController {
 
     @MutationMapping 
     public LoginResponse login(@Argument String email, @Argument String password) {
-        System.out.println("llega a query de ql");
         return webClient.post()
                         .uri("/api/Account/login")
                         .bodyValue(new HashMap<String, String>() {{
@@ -54,7 +52,6 @@ public class AuthController {
 
     @MutationMapping
     public RegisterResponse register(@Argument RegisterInput registerInput) {
-        System.out.println("llega a query de ql");
         return webClient.post()
                         .uri("/api/Account/register")
                         .bodyValue(registerInput)

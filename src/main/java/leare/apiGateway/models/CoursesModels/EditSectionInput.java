@@ -1,16 +1,17 @@
 package leare.apiGateway.models.CoursesModels;
 
+import java.util.List;
 public class EditSectionInput {
     private String section_id;
     private String module_id;
     private String section_name;
     private String section_content;
     private String video_id;
-    private String[] files_array;
+    private List<String> files_array;
     private int pos_index;
     
     public EditSectionInput(String section_id, String module_id, String section_name, String section_content,
-            String video_id, String[] files_array, int pos_index) {
+            String video_id, List<String> files_array, int pos_index) {
         this.section_id = section_id;
         this.module_id = module_id;
         this.section_name = section_name;
@@ -60,11 +61,11 @@ public class EditSectionInput {
         this.video_id = video_id;
     }
 
-    public String[] getFiles_array() {
+    public List<String> getFiles_array() {
         return files_array;
     }
 
-    public void setFiles_array(String[] files_array) {
+    public void setFiles_array(List<String> files_array) {
         this.files_array = files_array;
     }
 

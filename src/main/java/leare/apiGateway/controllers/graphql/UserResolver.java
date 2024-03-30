@@ -3,6 +3,7 @@ package leare.apiGateway.controllers.graphql;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ import leare.apiGateway.models.UserModels.responses.UserResponse;
 import leare.apiGateway.validation.UserValidation;
 import reactor.core.publisher.Mono;
 import leare.apiGateway.controllers.consumers.AuthConsumer;
-
+import leare.apiGateway.controllers.consumers.SearchConsumer;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
@@ -75,18 +76,20 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 // }
 
 @Controller
-public class UserController {
+public class UserResolver {
 
     private final WebClient usersClient;
     private final UserValidation userValidation;
     private final AuthConsumer auth;
+    private final SearchConsumer search;
 
-    public UserController() {
+    public UserResolver() {
         String url = "http://users-web";
         String port = "3000";
         this.usersClient = WebClient.create(url + ":" + port);
         this.userValidation = new UserValidation();
         this.auth = new AuthConsumer();
+        this.search = new SearchConsumer();
     }
 
     @QueryMapping
@@ -102,11 +105,29 @@ public class UserController {
     
     @QueryMapping
     public UserResponse userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) {
-        
-        
+        //!search
+
+        // UUID x = UUID.randomUUID();
+        // if( search.AddCourseIndex(x.toString(), "2", "3", "4") == false){
+        // }
+        // search.UpdateCourseIndex(x.toString(), "update", "update", "update");
+        // x = UUID.randomUUID();
+        // if( search.AddUsersIndex(x.toString(), "2", "3", "4","5") == false){
+        //     //do something with the error?
+        // }
+        // search.UpdateUsersIndex(x.toString(), "update", "update", "update","update");
+        // x = UUID.randomUUID();
+        // if( search.AddCategoryIndex(x.toString(), "2") == false){
+        //     //do something with the error?
+        // }
+        // search.UpdateCategoryIndex(x.toString(), "AQUI ESTOY");
+        // search.DeleteIndex(x.toString());
+
+        //!auth
         // //String route, String method, String token
-        // auth.Test();
-        auth.CheckRoute("/user/:id","get",AuthorizationHeader);
+        // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
+
+        //!document
         try {
             Users user = usersClient.get()
                     .uri("/users/{id}", id)
