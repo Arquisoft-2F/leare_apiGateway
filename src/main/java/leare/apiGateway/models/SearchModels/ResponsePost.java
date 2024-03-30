@@ -2,94 +2,45 @@ package leare.apiGateway.models.SearchModels;
 
 import graphql.com.google.common.base.Optional;
 
-public class ResponsePost {
+    public class ResponsePost{
+        private Highlight highlight;
+        private Post post;
+        private String error;
+        public ResponsePost() {
+        }
 
-    public class Post{
-        private String id;
-        private String name;
-        private Optional<String> lastname;
-        private Optional<String> nickname;
-        private Optional<String> description;
-        private Optional<String> picture;
         
-        public Post(String id, String name, Optional<String> lastname, Optional<String> nickname,
-                Optional<String> description, Optional<String> picture) {
-            this.id = id;
-            this.name = name;
-            this.lastname = lastname;
-            this.nickname = nickname;
-            this.description = description;
-            this.picture = picture;
+        public ResponsePost(Highlight highlight, Post post, String error) {
+            this.highlight = highlight;
+            this.post = post;
+            this.error = error;
         }
 
-        public String getId() {
-            return id;
+
+        public Highlight getHighlight() {
+            return highlight;
+        }
+        public void setHighlight(Highlight highlight) {
+            this.highlight = highlight;
+        }
+        public Post getPost() {
+            return post;
+        }
+        public void setPost(Post post) {
+            this.post = post;
         }
 
-        public void setId(String id) {
-            this.id = id;
+
+        public String getError() {
+            return error;
         }
 
-        public String getName() {
-            return name;
-        }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setError(String error) {
+            this.error = error;
         }
+        
+        
+        
 
-        public Optional<String> getLastname() {
-            return lastname;
-        }
-
-        public void setLastname(Optional<String> lastname) {
-            this.lastname = lastname;
-        }
-
-        public Optional<String> getNickname() {
-            return nickname;
-        }
-
-        public void setNickname(Optional<String> nickname) {
-            this.nickname = nickname;
-        }
-
-        public Optional<String> getDescription() {
-            return description;
-        }
-
-        public void setDescription(Optional<String> description) {
-            this.description = description;
-        }
-
-        public Optional<String> getPicture() {
-            return picture;
-        }
-
-        public void setPicture(Optional<String> picture) {
-            this.picture = picture;
-        }
     }
-
-    private Optional<Post> highlight; 
-    private Optional<Post> post;
-    public ResponsePost(Optional<Post> highlight, Optional<Post> post) {
-        this.highlight = highlight;
-        this.post = post;
-    }
-    public Optional<Post> getHighlight() {
-        return highlight;
-    }
-    public void setHighlight(Optional<Post> highlight) {
-        this.highlight = highlight;
-    }
-    public Optional<Post> getPost() {
-        return post;
-    }
-    public void setPost(Optional<Post> post) {
-        this.post = post;
-    } 
-
-    
-    
-}
