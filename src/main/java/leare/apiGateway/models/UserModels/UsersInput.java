@@ -16,16 +16,28 @@ public class UsersInput {
     private String updates_at;
 
     // Constructor, getters, and setters
-    public UsersInput(String nickname, String name, String lastname, String email, String nationality) {
-        this.nickname = nickname;
-        this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.nationality = nationality;
-    }
+    
 
     public String getNickname() {
         return nickname;
+    }
+
+    public UsersInput(String nickname, String name, String lastname, String picture_id, String nationality,
+            String email, String web_site, String biography, String twitter_link, String linkedin_link,
+            String facebook_link, String created_at, String updates_at) {
+        this.nickname = nickname;
+        this.name = name;
+        this.lastname = lastname;
+        this.picture_id = picture_id;
+        this.nationality = nationality;
+        this.email = email;
+        this.web_site = web_site;
+        this.biography = biography;
+        this.twitter_link = twitter_link;
+        this.linkedin_link = linkedin_link;
+        this.facebook_link = facebook_link;
+        this.created_at = created_at;
+        this.updates_at = updates_at;
     }
 
     public void setNickname(String nickname) {

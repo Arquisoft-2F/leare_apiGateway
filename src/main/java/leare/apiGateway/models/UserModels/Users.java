@@ -2,10 +2,11 @@ package leare.apiGateway.models.UserModels;
 
 public class Users extends UsersInput{
     private String id;
-
-    // Constructor, getters, and setters
-    public Users(String id, String nickname, String name, String lastname, String email, String nationality) {
-        super(nickname, name, lastname, email, nationality);
+    public Users(String nickname, String name, String lastname, String picture_id, String nationality, String email,
+            String web_site, String biography, String twitter_link, String linkedin_link, String facebook_link,
+            String created_at, String updates_at, String id) {
+        super(nickname, name, lastname, picture_id, nationality, email, web_site, biography, twitter_link,
+                linkedin_link, facebook_link, created_at, updates_at);
         this.id = id;
     }
 
