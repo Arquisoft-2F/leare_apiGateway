@@ -57,8 +57,26 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
                 return super.resolveToSingleError(throwable, env);
             }
         }
+        else { // Cualquier otra excepción
+            Map<String, String> errorMap = new HashMap<>();
+            // Map<String, Object> errorMap = new HashMap<>();
+            // errorMap.put("uri", "N/A");
+            // errorMap.put("statusCode", "400");
+            errorMap.put("responseBody", "ERROR NO IDENTIFICADO EN EL CODIGO. PROBABLEMENTE AUTH");
 
-        return super.resolveToSingleError(throwable, env);
+            try {
+                String errorMessage = objectMapper.writeValueAsString(errorMap);
+                return GraphqlErrorBuilder.newError()
+                        .errorType(ErrorType.ExecutionAborted)
+                        .message(errorMessage)
+                        .path(env.getExecutionStepInfo().getPath())
+                        .location(env.getField().getSourceLocation())
+                        .build();
+            } catch (JsonProcessingException e) {
+                return super.resolveToSingleError(throwable, env);
+            }
+        }
+        // return super.resolveToSingleError(throwable, env);
     }
 }
 

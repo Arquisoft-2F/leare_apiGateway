@@ -68,7 +68,6 @@ import java.util.regex.Pattern;
 //         request.configureExecutionInput((executionInput, builder) ->
 //                 builder.graphQLContext(Collections.singletonMap("Authorization", value)).build());
 
-                
 //         return chain.next(request);
 //     }
 // }
@@ -80,7 +79,7 @@ import java.util.regex.Pattern;
 //         System.out.println("7777777777777777777777777777");
 //         System.out.println("7777777777777777777777777777");
 //         System.out.println("7777777777777777777777777777");
-        
+
 //         String value = request.getHeaders().getFirst("Authorization");
 //         System.out.println(value);
 //         request.configureExecutionInput((executionInput, builder) ->
@@ -95,9 +94,10 @@ public class UserResolver {
     private final DocumentConsumer documentConsumer;
     private final SearchConsumer searchConsumer;
     private final AuthConsumer authConsumer;
-    
+
     @Autowired
-    public UserResolver(UserConsumer userConsumer, DocumentConsumer documentConsumer, SearchConsumer searchConsumer, AuthConsumer authConsumer) {
+    public UserResolver(UserConsumer userConsumer, DocumentConsumer documentConsumer, SearchConsumer searchConsumer,
+            AuthConsumer authConsumer) {
         this.userConsumer = userConsumer;
         this.documentConsumer = documentConsumer;
         this.searchConsumer = searchConsumer;
@@ -105,30 +105,32 @@ public class UserResolver {
     }
 
     @QueryMapping
-    public Users[] users(@ContextValue("Authorization") String AuthorizationHeader) {
-        
-        
+    public Users[] users(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
         // System.out.println(authConsumer.Login("david3@example.com","User@123"));
-        Boolean Auth = authConsumer.CheckRoute("/users","get",AuthorizationHeader);
-        if(!Auth){
-            Users[] x = new Users[1];
-            return x;
+        Boolean Auth = authConsumer.CheckRoute("/users", "get", AuthorizationHeader);
+
+        if (!Auth) {
+            // Users[] x = new Users[1];
+            throw new Exception("Auth Problem");
         }
 
         Users[] allUser = userConsumer.users();
-        for (Users user : allUser){
-            if(user!=null && user.getPicture_id()!=null){
+        for (Users user : allUser) {
+            if (user != null && user.getPicture_id() != null) {
                 String link = documentConsumer.getDocument(user.getPicture_id());
                 user.setPicture_id(link);
             }
         }
+        // throw new Exception("NO ESTA AUTENTICADO ");
+
         return allUser;
     }
 
-    
     @QueryMapping
-    public Users userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) {
-        //!search
+    public Users userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader)
+            throws Exception {
+        // !search
 
         // UUID x = UUID.randomUUID();
         // if( search.AddCourseIndex(x.toString(), "2", "3", "4") == false){
@@ -136,52 +138,76 @@ public class UserResolver {
         // search.UpdateCourseIndex(x.toString(), "update", "update", "update");
         // x = UUID.randomUUID();
         // if( search.AddUsersIndex(x.toString(), "2", "3", "4","5") == false){
-        //     //do something with the error?
+        // //do something with the error?
         // }
         // search.UpdateUsersIndex(x.toString(), "update", "update", "update","update");
         // x = UUID.randomUUID();
         // if( search.AddCategoryIndex(x.toString(), "2") == false){
-        //     //do something with the error?
+        // //do something with the error?
         // }
         // search.UpdateCategoryIndex(x.toString(), "AQUI ESTOY");
         // search.DeleteIndex(x.toString());
 
-        //!auth
+        // !auth
         // //String route, String method, String token
-        // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
 
-        //!document
-        Users x= userConsumer.userById(id, AuthorizationHeader);
-        if(x!=null && x.getPicture_id()!=null){
+        Boolean Auth = authConsumer.CheckRoute("/user/:id", "get", AuthorizationHeader);
+        if (!Auth) {
+            throw new Exception("Auth problem");
+        }
+        // !document
+        Users x = userConsumer.userById(id, AuthorizationHeader);
+        if (x != null && x.getPicture_id() != null) {
             String link = documentConsumer.getDocument(x.getPicture_id());
             x.setPicture_id(link);
         }
         return x;
     }
 
-    
-
     @QueryMapping
-    public Enrollment[] enrollements() {
+    public Enrollment[] enrollements(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/courses_users", "get", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return userConsumer.enrollements();
     }
 
     @QueryMapping
-    public Enrollment[] myCourses(@Argument String user_id) {
+    public Enrollment[] myCourses(@Argument String user_id, @ContextValue("Authorization") String AuthorizationHeader)
+            throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id/enroll", "get", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return userConsumer.myCourses(user_id);
     }
 
     @QueryMapping
-    public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id) {
+    public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id,
+            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:user_id/enroll/:course:id", "get", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return userConsumer.isEnrolled(user_id, course_id);
     }
 
     @QueryMapping
-    public Students[] getCourses(@Argument String course_id) {
+    public Students[] getCourses(@Argument String course_id, @ContextValue("Authorization") String AuthorizationHeader)
+            throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/courses_users/:course_id/users", "get", AuthorizationHeader);
 
-        Students[] students= userConsumer.getCourses(course_id);
-        for(Students student: students){
-            if(student.getUser()!=null && student.getUser().getPicture_id()!=null){
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
+
+        Students[] students = userConsumer.getCourses(course_id);
+        for (Students student : students) {
+            if (student.getUser() != null && student.getUser().getPicture_id() != null) {
                 String link = documentConsumer.getDocument(student.getUser().getPicture_id());
                 student.getUser().setPicture_id(link);
             }
@@ -193,58 +219,95 @@ public class UserResolver {
     }
 
     @MutationMapping
-    public CreateResponse createUser(@Argument UsersInput user, @Argument String password, @Argument String confirmPassword, @Argument String rol) {
+    public CreateResponse createUser(@Argument UsersInput user, @Argument String password,
+            @Argument String confirmPassword, @Argument String rol,
+            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         // System.out.println(authConsumer.DecryptToken().toString());
-        
+        // Boolean Auth = authConsumer.CheckRoute("/users", "post", AuthorizationHeader);
+
+        // if (!Auth) {
+        //     throw new Exception("Auth Problem");
+        // }
+
         Users newUser = userConsumer.createUser(user);
         // if(newUser!=null && newUser.getPicture_id()!=null){
-        //     String link = documentConsumer.getDocument(newUser.getPicture_id());
-        //     newUser.setPicture_id(link);
+        // String link = documentConsumer.getDocument(newUser.getPicture_id());
+        // newUser.setPicture_id(link);
         // }
 
         newUser = documentConsumer.updatePictureLinks(newUser);
 
-        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(), newUser.getPicture_id());
-        RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getEmail(), password, confirmPassword,rol,newUser.getId());
+        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
+                newUser.getPicture_id());
+        RegisterResponse registerResponse = authConsumer.Register(user.getName(), user.getEmail(), password,
+                confirmPassword, rol, newUser.getId());
         // return new CreateResponse(newUser,registerResponse.getToken());
-        return new CreateResponse(newUser,"ESTEBAN METE TOKEN");
+        return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
     }
 
     @MutationMapping
-    public Users updateUser(@Argument UsersInput user, @Argument String id) {
-        Users editedUser= userConsumer.updateUser(user, id);
+    public Users updateUser(@Argument UsersInput user, @Argument String id,
+            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
+        Users editedUser = userConsumer.updateUser(user, id);
         // if(editedUser!=null && editedUser.getPicture_id()!=null){
-        //     String link = documentConsumer.getDocument(editedUser.getPicture_id());
-        //     editedUser.setPicture_id(link);
+        // String link = documentConsumer.getDocument(editedUser.getPicture_id());
+        // editedUser.setPicture_id(link);
         // }
         editedUser = documentConsumer.updatePictureLinks(editedUser);
 
-        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
+        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
+                editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
 
     @MutationMapping
-    public Users deleteUser(@Argument String id) {
-        Users deletedUser= userConsumer.deleteUser(id);
+    public Users deleteUser(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader)
+            throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "delete", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
+        Users deletedUser = userConsumer.deleteUser(id);
         // if(deletedUser!=null && deletedUser.getPicture_id()!=null){
-        //     documentConsumer.deleteDocument(deletedUser.getPicture_id());
+        // documentConsumer.deleteDocument(deletedUser.getPicture_id());
         // }
-    
+
         deletedUser = documentConsumer.deletePictureLinks(deletedUser);
         searchConsumer.DeleteIndex(deletedUser.getId());
         return deletedUser;
     }
 
     @MutationMapping
-    public Users updateMe(@Argument UsersInput user, @Argument String id) {
-        Users editedUser= userConsumer.updateMe(user, id);
+    public Users updateMe(@Argument UsersInput user, @Argument String id,
+            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/me", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
+        Users editedUser = userConsumer.updateMe(user, id);
         editedUser = documentConsumer.updatePictureLinks(editedUser);
-        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
+        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
+                editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
 
     @MutationMapping
-    public Users deleteMe(@Argument String id) {
+    public Users deleteMe(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader)
+            throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/me", "delete", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         Users userDeleted = userConsumer.deleteMe(id);
         userDeleted = documentConsumer.deletePictureLinks(userDeleted);
         searchConsumer.DeleteIndex(userDeleted.getId());
@@ -252,18 +315,35 @@ public class UserResolver {
     }
 
     @MutationMapping
-    public Enrollment createEnrollment(@Argument String course_id, @Argument String user_id) {
+    public Enrollment createEnrollment(@Argument String course_id, @Argument String user_id,
+            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/courses_users", "post", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return userConsumer.createEnrollment(course_id, user_id);
     }
 
     @MutationMapping
     public Enrollment updateEnrollment(@Argument EnrollInput enrollment, @Argument String course_id,
-            @Argument String user_id) {
+            @Argument String user_id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/courses_users/:course_id/:user_id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return userConsumer.updateEnrollment(enrollment, course_id, user_id);
     }
 
     @MutationMapping
-    public Enrollment deleteEnrollment(@Argument String course_id, @Argument String user_id) {
+    public Enrollment deleteEnrollment(@Argument String course_id, @Argument String user_id,
+            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/courses_users/:course_id/:user_id", "delete", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return userConsumer.deleteEnrollment(course_id, user_id);
     }
 }
