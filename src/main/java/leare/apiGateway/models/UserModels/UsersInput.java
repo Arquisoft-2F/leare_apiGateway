@@ -1,6 +1,8 @@
 package leare.apiGateway.models.UserModels;
 
-public class UsersInput {
+import leare.apiGateway.controllers.graphql.ObjectWhitPicture;
+
+public class UsersInput implements ObjectWhitPicture{
     private String nickname;
     private String name;
     private String lastname;

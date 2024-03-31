@@ -3,7 +3,6 @@ package leare.apiGateway.controllers.graphql;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -187,6 +186,9 @@ public class UserResolver {
                 student.getUser().setPicture_id(link);
             }
         }
+
+        // TODO : USE DOCUMENT CONSUMER TO UPDATE PICTURE LINKS
+
         return students;
     }
 
@@ -195,10 +197,12 @@ public class UserResolver {
         // System.out.println(authConsumer.DecryptToken().toString());
         
         Users newUser = userConsumer.createUser(user);
-        if(newUser!=null && newUser.getPicture_id()!=null){
-            String link = documentConsumer.getDocument(newUser.getPicture_id());
-            newUser.setPicture_id(link);
-        }
+        // if(newUser!=null && newUser.getPicture_id()!=null){
+        //     String link = documentConsumer.getDocument(newUser.getPicture_id());
+        //     newUser.setPicture_id(link);
+        // }
+
+        newUser = documentConsumer.updatePictureLinks(newUser);
 
         searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(), newUser.getPicture_id());
         RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getEmail(), password, confirmPassword,rol,newUser.getId());
@@ -209,11 +213,12 @@ public class UserResolver {
     @MutationMapping
     public Users updateUser(@Argument UsersInput user, @Argument String id) {
         Users editedUser= userConsumer.updateUser(user, id);
-        if(editedUser!=null && editedUser.getPicture_id()!=null){
-            String link = documentConsumer.getDocument(editedUser.getPicture_id());
-            editedUser.setPicture_id(link);
-        }
-        
+        // if(editedUser!=null && editedUser.getPicture_id()!=null){
+        //     String link = documentConsumer.getDocument(editedUser.getPicture_id());
+        //     editedUser.setPicture_id(link);
+        // }
+        editedUser = documentConsumer.updatePictureLinks(editedUser);
+
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
@@ -221,9 +226,11 @@ public class UserResolver {
     @MutationMapping
     public Users deleteUser(@Argument String id) {
         Users deletedUser= userConsumer.deleteUser(id);
-        if(deletedUser!=null && deletedUser.getPicture_id()!=null){
-            documentConsumer.deleteDocument(deletedUser.getPicture_id());
-        }
+        // if(deletedUser!=null && deletedUser.getPicture_id()!=null){
+        //     documentConsumer.deleteDocument(deletedUser.getPicture_id());
+        // }
+    
+        deletedUser = documentConsumer.deletePictureLinks(deletedUser);
         searchConsumer.DeleteIndex(deletedUser.getId());
         return deletedUser;
     }
@@ -231,10 +238,7 @@ public class UserResolver {
     @MutationMapping
     public Users updateMe(@Argument UsersInput user, @Argument String id) {
         Users editedUser= userConsumer.updateMe(user, id);
-        if(editedUser!=null && editedUser.getPicture_id()!=null){
-            String link = documentConsumer.getDocument(editedUser.getPicture_id());
-            editedUser.setPicture_id(link);
-        }
+        editedUser = documentConsumer.updatePictureLinks(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
@@ -242,9 +246,7 @@ public class UserResolver {
     @MutationMapping
     public Users deleteMe(@Argument String id) {
         Users userDeleted = userConsumer.deleteMe(id);
-        if(userDeleted!=null && userDeleted.getPicture_id()!=null){
-            documentConsumer.deleteDocument(userDeleted.getPicture_id());
-        }
+        userDeleted = documentConsumer.deletePictureLinks(userDeleted);
         searchConsumer.DeleteIndex(userDeleted.getId());
         return userDeleted;
     }

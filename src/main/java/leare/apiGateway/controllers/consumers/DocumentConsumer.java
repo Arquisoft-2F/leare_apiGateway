@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import leare.apiGateway.controllers.graphql.ObjectWhitPicture;
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Students;
@@ -71,4 +72,45 @@ public class DocumentConsumer {
 
     }
 
+        // public <T extends ObjectWhitPicture> List<T> updatePictureLinks(List<T> items) {
+    //     for (T item : items) {
+    //         if (item != null && item.getPicture_id() != null) {
+    //             String link = documentConsumer.getDocument(item.getPicture_id());
+    //             item.setPicture_id(link);
+    //         }
+    //     }
+    //     return items;
+    // }
+
+
+    
+    public <T extends ObjectWhitPicture> T[] updatePictureLinks(T[] items) {
+        for (T item : items) {
+            this.updatePictureLinks(item);
+        }
+        return items;
+    }
+    public <T extends ObjectWhitPicture> T updatePictureLinks(T item) {
+        if (item != null && item.getPicture_id() != null) {
+            String link = this.getDocument(item.getPicture_id());
+            item.setPicture_id(link);
+        }
+        return item;
+    }
+    
+    public <T extends ObjectWhitPicture> T deletePictureLinks(T item) {
+        if (item != null && item.getPicture_id() != null) {
+            String link = this.deleteDocument(item.getPicture_id());
+            item.setPicture_id(link);
+        }
+        return item;
+    }
+    
+    public <T extends ObjectWhitPicture> T[] deletePictureLinks(T[] items) {
+        for (T item : items) {
+            this.deletePictureLinks(item);
+        }
+        return items;
+    }
+    
 }
