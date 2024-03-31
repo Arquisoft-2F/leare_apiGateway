@@ -17,10 +17,6 @@ public class UserValidation {
      
     }
     public UserResponse UserClientEx(WebClientResponseException ex){
-        // System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        // System.err.println(ex.getRawStatusCode()>299);
-        // System.err.println(ex.getStatusText());
-        // System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
             return new UserResponse(null, "User not found");
         } else if (ex.getStatusCode() == HttpStatus.FORBIDDEN) {

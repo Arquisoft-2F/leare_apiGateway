@@ -3,3 +3,7 @@ type UsersResponse {
     error: String
 }
 
+type CreateResponse{
+    users: Users
+    token: String
+}

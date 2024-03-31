@@ -1,6 +1,6 @@
 extend type Mutation {
     
-    createUser(user: UsersInput): UsersResponse
+    createUser(user: UsersInput,password: String, confirmPassword: String, rol:String): CreateResponse
     updateUser(user: UsersInput, id: ID!): UsersResponse
     deleteUser(id: ID!): UsersResponse
     updateMe(user:UsersInput, id:ID!): UsersResponse

@@ -124,20 +124,14 @@ public class UserConsumer {
         return result;
     }
 
-    public UserResponse createUser(UsersInput user) {
-        try {
-            Users createdUser = usersClient.post()
-                    .uri("/users")
-                    .bodyValue(user)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-            return userValidation.DeleteMe(createdUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+    public Users createUser(UsersInput user) {
+        Users createdUser = usersClient.post()
+                .uri("/users")
+                .bodyValue(user)
+                .retrieve()
+                .bodyToMono(Users.class)
+                .block();
+        return createdUser;
     }
 
     public UserResponse updateUser(UsersInput user, String id) {

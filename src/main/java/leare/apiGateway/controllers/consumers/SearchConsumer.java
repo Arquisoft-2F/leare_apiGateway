@@ -15,14 +15,6 @@ public class SearchConsumer {
         this.SearchClient = WebClient.create("http://search-web:3005");
     }
 
-    public void Login() {
-
-    }
-
-    public void Register() {
-
-    }
-
     public Boolean AddCourseIndex(String id, String description, String name,String picture){
         try{
 

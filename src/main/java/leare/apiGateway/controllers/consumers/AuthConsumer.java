@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import leare.apiGateway.models.AuthModels.LoginResponse;
+import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.validation.UserValidation;
 
 public class AuthConsumer {
@@ -12,15 +14,35 @@ public class AuthConsumer {
     public AuthConsumer(){
         this.AuthClient = WebClient.create("http://auth-web:8080");
     }
-    public void Login(){
-
-    }
-    public void Register(){
-        
-    }
-
-    public String CheckRoute(String route, String method, String token){
+    public LoginResponse Login(String email,String password){
         return AuthClient.post()
+                        .uri("/api/Account/login")
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("email", email);
+                            put("password", password);}})
+                        .retrieve()
+                        .bodyToMono(LoginResponse.class)
+                        .block();
+
+    }
+    public RegisterResponse Register(String name, String email, String password, String confirmPassword, String role,String userId){
+        return AuthClient.post()
+                        .uri("/api/Account/register")
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("name", name);
+                            put("email", email);
+                            put("password", password);
+                            put("confirmPassword", confirmPassword);
+                            put("role", role);
+                            put("userId", userId);
+                        }})
+                        .retrieve()
+                        .bodyToMono(RegisterResponse.class)
+                        .block();
+    }
+
+    public Boolean CheckRoute(String route, String method, String token){
+        String RouteResponse = AuthClient.post()
                         .uri("/Test/getRoute")
                         .bodyValue(new HashMap<String, String>() {{
                             put("route", route);
@@ -29,5 +51,18 @@ public class AuthConsumer {
                         .retrieve()
                         .bodyToMono(String.class)
                         .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        if (RouteResponse.equals("Authorized")) {
+        return true;
+        }
+        return false;
+    }
+
+    public String DecryptToken(String token){
+        return AuthClient.get()
+                        .uri("/decodeJwt")
+                        .header("Authorization", token)
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .block();
     }
 }
