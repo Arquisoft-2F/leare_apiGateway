@@ -3,9 +3,15 @@ package leare.apiGateway.controllers.consumers;
 import java.util.HashMap;
 
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.core.annotation.MergedAnnotations.Search;
+import org.springframework.http.MediaType;
+import leare.apiGateway.models.SearchModels.Highlight;
+import leare.apiGateway.models.SearchModels.Post;
 import leare.apiGateway.models.SearchModels.ResponsePost;
-import leare.apiGateway.models.SearchModels.ResponsePost.Post;
 
 public class SearchConsumer {
 
@@ -15,7 +21,7 @@ public class SearchConsumer {
         this.SearchClient = WebClient.create("http://search-web:3005");
     }
 
-    public Boolean AddCourseIndex(String id, String description, String name,String picture){
+    public Boolean AddCourseIndex(String id, String name, String description, String picture){
         try{
 
             String response =  SearchClient.post()
@@ -187,24 +193,56 @@ public class SearchConsumer {
     }
 
     public ResponsePost[] getbyIndex(String query){
-        try{
+        ObjectMapper objectMapper = new ObjectMapper();
+        ResponsePost[] response = SearchClient
+            .get()
+            .uri("/posts?q=" + query)
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .bodyToMono(String.class)
+            .map(jsonString -> {
+                try {
+                    // Deserialize JSON response using Jackson
+                    return objectMapper.readValue(jsonString, ResponsePost[].class);
+                } catch (Exception e) {
+                    // Handle exception
+                    e.printStackTrace();
+                    return null;
+                }
+            })
+            .block();
+        return response;
+        //     Highlight[] response =  SearchClient.get()
+        //                 .uri("/posts?q="+query)
+        //                 // .header("Authorization", token)
+        //                 .retrieve()
+        //                 .bodyToMono(Highlight[].class)
+        //                 .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        //     Post[] responsePost =  SearchClient.get()
+        //                 .uri("/posts?q="+query)
+        //                 // .header("Authorization", token)
+        //                 .retrieve()
+        //                 .bodyToMono(Post[].class)
+        //                 .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        //     for(Highlight x : response){
+        //         System.out.println(x.getName());
+        //         System.out.println(x.getLastname());
+        //         System.out.println(x.getNickname());
+        //         System.out.println(x.getDescription());
+        //         System.out.println("Highlight");
+        //     }
+        //     for(Post x : responsePost){
+        //         System.out.println(x.getId());
+        //         System.out.println("Post");
+        //     }
+        //     return null;
 
-            Post[] response =  SearchClient.get()
-                        .uri("/posts?q="+query)
-                        // .header("Authorization", token)
-                        .retrieve()
-                        .bodyToMono(Post[].class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-            for(Post x : response){
-                System.out.println(x.getId());
-            }
-            return null;
-
-        }
-        catch(Exception e){
-            System.out.println(e);
-            return null;
-        }
+        // // }
+        // // catch(Exception e){
+        // //     System.out.println(e);
+        // //     System.out.println("e");
+        // //     return null;
+        // // }
 
 
     }

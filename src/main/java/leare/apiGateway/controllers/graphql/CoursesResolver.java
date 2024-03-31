@@ -7,6 +7,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 
 import leare.apiGateway.controllers.consumers.CourseConsumer;
+import leare.apiGateway.controllers.consumers.DocumentConsumer;
+import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.CoursesModels.CourseByCategory;
@@ -25,10 +27,14 @@ import java.util.List;
 @Controller
 public class CoursesResolver {
     private final CourseConsumer coursesConsumer;
+    private final SearchConsumer searchConsumer;
+    private final DocumentConsumer documentConsumer;
 
     @Autowired
     public CoursesResolver() {
         this.coursesConsumer = new CourseConsumer();
+        this.searchConsumer = new SearchConsumer();
+        this.documentConsumer = new DocumentConsumer();
     }
 
     // CATEGORY
@@ -45,17 +51,28 @@ public class CoursesResolver {
 
     @MutationMapping
     public Category createCategory(@Argument String category_name) {
-        return coursesConsumer.createCategory(category_name);
+
+        Category category = coursesConsumer.createCategory(category_name);
+        searchConsumer.AddCategoryIndex(category.getCategory_id(), category.getCategory_name());
+
+        return category;
     }
 
     @MutationMapping
     public Category editCategory(@Argument EditCategoryInput input) {
-        return coursesConsumer.editCategory(input);
+
+        Category category = coursesConsumer.editCategory(input);
+        searchConsumer.UpdateCategoryIndex(category.getCategory_id(), category.getCategory_name());
+
+        return category;
     }
     
     @MutationMapping
     public Boolean deleteCategory(@Argument String id) {
+
         coursesConsumer.deleteCategory(id);
+        searchConsumer.DeleteIndex(id);
+        
         return true;
     }
 
@@ -78,17 +95,25 @@ public class CoursesResolver {
 
     @MutationMapping
     public Course createCourse(@Argument CreateCourseInput input) {
-        return coursesConsumer.createCourse(input);
+
+        Course course = coursesConsumer.createCourse(input);
+        searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
+
+        return course;
+
     }
 
     @MutationMapping
     public Course editCourse(@Argument EditCourseInput input) {
-        return coursesConsumer.editCourse(input);
+        Course course = coursesConsumer.editCourse(input);
+        searchConsumer.UpdateCourseIndex(course.getCourse_id(), course.getCourse_description(), course.getCourse_name(), course.getPicture_id());
+        return course;
     }
 
     @MutationMapping
     public Boolean deleteCourse(@Argument String id) {
         coursesConsumer.deleteCourse(id);
+        searchConsumer.DeleteIndex(id);
         return true;
     }
 

@@ -44,7 +44,7 @@ public class UserConsumer {
     }
 
     
-    public UserResponse userById(String id, String AuthorizationHeader) {
+    public Users userById(String id, String AuthorizationHeader) {
         //!search
 
         // UUID x = UUID.randomUUID();
@@ -68,18 +68,13 @@ public class UserConsumer {
         // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
 
         //!document
-        try {
-            Users user = usersClient.get()
-                    .uri("/users/{id}", id)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-            return userValidation.DeleteMe(user);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+        Users user = usersClient.get()
+                .uri("/users/{id}", id)
+                .retrieve()
+                .bodyToMono(Users.class)
+                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return user;
+        
     }
 
     public Enrollment[] enrollements() {
@@ -134,79 +129,52 @@ public class UserConsumer {
         return createdUser;
     }
 
-    public UserResponse updateUser(UsersInput user, String id) {
-        try {
-            Users updatedUser = usersClient.patch()
-                    .uri("/users/{id}", id)
-                    .bodyValue(user)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-            return userValidation.DeleteMe(updatedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+    public Users updateUser(UsersInput user, String id) {
+        Users updatedUser = usersClient.patch()
+                .uri("/users/{id}", id)
+                .bodyValue(user)
+                .retrieve()
+                .bodyToMono(Users.class)
+                .block();
+        return updatedUser;
     }
 
-    public UserResponse deleteUser(String id) {
-        try {
-            Users deletedUser = usersClient.delete()
-                    .uri("/users/{id}", id)
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-
-            return userValidation.DeleteMe(deletedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+    public Users deleteUser(String id) {
+        Users deletedUser = usersClient.delete()
+                .uri("/users/{id}", id)
+                .retrieve()
+                .bodyToMono(Users.class)
+                .block();
+        return deletedUser;
     }
 
-    public UserResponse updateMe(UsersInput user, String id) {
-        try {
-            Users updatedUser = ((RequestBodySpec) usersClient.patch()
-                    .uri("/users/me")
-                    .bodyValue(user))
-                    .bodyValue(new HashMap<String, String>() {
-                        {
-                            put("id", id);
-                        }
-                    })
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-            return userValidation.DeleteMe(updatedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+    public Users updateMe(UsersInput user, String id) {
+        Users updatedUser = ((RequestBodySpec) usersClient.patch()
+                .uri("/users/me")
+                .bodyValue(user))
+                .bodyValue(new HashMap<String, String>() {
+                    {
+                        put("id", id);
+                    }
+                })
+                .retrieve()
+                .bodyToMono(Users.class)
+                .block();
+        return updatedUser;
     }
 
-    public UserResponse deleteMe(String id) {
-        try {
-
-            Users deletedUser = ((RequestBodySpec) usersClient.delete()
-                    .uri("/users/me"))
-                    .bodyValue(new HashMap<String, String>() {
-                        {
-                            put("id", id);
-                        }
-                    })
-                    .retrieve()
-                    .bodyToMono(Users.class)
-                    .block();
-
-            return userValidation.DeleteMe(deletedUser);
-        } catch (WebClientResponseException ex) {
-            return userValidation.UserClientEx(ex);
-        } catch (Exception ex) {
-            return userValidation.UserEx(ex);
-        }
+    public Users deleteMe(String id) {
+        Users deletedUser = ((RequestBodySpec) usersClient.delete()
+                .uri("/users/me"))
+                .bodyValue(new HashMap<String, String>() {
+                    {
+                        put("id", id);
+                    }
+                })
+                .retrieve()
+                .bodyToMono(Users.class)
+                .block();
+        return deletedUser;
     }
 
     public Enrollment createEnrollment(String course_id, String user_id) {

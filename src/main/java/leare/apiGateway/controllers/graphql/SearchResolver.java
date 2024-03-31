@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.models.CoursesModels.Category;
+import leare.apiGateway.models.SearchModels.Post;
 import leare.apiGateway.models.SearchModels.ResponsePost;
 
 @Controller

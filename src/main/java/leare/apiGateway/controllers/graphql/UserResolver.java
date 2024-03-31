@@ -94,12 +94,14 @@ import java.util.regex.Pattern;
 public class UserResolver {
     private final UserConsumer userConsumer;
     private final DocumentConsumer documentConsumer;
+    private final SearchConsumer searchConsumer;
     private final AuthConsumer authConsumer;
     
     @Autowired
     public UserResolver() {
         this.userConsumer = new UserConsumer();
         this.documentConsumer = new DocumentConsumer();
+        this.searchConsumer = new SearchConsumer();
         this.authConsumer = new AuthConsumer();
     }
 
@@ -126,7 +128,7 @@ public class UserResolver {
 
     
     @QueryMapping
-    public UserResponse userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) {
+    public Users userById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) {
         //!search
 
         // UUID x = UUID.randomUUID();
@@ -150,10 +152,10 @@ public class UserResolver {
         // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
 
         //!document
-        UserResponse x= userConsumer.userById(id, AuthorizationHeader);
-        if(x.getUsers()!=null && x.getUsers().getPicture_id()!=null){
-            String link = documentConsumer.getDocument(x.getUsers().getPicture_id());
-            x.getUsers().setPicture_id(link);
+        Users x= userConsumer.userById(id, AuthorizationHeader);
+        if(x!=null && x.getPicture_id()!=null){
+            String link = documentConsumer.getDocument(x.getPicture_id());
+            x.setPicture_id(link);
         }
         return x;
     }
@@ -190,50 +192,59 @@ public class UserResolver {
 
     @MutationMapping
     public CreateResponse createUser(@Argument UsersInput user, @Argument String password, @Argument String confirmPassword, @Argument String rol) {
-        Users newUser= userConsumer.createUser(user);
+        Users newUser = userConsumer.createUser(user);
         if(newUser!=null && newUser.getPicture_id()!=null){
             String link = documentConsumer.getDocument(newUser.getPicture_id());
             newUser.setPicture_id(link);
         }
 
+        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(), newUser.getPicture_id());
         RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getEmail(), password, confirmPassword,rol,newUser.getId());
-        System.out.println(new CreateResponse(newUser,"ESTEBAN METE TOKEN"));
         // return new CreateResponse(newUser,registerResponse.getToken());
         return new CreateResponse(newUser,"ESTEBAN METE TOKEN");
     }
 
     @MutationMapping
-    public UserResponse updateUser(@Argument UsersInput user, @Argument String id) {
-        UserResponse editedUser= userConsumer.updateUser(user, id);
-        if(editedUser.getUsers()!=null && editedUser.getUsers().getPicture_id()!=null){
-            String link = documentConsumer.getDocument(editedUser.getUsers().getPicture_id());
-            editedUser.getUsers().setPicture_id(link);
+    public Users updateUser(@Argument UsersInput user, @Argument String id) {
+        Users editedUser= userConsumer.updateUser(user, id);
+        if(editedUser!=null && editedUser.getPicture_id()!=null){
+            String link = documentConsumer.getDocument(editedUser.getPicture_id());
+            editedUser.setPicture_id(link);
         }
+        
+        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
 
     @MutationMapping
-    public UserResponse deleteUser(@Argument String id) {
-        UserResponse deletedUser= userConsumer.deleteUser(id);
-        if(deletedUser.getUsers()!=null && deletedUser.getUsers().getPicture_id()!=null){
-            documentConsumer.deleteDocument(deletedUser.getUsers().getPicture_id());
+    public Users deleteUser(@Argument String id) {
+        Users deletedUser= userConsumer.deleteUser(id);
+        if(deletedUser!=null && deletedUser.getPicture_id()!=null){
+            documentConsumer.deleteDocument(deletedUser.getPicture_id());
         }
+        searchConsumer.DeleteIndex(deletedUser.getId());
         return deletedUser;
     }
 
     @MutationMapping
-    public UserResponse updateMe(@Argument UsersInput user, @Argument String id) {
-        UserResponse editedUser= userConsumer.updateMe(user, id);
-        if(editedUser.getUsers()!=null && editedUser.getUsers().getPicture_id()!=null){
-            String link = documentConsumer.getDocument(editedUser.getUsers().getPicture_id());
-            editedUser.getUsers().setPicture_id(link);
+    public Users updateMe(@Argument UsersInput user, @Argument String id) {
+        Users editedUser= userConsumer.updateMe(user, id);
+        if(editedUser!=null && editedUser.getPicture_id()!=null){
+            String link = documentConsumer.getDocument(editedUser.getPicture_id());
+            editedUser.setPicture_id(link);
         }
+        searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
     }
 
     @MutationMapping
-    public UserResponse deleteMe(@Argument String id) {
-        return userConsumer.deleteMe(id);
+    public Users deleteMe(@Argument String id) {
+        Users userDeleted = userConsumer.deleteMe(id);
+        if(userDeleted!=null && userDeleted.getPicture_id()!=null){
+            documentConsumer.deleteDocument(userDeleted.getPicture_id());
+        }
+        searchConsumer.DeleteIndex(userDeleted.getId());
+        return userDeleted;
     }
 
     @MutationMapping
