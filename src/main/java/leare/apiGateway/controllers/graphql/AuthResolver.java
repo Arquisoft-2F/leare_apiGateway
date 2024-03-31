@@ -3,6 +3,7 @@ package leare.apiGateway.controllers.graphql;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -17,16 +18,13 @@ import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.AuthModels.LoginResponse;
 
 @Controller
-public class AuthResolver { // TODO: ELIMINAR ESTO O EN SU DEFECTO DEJAR SOLO EL LOGIN EL CUAL DEBERIA USAR EL CONSUMER
+public class AuthResolver {
 
-    private final WebClient webClient;
     private final AuthConsumer authConsumer;
 
-    public AuthResolver() {
-        // this.webClient = WebClient.create("http://localhost:5183");
-        this.webClient = WebClient.create("http://auth-web:8080");
-        this.authConsumer = new AuthConsumer();
-
+    @Autowired
+    public AuthResolver(AuthConsumer authConsumer) {
+        this.authConsumer = authConsumer;
     }
 
 
