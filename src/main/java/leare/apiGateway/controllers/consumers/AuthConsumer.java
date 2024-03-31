@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import leare.apiGateway.models.AuthModels.LoginResponse;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
+import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.validation.UserValidation;
 
 @Component
@@ -61,12 +62,12 @@ public class AuthConsumer {
         return false;
     }
 
-    public String DecryptToken(String token){
+    public DecryptedToken DecryptToken(String token){
         return AuthClient.get()
                         .uri("/decodeJwt")
                         .header("Authorization", token)
                         .retrieve()
-                        .bodyToMono(String.class)
+                        .bodyToMono(DecryptedToken.class)
                         .block();
     }
 }
