@@ -4,6 +4,6 @@ type UsersResponse {
 }
 
 type CreateResponse{
-    users: Users
-    token: String
+    users: Users!
+    token: String!
 }

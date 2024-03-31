@@ -2,21 +2,21 @@ package leare.apiGateway.models.UserModels.responses;
 import leare.apiGateway.models.UserModels.Users;
 
 public class CreateResponse {
-    private Users user;
+    private Users users;
     private String token;
 
 
-    public CreateResponse(Users user, String token) {
-        this.user = user;
+    public CreateResponse(Users users, String token) {
+        this.users = users;
         this.token = token;
     }
 
-    public Users getUser() {
-        return this.user;
+    public Users getUsers() {
+        return this.users;
     }
 
-    public void setUser(Users user) {
-        this.user = user;
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
     public String getToken() {
@@ -25,16 +25,6 @@ public class CreateResponse {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public CreateResponse user(Users user) {
-        setUser(user);
-        return this;
-    }
-
-    public CreateResponse token(String token) {
-        setToken(token);
-        return this;
     }
 
 }
