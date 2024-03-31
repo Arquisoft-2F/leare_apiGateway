@@ -1,5 +1,7 @@
 package leare.apiGateway.controllers.consumers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import leare.apiGateway.models.ChatModels.Chat;
 import leare.apiGateway.models.ChatModels.ChatData;
@@ -9,14 +11,16 @@ import leare.apiGateway.models.ChatModels.ChatUser;
 import leare.apiGateway.models.ChatModels.Message;
 import reactor.core.publisher.Mono;
 
+@Component
 public class ChatConsumer {
     private final WebClient webClient;
 
-    public ChatConsumer() {
+    @Autowired
+    public ChatConsumer(WebClient.Builder webClientBuilder) {
         String baseUrl = "http://chat-web";
         String port = "3002";
         String prefix = "/chat";
-        this.webClient = WebClient.create(baseUrl + ":" + port + prefix);
+        this.webClient = webClientBuilder.baseUrl(baseUrl + ":" + port + prefix).build();
     }
 
     public Chat[] getUserChats(String userId) {

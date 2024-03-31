@@ -16,7 +16,7 @@ import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.AuthModels.LoginResponse;
 
 @Controller
-public class AuthResolver {
+public class AuthResolver { // TODO: ELIMINAR ESTO O EN SU DEFECTO DEJAR SOLO EL LOGIN EL CUAL DEBERIA USAR EL CONSUMER
 
     private final WebClient webClient;
 

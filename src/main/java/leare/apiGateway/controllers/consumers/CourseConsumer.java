@@ -1,6 +1,7 @@
 package leare.apiGateway.controllers.consumers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import leare.apiGateway.models.CoursesModels.Category;
@@ -21,14 +22,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class CourseConsumer {
     private final WebClient webClient;
 
-    public CourseConsumer() {
-
+    @Autowired
+    public CourseConsumer(WebClient.Builder webClientBuilder) {
         String baseUrl = "http://courses-web";
         String port = "3003";
-        this.webClient = WebClient.create(baseUrl + ":" + port);
+        this.webClient = webClientBuilder.baseUrl(baseUrl + ":" + port).build();
     }
 
     public Category[] getCategories() {
