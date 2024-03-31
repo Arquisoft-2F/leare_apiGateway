@@ -192,6 +192,8 @@ public class UserResolver {
 
     @MutationMapping
     public CreateResponse createUser(@Argument UsersInput user, @Argument String password, @Argument String confirmPassword, @Argument String rol) {
+        // System.out.println(authConsumer.DecryptToken().toString());
+        
         Users newUser = userConsumer.createUser(user);
         if(newUser!=null && newUser.getPicture_id()!=null){
             String link = documentConsumer.getDocument(newUser.getPicture_id());
