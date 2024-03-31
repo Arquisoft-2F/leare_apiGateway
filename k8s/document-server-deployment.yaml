@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe -f docker-compose.yaml convert
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-server
+  name: document-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: document-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe -f docker-compose.yaml convert
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8s-leare-network: "true"
+        io.kompose.service: document-server
+    spec:
+      containers:
+        - image: document-server
+          name: document-server
+          ports:
+            - containerPort: 3004
+              hostPort: 3004
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /temp
+              name: document-server-claim0
+            - mountPath: /logs
+              name: document-server-claim1
+      restartPolicy: Always
+      volumes:
+        - name: document-server-claim0
+          persistentVolumeClaim:
+            claimName: document-server-claim0
+        - name: document-server-claim1
+          persistentVolumeClaim:
+            claimName: document-server-claim1
+status: {}
