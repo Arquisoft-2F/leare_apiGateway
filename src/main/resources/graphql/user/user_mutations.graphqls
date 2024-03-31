@@ -1,10 +1,10 @@
 extend type Mutation {
     
     createUser(user: UsersInput,password: String, confirmPassword: String, rol:String): CreateResponse
-    updateUser(user: UsersInput, id: ID!): UsersResponse
-    deleteUser(id: ID!): UsersResponse
-    updateMe(user:UsersInput, id:ID!): UsersResponse
-    deleteMe(id: ID!): UsersResponse
+    updateUser(user: UsersInput, id: ID!): Users
+    deleteUser(id: ID!): Users
+    updateMe(user:UsersInput, id:ID!): Users
+    deleteMe(id: ID!): Users
 
     createEnrollment(course_id:String!, user_id:String!): Enrollment
     updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
