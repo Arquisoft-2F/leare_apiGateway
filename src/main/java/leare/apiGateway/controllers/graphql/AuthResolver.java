@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 
+import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.models.AuthModels.LoginResponse;
 import leare.apiGateway.models.AuthModels.RegisterInput;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
@@ -19,47 +20,20 @@ import leare.apiGateway.models.AuthModels.LoginResponse;
 public class AuthResolver { // TODO: ELIMINAR ESTO O EN SU DEFECTO DEJAR SOLO EL LOGIN EL CUAL DEBERIA USAR EL CONSUMER
 
     private final WebClient webClient;
+    private final AuthConsumer authConsumer;
 
     public AuthResolver() {
         // this.webClient = WebClient.create("http://localhost:5183");
         this.webClient = WebClient.create("http://auth-web:8080");
+        this.authConsumer = new AuthConsumer();
+
     }
 
-    @QueryMapping
-    public String getRoute(@Argument String route, @Argument String method, @Argument String token) {
-        return webClient.post()
-                        .uri("/Test/getRoute")
-                        .bodyValue(new HashMap<String, String>() {{
-                            put("route", route);
-                            put("method", method);}})
-                        .header("Authorization", token)
-                        .retrieve()
-                        .bodyToMono(String.class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-    }
 
     @MutationMapping 
     public LoginResponse login(@Argument String email, @Argument String password) {
-        return webClient.post()
-                        .uri("/api/Account/login")
-                        .bodyValue(new HashMap<String, String>() {{
-                            put("email", email);
-                            put("password", password);}})
-                        .retrieve()
-                        .bodyToMono(LoginResponse.class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        return authConsumer.Login(email, password);
     }
 
-    @MutationMapping
-    public RegisterResponse register(@Argument RegisterInput registerInput) {
-        return webClient.post()
-                        .uri("/api/Account/register")
-                        .bodyValue(registerInput)
-                        .retrieve()
-                        .bodyToMono(RegisterResponse.class)
-                        .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-    }
-
-
-  
+    
 }

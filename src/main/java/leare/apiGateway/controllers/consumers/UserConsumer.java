@@ -131,7 +131,6 @@ public class UserConsumer {
                 .bodyToMono(Users.class)
                 .block();
         return createdUser;
-        
     }
 
     public Users updateUser(UsersInput user, String id) {

@@ -1,6 +1,9 @@
 package leare.apiGateway.controllers.consumers;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -32,12 +35,30 @@ public class DocumentConsumer {
         this.documentClient = webClientBuilder.baseUrl(url + ":" + port).build();
     }
 
+    private String extractURL(String text) {
+        String[] matches = Pattern.compile("https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)")
+                          .matcher(text)
+                          .results()
+                          .map(MatchResult::group)
+                          .toArray(String[]::new);
+        System.out.println(Arrays.toString(matches));
+        return String.join("",matches);
+    }
+
     public String getDocument( String id) {
-        return documentClient.get()
+        try {
+        String fullDOcument = documentClient.get()
                 .uri("/read/{id}",id)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+
+            return this.extractURL(fullDOcument);
+        } catch (Exception e) {
+            return "notFound";
+        }
+
+
 
     }
 

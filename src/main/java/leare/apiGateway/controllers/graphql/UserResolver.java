@@ -28,6 +28,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Students;
@@ -37,6 +38,7 @@ import leare.apiGateway.models.UserModels.UsersInput;
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Users;
+import leare.apiGateway.models.UserModels.responses.CreateResponse;
 import leare.apiGateway.models.UserModels.responses.UserResponse;
 import leare.apiGateway.validation.UserValidation;
 import reactor.core.publisher.Mono;
@@ -47,6 +49,8 @@ import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.controllers.consumers.UserConsumer;
 import graphql.language.Document;
 import graphql.schema.DataFetchingEnvironment;
+import jakarta.validation.constraints.PastOrPresent;
+
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import java.util.regex.MatchResult;
@@ -91,21 +95,32 @@ public class UserResolver {
     private final UserConsumer userConsumer;
     private final DocumentConsumer documentConsumer;
     private final SearchConsumer searchConsumer;
-
+    private final AuthConsumer authConsumer;
+    
     @Autowired
-    public UserResolver(UserConsumer userConsumer, DocumentConsumer documentConsumer, SearchConsumer searchConsumer) {
+    public UserResolver(UserConsumer userConsumer, DocumentConsumer documentConsumer, SearchConsumer searchConsumer, AuthConsumer authConsumer) {
         this.userConsumer = userConsumer;
         this.documentConsumer = documentConsumer;
         this.searchConsumer = searchConsumer;
+        this.authConsumer = authConsumer;
     }
 
     @QueryMapping
-    public Users[] users() {
+    public Users[] users(@ContextValue("Authorization") String AuthorizationHeader) {
+        
+        
+        // System.out.println(authConsumer.Login("david3@example.com","User@123"));
+        Boolean Auth = authConsumer.CheckRoute("/users","get",AuthorizationHeader);
+        if(!Auth){
+            Users[] x = new Users[1];
+            return x;
+        }
+
         Users[] allUser = userConsumer.users();
         for (Users user : allUser){
             if(user!=null && user.getPicture_id()!=null){
                 String link = documentConsumer.getDocument(user.getPicture_id());
-                user.setPicture_id(extractURL(link));
+                user.setPicture_id(link);
             }
         }
         return allUser;
@@ -140,20 +155,12 @@ public class UserResolver {
         Users x= userConsumer.userById(id, AuthorizationHeader);
         if(x!=null && x.getPicture_id()!=null){
             String link = documentConsumer.getDocument(x.getPicture_id());
-            x.setPicture_id(extractURL(link));
+            x.setPicture_id(link);
         }
         return x;
     }
 
-    public static String extractURL(String text) {
-        String[] matches = Pattern.compile("https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)")
-                          .matcher(text)
-                          .results()
-                          .map(MatchResult::group)
-                          .toArray(String[]::new);
-        System.out.println(Arrays.toString(matches));
-        return String.join("",matches);
-    }
+    
 
     @QueryMapping
     public Enrollment[] enrollements() {
@@ -172,27 +179,29 @@ public class UserResolver {
 
     @QueryMapping
     public Students[] getCourses(@Argument String course_id) {
+
         Students[] students= userConsumer.getCourses(course_id);
         for(Students student: students){
             if(student.getUser()!=null && student.getUser().getPicture_id()!=null){
                 String link = documentConsumer.getDocument(student.getUser().getPicture_id());
-                student.getUser().setPicture_id(extractURL(link));
+                student.getUser().setPicture_id(link);
             }
         }
         return students;
     }
 
     @MutationMapping
-    public Users createUser(@Argument UsersInput user) {
+    public CreateResponse createUser(@Argument UsersInput user, @Argument String password, @Argument String confirmPassword, @Argument String rol) {
         Users newUser = userConsumer.createUser(user);
         if(newUser!=null && newUser.getPicture_id()!=null){
             String link = documentConsumer.getDocument(newUser.getPicture_id());
-            newUser.setPicture_id(extractURL(link));
+            newUser.setPicture_id(link);
         }
-        
-        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(), newUser.getPicture_id());
 
-        return newUser;
+        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(), newUser.getPicture_id());
+        RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getEmail(), password, confirmPassword,rol,newUser.getId());
+        // return new CreateResponse(newUser,registerResponse.getToken());
+        return new CreateResponse(newUser,"ESTEBAN METE TOKEN");
     }
 
     @MutationMapping
@@ -200,7 +209,7 @@ public class UserResolver {
         Users editedUser= userConsumer.updateUser(user, id);
         if(editedUser!=null && editedUser.getPicture_id()!=null){
             String link = documentConsumer.getDocument(editedUser.getPicture_id());
-            editedUser.setPicture_id(extractURL(link));
+            editedUser.setPicture_id(link);
         }
         
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
@@ -222,7 +231,7 @@ public class UserResolver {
         Users editedUser= userConsumer.updateMe(user, id);
         if(editedUser!=null && editedUser.getPicture_id()!=null){
             String link = documentConsumer.getDocument(editedUser.getPicture_id());
-            editedUser.setPicture_id(extractURL(link));
+            editedUser.setPicture_id(link);
         }
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(), editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
