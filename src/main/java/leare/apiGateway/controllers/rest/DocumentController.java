@@ -3,6 +3,7 @@ package leare.apiGateway.controllers.rest;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -27,13 +28,13 @@ public class DocumentController {
     private final WebClient documentClient;
     private final AuthConsumer auth;
 
-    public DocumentController() {
+    @Autowired
+    public DocumentController(WebClient.Builder webClientBuilder, AuthConsumer auth) {
         String url = "http://document-server";
         String port = "3004";
-        this.documentClient = WebClient.create(url + ":" + port);
-
+        this.documentClient = webClientBuilder.baseUrl(url + ":" + port).build();
         
-        this.auth = new AuthConsumer();
+        this.auth = auth;
     }
 
     @CrossOrigin

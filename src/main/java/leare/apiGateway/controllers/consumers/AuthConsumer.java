@@ -2,6 +2,8 @@ package leare.apiGateway.controllers.consumers;
 
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import leare.apiGateway.models.AuthModels.LoginResponse;
@@ -9,11 +11,13 @@ import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.validation.UserValidation;
 
+@Component
 public class AuthConsumer {
     private final WebClient AuthClient;
 
-    public AuthConsumer(){
-        this.AuthClient = WebClient.create("http://auth-web:8080");
+    @Autowired
+    public AuthConsumer(WebClient.Builder webClientBuilder) {
+        this.AuthClient = webClientBuilder.baseUrl("http://auth-web:8080").build();
     }
     public LoginResponse Login(String email,String password){
         return AuthClient.post()

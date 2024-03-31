@@ -98,11 +98,11 @@ public class UserResolver {
     private final AuthConsumer authConsumer;
     
     @Autowired
-    public UserResolver() {
-        this.userConsumer = new UserConsumer();
-        this.documentConsumer = new DocumentConsumer();
-        this.searchConsumer = new SearchConsumer();
-        this.authConsumer = new AuthConsumer();
+    public UserResolver(UserConsumer userConsumer, DocumentConsumer documentConsumer, SearchConsumer searchConsumer, AuthConsumer authConsumer) {
+        this.userConsumer = userConsumer;
+        this.documentConsumer = documentConsumer;
+        this.searchConsumer = searchConsumer;
+        this.authConsumer = authConsumer;
     }
 
     @QueryMapping

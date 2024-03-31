@@ -31,10 +31,10 @@ public class CoursesResolver {
     private final DocumentConsumer documentConsumer;
 
     @Autowired
-    public CoursesResolver() {
-        this.coursesConsumer = new CourseConsumer();
-        this.searchConsumer = new SearchConsumer();
-        this.documentConsumer = new DocumentConsumer();
+    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer) {
+        this.coursesConsumer = coursesConsumer;
+        this.searchConsumer = searchConsumer;
+        this.documentConsumer = documentConsumer;
     }
 
     // CATEGORY

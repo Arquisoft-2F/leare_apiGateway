@@ -7,18 +7,23 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.MergedAnnotations.Search;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+
 import leare.apiGateway.models.SearchModels.Highlight;
 import leare.apiGateway.models.SearchModels.Post;
 import leare.apiGateway.models.SearchModels.ResponsePost;
 
+@Component
 public class SearchConsumer {
 
     private final WebClient SearchClient;
 
-    public SearchConsumer() {
-        this.SearchClient = WebClient.create("http://search-web:3005");
+    @Autowired
+    public SearchConsumer(WebClient.Builder webClientBuilder) {
+        this.SearchClient = webClientBuilder.baseUrl("http://search-web:3005").build();
     }
 
     public Boolean AddCourseIndex(String id, String name, String description, String picture){

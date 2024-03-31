@@ -16,8 +16,8 @@ public class ChatResolver {
     private final ChatConsumer chatConsumer;
 
     @Autowired
-    public ChatResolver() {
-        this.chatConsumer = new ChatConsumer();
+    public ChatResolver(ChatConsumer chatConsumer) {
+        this.chatConsumer = chatConsumer;
     }
 
     @QueryMapping

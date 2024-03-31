@@ -2,10 +2,12 @@ package leare.apiGateway.controllers.consumers;
 
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -18,20 +20,18 @@ import leare.apiGateway.models.UserModels.UsersInput;
 import leare.apiGateway.models.UserModels.responses.UserResponse;
 import leare.apiGateway.validation.UserValidation;
 
+@Component
 public class UserConsumer {
     
     private final WebClient usersClient;
     private final UserValidation userValidation;
-    private final AuthConsumer auth;
-    private final SearchConsumer search;
 
-    public UserConsumer() {
+    @Autowired
+    public UserConsumer(WebClient.Builder webClientBuilder) {
         String url = "http://users-web";
         String port = "3000";
-        this.usersClient = WebClient.create(url + ":" + port);
+        this.usersClient = webClientBuilder.baseUrl(url + ":" + port).build();
         this.userValidation = new UserValidation();
-        this.auth = new AuthConsumer();
-        this.search = new SearchConsumer();
     }
 
     public Users[] users() {
@@ -45,29 +45,6 @@ public class UserConsumer {
 
     
     public Users userById(String id, String AuthorizationHeader) {
-        //!search
-
-        // UUID x = UUID.randomUUID();
-        // if( search.AddCourseIndex(x.toString(), "2", "3", "4") == false){
-        // }
-        // search.UpdateCourseIndex(x.toString(), "update", "update", "update");
-        // x = UUID.randomUUID();
-        // if( search.AddUsersIndex(x.toString(), "2", "3", "4","5") == false){
-        //     //do something with the error?
-        // }
-        // search.UpdateUsersIndex(x.toString(), "update", "update", "update","update");
-        // x = UUID.randomUUID();
-        // if( search.AddCategoryIndex(x.toString(), "2") == false){
-        //     //do something with the error?
-        // }
-        // search.UpdateCategoryIndex(x.toString(), "AQUI ESTOY");
-        // search.DeleteIndex(x.toString());
-
-        //!auth
-        // //String route, String method, String token
-        // auth.CheckRoute("/user/:id","get",AuthorizationHeader);
-
-        //!document
         Users user = usersClient.get()
                 .uri("/users/{id}", id)
                 .retrieve()

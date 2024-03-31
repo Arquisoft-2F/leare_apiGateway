@@ -18,8 +18,8 @@ public class SearchResolver {
     private final SearchConsumer searchConsumer;
 
     @Autowired
-    public SearchResolver() {
-        this.searchConsumer = new SearchConsumer();
+    public SearchResolver(SearchConsumer searchConsumer) {
+        this.searchConsumer = searchConsumer;
     }
 
     @QueryMapping
