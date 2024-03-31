@@ -2,13 +2,12 @@ package leare.apiGateway.models.AuthModels;
 
 public class DecryptedToken {
     private String UserID;
+    private String Username;
     private String Role;
 
-    public DecryptedToken() {
-    }
-
-    public DecryptedToken(String UserID, String Role) {
+    public DecryptedToken(String UserID, String Username, String Role) {
         this.UserID = UserID;
+        this.Username = Username;
         this.Role = Role;
     }
 
@@ -18,6 +17,14 @@ public class DecryptedToken {
 
     public void setUserID(String UserID) {
         this.UserID = UserID;
+    }
+
+    public String getUsername() {
+        return this.Username;
+    }
+
+    public void setUsername(String Username) {
+        this.Username = Username;
     }
 
     public String getRole() {
@@ -33,9 +40,15 @@ public class DecryptedToken {
         return this;
     }
 
+    public DecryptedToken Username(String Username) {
+        setUsername(Username);
+        return this;
+    }
+
     public DecryptedToken Role(String Role) {
         setRole(Role);
         return this;
-    }    
+    }
+
     
 }

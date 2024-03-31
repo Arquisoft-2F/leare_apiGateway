@@ -222,7 +222,7 @@ public class UserResolver {
     public CreateResponse createUser(@Argument UsersInput user, @Argument String password,
             @Argument String confirmPassword, @Argument String rol,
             @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        // System.out.println(authConsumer.DecryptToken().toString());
+        
         // Boolean Auth = authConsumer.CheckRoute("/users", "post", AuthorizationHeader);
 
         // if (!Auth) {
@@ -241,8 +241,8 @@ public class UserResolver {
                 newUser.getPicture_id());
         RegisterResponse registerResponse = authConsumer.Register(user.getName(), user.getEmail(), password,
                 confirmPassword, rol, newUser.getId());
-        // return new CreateResponse(newUser,registerResponse.getToken());
-        return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
+        return new CreateResponse(newUser,registerResponse.getToken());
+        // return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
     }
 
     @MutationMapping

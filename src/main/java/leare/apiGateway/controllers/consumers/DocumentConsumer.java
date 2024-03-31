@@ -46,14 +46,13 @@ public class DocumentConsumer {
         return String.join("",matches);
     }
 
-    public String getDocument( String id) {
+    public String getDocument(String id) {
         try {
         String fullDOcument = documentClient.get()
                 .uri("/read/{id}",id)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block(); // .block() se usa por simplicidad pero deberia ser asincrono
-
             return this.extractURL(fullDOcument);
         } catch (Exception e) {
             return "notFound";

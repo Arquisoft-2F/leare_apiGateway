@@ -10,6 +10,7 @@ import leare.apiGateway.models.AuthModels.LoginResponse;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.validation.UserValidation;
+import com.google.gson.Gson;
 
 @Component
 public class AuthConsumer {
@@ -63,11 +64,13 @@ public class AuthConsumer {
     }
 
     public DecryptedToken DecryptToken(String token){
-        return AuthClient.get()
+        String rawDecryptedToken = AuthClient.get()
                         .uri("/decodeJwt")
                         .header("Authorization", token)
                         .retrieve()
-                        .bodyToMono(DecryptedToken.class)
+                        .bodyToMono(String.class)
                         .block();
+        Gson gson = new Gson();
+        return gson.fromJson(rawDecryptedToken, DecryptedToken.class);
     }
 }
