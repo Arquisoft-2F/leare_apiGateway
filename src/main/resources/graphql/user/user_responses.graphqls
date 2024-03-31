@@ -1,8 +1,3 @@
-type UsersResponse {
-    users: Users
-    error: String
-}
-
 type CreateResponse{
     users: Users
     token: String
