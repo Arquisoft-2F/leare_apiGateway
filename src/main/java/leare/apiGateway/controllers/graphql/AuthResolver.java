@@ -33,5 +33,14 @@ public class AuthResolver {
         return authConsumer.Login(email, password);
     }
 
+    @MutationMapping 
+    public LoginResponse editPassword(@Argument String id, @Argument String OldPassword, @Argument String NewPassword) throws Exception {
+        LoginResponse res = authConsumer.changePassword(id, OldPassword, NewPassword);
+        if(res.getFlag().equals("false")){
+            throw new Exception("Auth Problem");
+        }
+        return res;
+    }
+
     
 }

@@ -265,8 +265,7 @@ for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
 
     @MutationMapping
     public CreateResponse createUser(@Argument UsersInput user, @Argument String password,
-            @Argument String confirmPassword, @Argument String rol,
-            @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+            @Argument String confirmPassword, @Argument String rol) throws Exception {
         
         // Boolean Auth = authConsumer.CheckRoute("/users", "post", AuthorizationHeader);
 
@@ -332,7 +331,6 @@ for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
         // }
         RegisterResponse deletedAuth=authConsumer.deleteAuth(id);
         if(deletedAuth.getFlag().equals("false")){
-            userConsumer.createUser(deletedUser);
             throw new Exception("Auth Problem");
         }
         documentConsumer.deleteDocument(token.getUserID(),deletedUser.getPicture_id());
@@ -376,7 +374,6 @@ for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
         Users userDeleted = userConsumer.deleteMe(token.getUserID());
         RegisterResponse deletedAuth=authConsumer.deleteAuth(token.getUserID());
         if(deletedAuth.getFlag().equals("false")){
-            userConsumer.createUser(userDeleted);
             throw new Exception("Auth Problem");
         }
         documentConsumer.deleteDocument(token.getUserID(), userDeleted.getPicture_id());
