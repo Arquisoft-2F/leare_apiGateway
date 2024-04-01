@@ -3,12 +3,15 @@ package leare.apiGateway.controllers.graphql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 
+import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
+import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.CoursesModels.CourseByCategory;
@@ -30,28 +33,48 @@ public class CoursesResolver {
     private final CourseConsumer coursesConsumer;
     private final SearchConsumer searchConsumer;
     private final DocumentConsumer documentConsumer;
+    private final AuthConsumer authConsumer;
 
     @Autowired
-    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer) {
+    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer, AuthConsumer authConsumer) {
         this.coursesConsumer = coursesConsumer;
         this.searchConsumer = searchConsumer;
         this.documentConsumer = documentConsumer;
+        this.authConsumer = authConsumer;
     }
 
     // CATEGORY
 
     @QueryMapping
-    public Category[] categories() {
+    public Category[] categories(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return coursesConsumer.getCategories();
     }
 
     @QueryMapping
-    public Category categoryById(@Argument String id) {
+    public Category categoryById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
+
         return coursesConsumer.getCategoryById(id);
     }
 
     @MutationMapping
-    public Category createCategory(@Argument String category_name) {
+    public Category createCategory(@Argument String category_name, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
 
         Category category = coursesConsumer.createCategory(category_name);
         searchConsumer.AddCategoryIndex(category.getCategory_id(), category.getCategory_name());
@@ -60,7 +83,13 @@ public class CoursesResolver {
     }
 
     @MutationMapping
-    public Category editCategory(@Argument EditCategoryInput input) {
+    public Category editCategory(@Argument EditCategoryInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
 
         Category category = coursesConsumer.editCategory(input);
         searchConsumer.UpdateCategoryIndex(category.getCategory_id(), category.getCategory_name());
@@ -69,7 +98,13 @@ public class CoursesResolver {
     }
     
     @MutationMapping
-    public Boolean deleteCategory(@Argument String id) {
+    public Boolean deleteCategory(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
 
         coursesConsumer.deleteCategory(id);
         searchConsumer.DeleteIndex(id);
@@ -80,7 +115,12 @@ public class CoursesResolver {
     // COURSE
 
     @QueryMapping
-    public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories) {
+    public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         CourseByCategory[] courses = coursesConsumer.getCoursesByCategory(categories);
 
         courses = documentConsumer.updatePictureLink(courses);
@@ -89,14 +129,24 @@ public class CoursesResolver {
     }
 
     @QueryMapping
-    public Course[] listCourses(@Argument int page) {
+    public Course[] listCourses(@Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         Course[] courses = coursesConsumer.listCourses(page);
         courses = documentConsumer.updatePictureLink(courses);
         return courses;
     }
 
     @QueryMapping
-    public Course courseById(@Argument String id) {
+    public Course courseById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         Course course = coursesConsumer.getCourseById(id);
         course = documentConsumer.updatePictureLink(course);
         course.setModules(course.getModules());
@@ -106,7 +156,13 @@ public class CoursesResolver {
     }
 
     @MutationMapping
-    public Course createCourse(@Argument CreateCourseInput input) {
+    public Course createCourse(@Argument CreateCourseInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
 
         Course course = coursesConsumer.createCourse(input);
         course = documentConsumer.updatePictureLink(course);
@@ -117,7 +173,14 @@ public class CoursesResolver {
     }
 
     @MutationMapping
-    public Course editCourse(@Argument EditCourseInput input) {
+    public Course editCourse(@Argument EditCourseInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=input.getCreator_id())) {
+            throw new Exception("Auth Problem");
+        }
         Course course = coursesConsumer.editCourse(input);
         course = documentConsumer.updatePictureLink(course);
         searchConsumer.UpdateCourseIndex(course.getCourse_id(), course.getCourse_description(), course.getCourse_name(), course.getPicture_id());
@@ -125,7 +188,16 @@ public class CoursesResolver {
     }
 
     @MutationMapping
-    public Boolean deleteCourse(@Argument String id) {
+    public Boolean deleteCourse(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        Course course = coursesConsumer.getCourseById(id);
+
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=course.getCreator_id())) {
+            throw new Exception("Auth Problem");
+        }
         coursesConsumer.deleteCourse(id);
         documentConsumer.deleteDocument(id);
         searchConsumer.DeleteIndex(id);
@@ -135,27 +207,57 @@ public class CoursesResolver {
     // MODULE
 
     @QueryMapping
-    public CourseModule[] courseModules(@Argument String course_id, @Argument int page) {
+    public CourseModule[] courseModules(@Argument String course_id, @Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return coursesConsumer.getCourseModules(course_id, page);
     }
 
     @QueryMapping
-    public CourseModule moduleById(@Argument String id) {
+    public CourseModule moduleById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return coursesConsumer.getModuleById(id);
     }
 
     @MutationMapping
-    public CourseModule createModule(@Argument CreateModuleInput input) {
+    public CourseModule createModule(@Argument CreateModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        Course course = coursesConsumer.getCourseById(input.getCourse_id());
+
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=course.getCreator_id())) {
+            throw new Exception("Auth Problem");
+        }
+
         return coursesConsumer.createModule(input);
     }
 
     @MutationMapping
-    public CourseModule editModule(@Argument EditModuleInput input) {
+    public CourseModule editModule(@Argument EditModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         return coursesConsumer.editModule(input);
     }
 
     @MutationMapping
-    public Boolean deleteModule(@Argument String id) {
+    public Boolean deleteModule(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         coursesConsumer.deleteModule(id);
         return true;
     }
@@ -191,36 +293,62 @@ public class CoursesResolver {
     }
 
     @QueryMapping
-    public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page) { 
+    public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception { 
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         ModuleSection[] sections = coursesConsumer.getModuleSections(module_id, page);
         sections = this.updateSectionLinks(sections);
         return sections;
     }
 
     @QueryMapping
-    public ModuleSection sectionById(@Argument String id) { 
+    public ModuleSection sectionById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception { 
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         ModuleSection section = coursesConsumer.getSectionById(id);
         section = this.updateSectionLinks(section);
         return section;
     }
 
     @MutationMapping
-    public ModuleSection createSection(@Argument CreateSectionInput input) {
+    public ModuleSection createSection(@Argument CreateSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         ModuleSection section = coursesConsumer.createSection(input);
         section = this.updateSectionLinks(section);
         return section;
     }
 
     @MutationMapping
-    public ModuleSection editSection(@Argument EditSectionInput input) {
+    public ModuleSection editSection(@Argument EditSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
         ModuleSection section = coursesConsumer.editSection(input);
         section = this.updateSectionLinks(section);
         return section;
     }
 
     @MutationMapping
-    public Boolean deleteSection(@Argument String id) {
+    public Boolean deleteSection(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new Exception("Auth Problem");
+        }
+
         ModuleSection section = coursesConsumer.getSectionById(id); // Se debe hacer antes de borrar para obtener los links de los archivos y borrarlos
 
         coursesConsumer.deleteSection(id);
