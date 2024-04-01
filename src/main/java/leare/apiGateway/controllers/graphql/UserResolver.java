@@ -128,13 +128,13 @@ public class UserResolver {
         System.out.println(Arrays.toString(pictureIds));
         GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
         // Iterate over the values in the map and print each one
-for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
-    System.out.println("VideoInfo: " + videoInfo.getDate());
-    System.out.println("VideoInfo: " + videoInfo.getFileName());
-    System.out.println("VideoInfo: " + videoInfo.getFilePath());
-    System.out.println("VideoInfo: " + videoInfo.getFileType());
-    System.out.println("VideoInfo: " + videoInfo.getUserId());
-    System.out.println("VideoInfo: " + videoInfo.getVideoId());
+        for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
+            System.out.println("VideoInfo: " + videoInfo.getDate());
+            System.out.println("VideoInfo: " + videoInfo.getFileName());
+            System.out.println("VideoInfo: " + videoInfo.getFilePath());
+            System.out.println("VideoInfo: " + videoInfo.getFileType());
+            System.out.println("VideoInfo: " + videoInfo.getUserId());
+            System.out.println("VideoInfo: " + videoInfo.getVideoId());
 }
 
         // for (Map.Entry<String, VideoInfo> entry : allPictures.getValue().entrySet()) {
