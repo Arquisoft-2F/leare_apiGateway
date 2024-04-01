@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,11 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.google.gson.Gson;
+
 import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.validation.UserValidation;
 import reactor.core.publisher.Mono;
-import leare.apiGateway.models.DocumentModels.DocumentPost;
+import leare.apiGateway.models.AuthModels.DecryptedToken;
+import leare.apiGateway.models.DocumentModels.DocumentPostError;
+import leare.apiGateway.models.DocumentModels.DocumentPostSuccess;
+import leare.apiGateway.models.DocumentModels.DocumentResponse;
 
 @RestController
 public class DocumentController {
@@ -40,31 +47,44 @@ public class DocumentController {
     @CrossOrigin
     // @GetMapping("/AddDocument")
     @PostMapping(path = "/AddDocument", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public DocumentPost add(@RequestPart MultipartFile content, @RequestPart String file_name,
+    public DocumentResponse add(@RequestPart MultipartFile content, @RequestPart String file_name,
             @RequestPart String data_type, @RequestPart String user_id) {
         UUID video_id = UUID.randomUUID();
+        
 
         try {
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
             formData.add("content", content);
             formData.add("file_name", file_name);
-            formData.add("data_type", data_type);
-            formData.add("user_id", user_id);
+            // formData.add("data_type", data_type);
+            // formData.add("user_id", user_id);
             formData.add("video_id", video_id.toString());
-            
-            WebClient.ResponseSpec x = documentClient.post()
-            .uri("/posts")
+
+            documentClient.post()
+            .uri("/create/addVideo/")
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(BodyInserters.fromMultipartData(formData))
             .retrieve();
-        //     // .bodyToMono(DocumentPost.class)
-        //     // .block();
-        //     // .bodyToMono(String.class)
-        return new DocumentPost(true);
-        
+            // .toBodilessEntity()
+            // .block();
+            System.out.println("FUNCIONA requset");
+            return new DocumentResponse(true, video_id);
+            
+            // if (responseEntity != null) {
+        //     System.out.println("entra if");
+        //     HttpStatusCode statusCode = responseEntity.getStatusCode();
+        //     if (statusCode.is2xxSuccessful()) {
+        //         return new DocumentResponse(true, video_id);
+        //     } else if (statusCode.is4xxClientError()) {
+        //         return new DocumentResponse(false, null);
+        //     }
+        // }
+            // throw new Exception("failed to arrive create document");
+
         }
         catch(Exception e){
-            return new DocumentPost(false);  
+            System.out.println(e);
+            return new DocumentResponse(false,null);  
         }
         //     .retrieve();
         //     // .bodyToMono(DocumentPost.class)
@@ -122,7 +142,7 @@ public class DocumentController {
 
     @CrossOrigin
     @GetMapping("/UpdateDocument")
-    public DocumentPost del() {
-        return this.add(null, null, null, null);
+    public void update() {
+        // return this.add(null, null, null, null);
     }
 }

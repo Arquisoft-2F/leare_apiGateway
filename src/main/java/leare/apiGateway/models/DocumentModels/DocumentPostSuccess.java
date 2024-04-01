@@ -1,13 +1,10 @@
 package leare.apiGateway.models.DocumentModels;
 import java.util.Objects;
 
-public class DocumentPost {
+public class DocumentPostSuccess {
     private Boolean success;
-    // private String error;
-    public DocumentPost(boolean success) {
-    // public DocumentPost(boolean success,String error) {
+    public DocumentPostSuccess(boolean success) {
         this.success = success;
-        // this.error = error;
     }
 
     public Boolean isSuccess() {
@@ -21,14 +18,4 @@ public class DocumentPost {
     public void setSuccess(Boolean success) {
         this.success = success;
     }
-
-    // public String getError() {
-    //     return this.error;
-    // }
-
-    // public void setError(String error) {
-    //     this.error = error;
-    // }
- 
-    
 }

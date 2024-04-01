@@ -240,7 +240,7 @@ public class UserResolver {
         // newUser.setPicture_id(link);
         // }
 
-        newUser = documentConsumer.updatePictureLinks(newUser);
+        newUser = documentConsumer.updatePictureLink(newUser);
 
         searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
                 newUser.getPicture_id());
@@ -266,7 +266,7 @@ public class UserResolver {
         // String link = documentConsumer.getDocument(editedUser.getPicture_id());
         // editedUser.setPicture_id(link);
         // }
-        editedUser = documentConsumer.updatePictureLinks(editedUser);
+        editedUser = documentConsumer.updatePictureLink(editedUser);
 
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
@@ -307,7 +307,7 @@ public class UserResolver {
             throw new Exception("Auth Problem");
         }
         Users editedUser = userConsumer.updateMe(user, token.getUserID());
-        editedUser = documentConsumer.updatePictureLinks(editedUser);
+        editedUser = documentConsumer.updatePictureLink(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
