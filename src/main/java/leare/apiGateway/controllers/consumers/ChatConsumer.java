@@ -6,7 +6,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import leare.apiGateway.models.ChatModels.Chat;
 import leare.apiGateway.models.ChatModels.ChatData;
 import leare.apiGateway.models.ChatModels.ChatInput;
-import leare.apiGateway.models.ChatModels.ChatJoinInput;
 import leare.apiGateway.models.ChatModels.ChatUser;
 import leare.apiGateway.models.ChatModels.Message;
 import reactor.core.publisher.Mono;
@@ -51,11 +50,11 @@ public class ChatConsumer {
                 .block();
     }
 
-    public ChatUser joinChat(ChatJoinInput chatJoinInput) {
+    public ChatUser joinChat(String user_id, String user_nickname, String chatId) {
         return webClient
                 .patch()
                 .uri("/{chatId}/join?user_id={userId}&user_nickname={userNickname}",
-                        chatJoinInput.getChat_id(), chatJoinInput.getUser_id(), chatJoinInput.getUser_nickname())
+                        chatId, user_id, user_nickname)
                 .retrieve()
                 .bodyToMono(ChatUser.class)
                 .block();

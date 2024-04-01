@@ -36,9 +36,3 @@ type Message {
 input ChatInput {
     chat_name: String!
 }
-
-input ChatJoinInput {
-    chat_id: ID!
-    user_id: ID!
-    user_nickname: String!
-}

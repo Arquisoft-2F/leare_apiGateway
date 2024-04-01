@@ -1,9 +1,11 @@
 package leare.apiGateway.controllers.graphql;
+import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.ChatConsumer;
 import leare.apiGateway.models.ChatModels.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -14,34 +16,66 @@ import java.util.Map;
 @Controller
 public class ChatResolver {
     private final ChatConsumer chatConsumer;
+    private final AuthConsumer authConsumer;
 
     @Autowired
-    public ChatResolver(ChatConsumer chatConsumer) {
+    public ChatResolver(ChatConsumer chatConsumer, AuthConsumer authConsumer) {
         this.chatConsumer = chatConsumer;
+        this.authConsumer = authConsumer;
     }
 
     @QueryMapping
-    public Chat[] userChats(@Argument String user_id) {
+    public Chat[] userChats(@ContextValue("Authorization") String AuthorizationHeader) {
+
+        // if (!authConsumer.CheckRoute("/chat/user/:user_id", "get", AuthorizationHeader)) {
+        //     throw new Exception("Auth Problem");
+        // }
+
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
         return chatConsumer.getUserChats(user_id);
     }
 
     @QueryMapping
-    public Message[] chatMessages(@Argument String chat_id, @Argument String user_id) {
+    public Message[] chatMessages(@ContextValue("Authorization") String AuthorizationHeader , @Argument String chat_id) {
+
+        // if (!authConsumer.CheckRoute("/chat/:chat_id/messages", "get", AuthorizationHeader)) {
+        //     throw new Exception("Auth Problem");
+        // }
+
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
         return chatConsumer.getChatMessages(chat_id, user_id);
     }
 
     @MutationMapping
-    public ChatData createChat(@Argument ChatInput chat_input) {
+    public ChatData createChat(@ContextValue("Authorization") String AuthorizationHeader, @Argument ChatInput chat_input) {
+
+        // if (!authConsumer.CheckRoute("/chat", "post", AuthorizationHeader)) {
+        //     throw new Exception("Auth Problem");
+        // }
+
         return chatConsumer.createChat(chat_input);
     }
 
     @MutationMapping
-    public ChatUser joinChat(@Argument ChatJoinInput chat_join_input) {
-        return chatConsumer.joinChat(chat_join_input);
+    public ChatUser joinChat(@ContextValue("Authorization") String AuthorizationHeader,  @Argument String chat_id) {
+
+        // if (!authConsumer.CheckRoute("/chat/:chat_id/join", "patch", AuthorizationHeader)) {
+        //     throw new Exception("Auth Problem");
+        // }
+
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
+        String user_nickname = authConsumer.DecryptToken(AuthorizationHeader).getUsername();
+        return chatConsumer.joinChat(user_id, user_nickname, chat_id);
     }
 
     @MutationMapping
-    public Map<String, String> leaveChat(@Argument String chat_id, @Argument String user_id) {
+    public Map<String, String> leaveChat(@ContextValue("Authorization") String AuthorizationHeader, @Argument String chat_id) {
+
+        // if (!authConsumer.CheckRoute("/chat/:chat_id/leave", "patch", AuthorizationHeader)) {
+        //     throw new Exception("Auth Problem");
+        // }
+
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
         chatConsumer.leaveChat(chat_id, user_id).block();
         Map<String, String> response = new HashMap<>();
         response.put("message", "User left chat");
@@ -49,7 +83,12 @@ public class ChatResolver {
     }
 
     @MutationMapping
-    public Map<String, String> deleteChat(@Argument String chat_id) {
+    public Map<String, String> deleteChat(@ContextValue("Authorization") String AuthorizationHeader, @Argument String chat_id) {
+
+        // if (!authConsumer.CheckRoute("/chat/chat:id", "delete", AuthorizationHeader)) {
+        //     throw new Exception("Auth Problem");
+        // }
+
         chatConsumer.deleteChat(chat_id).block();
         Map<String, String> response = new HashMap<>();
         response.put("message", "Chat deleted");

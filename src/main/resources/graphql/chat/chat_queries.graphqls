@@ -1,4 +1,4 @@
 extend type Query {
-    userChats(user_id: ID!): [Chat]
-    chatMessages(chat_id: ID!, user_id: ID!): [Message]
+    userChats: [Chat]
+    chatMessages(chat_id: ID!): [Message]
 }
