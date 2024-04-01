@@ -250,4 +250,24 @@ public class CourseConsumer {
                 .block();
         return true;
     }
+
+    public String moduleCreator(String id) {
+        return webClient
+                .get()
+                .uri("/modules/{id}/creator", id)
+                .retrieve()
+                .bodyToMono(Map.class) // Assuming the response is JSON and you're using a Map for deserialization
+                .map(map -> (String) map.get("creator_id"))
+                .block();
+    }
+
+    public String sectionCreator(String id) {
+        return webClient
+                .get()
+                .uri("/sections/{id}/creator", id)
+                .retrieve()
+                .bodyToMono(Map.class) // Assuming the response is JSON and you're using a Map for deserialization
+                .map(map -> (String) map.get("creator_id"))
+                .block();
+    }
 }
