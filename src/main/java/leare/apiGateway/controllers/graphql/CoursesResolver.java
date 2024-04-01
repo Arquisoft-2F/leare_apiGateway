@@ -199,7 +199,7 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         coursesConsumer.deleteCourse(id);
-        documentConsumer.deleteDocument(id);
+        documentConsumer.deleteDocument(token.getUsername(),id);
         searchConsumer.DeleteIndex(id);
         return true;
     }
@@ -267,7 +267,7 @@ public class CoursesResolver {
     // Funciones auxiliares para obtener los links de los archivos y videos de las secciones
     private ModuleSection updateSectionLinks(ModuleSection section) { //TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
         if (section != null && section.getVideo_id() != null) {
-            String link = documentConsumer.getDocument(section.getVideo_id());
+            String link = documentConsumer.getDocument(section.getVideo_id()).getValue().getFilePath();
             section.setVideo_id(link);
             
             if (section.getFiles_array() != null) {
@@ -275,7 +275,7 @@ public class CoursesResolver {
                 List<String> files_links = new ArrayList<String>();
 
                 for (String file_id : section.getFiles_array()) {
-                    String file_link = documentConsumer.getDocument(file_id);
+                    String file_link = documentConsumer.getDocument(file_id).getValue().getFilePath();
                     files_links.add(file_link);
                 }
 
@@ -353,14 +353,16 @@ public class CoursesResolver {
 
         coursesConsumer.deleteSection(id);
 
-        if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
-            documentConsumer.deleteDocument(section.getVideo_id());
+        if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO 
+
+            //ACTUALMENTE NO FUNCIONA. TOCA MANDAR USUARIO Y ID
+            // documentConsumer.deleteDocument(section.getVideo_id());
             
-            if (section.getFiles_array() != null) {
-                for (String file_id : section.getFiles_array()) {
-                    documentConsumer.deleteDocument(file_id);
-                }
-            }
+            // if (section.getFiles_array() != null) {
+            //     for (String file_id : section.getFiles_array()) {
+            //         documentConsumer.deleteDocument(file_id);
+            //     }
+            // }
         }
         return true;
     }

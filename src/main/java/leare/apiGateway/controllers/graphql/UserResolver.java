@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import org.springframework.http.MediaType;
 
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
+import leare.apiGateway.models.DocumentModels.batch.GetBatchResponse;
+import leare.apiGateway.models.DocumentModels.batch.VideoInfo;
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Students;
@@ -117,12 +120,49 @@ public class UserResolver {
         }
 
         Users[] allUser = userConsumer.users();
+        String[] pictureIds = new String[allUser.length];
+
+        for (int i = 0; i < allUser.length; i++) {
+            pictureIds[i] = allUser[i].getPicture_id();
+        }
+        System.out.println(Arrays.toString(pictureIds));
+        GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
+        // Iterate over the values in the map and print each one
+for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
+    System.out.println("VideoInfo: " + videoInfo.getDate());
+    System.out.println("VideoInfo: " + videoInfo.getFileName());
+    System.out.println("VideoInfo: " + videoInfo.getFilePath());
+    System.out.println("VideoInfo: " + videoInfo.getFileType());
+    System.out.println("VideoInfo: " + videoInfo.getUserId());
+    System.out.println("VideoInfo: " + videoInfo.getVideoId());
+}
+
+        // for (Map.Entry<String, VideoInfo> entry : allPictures.getValue().entrySet()) {
+        //     String key = entry.getKey();
+        //     VideoInfo value = entry.getValue();
+        //     System.out.println("Key: " + key);
+        //     System.out.println("Value: " + value);
+        // }
         for (Users user : allUser) {
-            if (user != null && user.getPicture_id() != null) {
-                String link = documentConsumer.getDocument(user.getPicture_id());
+            try {
+                String link = allPictures.getValueMap().get(user.getPicture_id()).getFilePath();
+                // System.out.println(allPictures.getValue().get("14").getUserId());
+                // System.out.println(allPictures.getValue().get("14").getFileName());
+                // System.out.println(allPictures.getValue().get("14").getVideoId());
+                
+                // System.out.println("User picture_id: " + user.getPicture_id());
+                // System.out.println("Link: " + link);
                 user.setPicture_id(link);
+            } catch (Exception e) {
+                user.setPicture_id(null);
             }
         }
+        // for (Users user : allUser) {
+        //     if (user != null && user.getPicture_id() != null) {
+        //         String link = documentConsumer.getDocument(user.getPicture_id()).getValue().getFilePath();
+        //         user.setPicture_id(link);
+        //     }
+        // }
         // throw new Exception("NO ESTA AUTENTICADO ");
 
         return allUser;
@@ -159,7 +199,7 @@ public class UserResolver {
         // !document
         Users x = userConsumer.userById(id, AuthorizationHeader);
         if (x != null && x.getPicture_id() != null) {
-            String link = documentConsumer.getDocument(x.getPicture_id());
+            String link = documentConsumer.getDocument(x.getPicture_id()).getValue().getFilePath();
             x.setPicture_id(link);
         }
         return x;
@@ -213,7 +253,7 @@ public class UserResolver {
         Students[] students = userConsumer.getCourses(course_id);
         for (Students student : students) {
             if (student.getUser() != null && student.getUser().getPicture_id() != null) {
-                String link = documentConsumer.getDocument(student.getUser().getPicture_id());
+                String link = documentConsumer.getDocument(student.getUser().getPicture_id()).getValue().getFilePath();
                 student.getUser().setPicture_id(link);
             }
         }
@@ -280,7 +320,6 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "delete", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
-
         if (!Auth || token==null || !token.getRole().equals("admin")) {
             throw new Exception("Auth Problem");
         }
@@ -289,7 +328,7 @@ public class UserResolver {
         // documentConsumer.deleteDocument(deletedUser.getPicture_id());
         // }
 
-        deletedUser = documentConsumer.deletePictureLinks(deletedUser);
+        documentConsumer.deleteDocument(token.getUserID(),deletedUser.getPicture_id());
         searchConsumer.DeleteIndex(deletedUser.getId());
         return deletedUser;
     }
@@ -323,7 +362,7 @@ public class UserResolver {
             throw new Exception("Auth Problem");
         }
         Users userDeleted = userConsumer.deleteMe(token.getUserID());
-        userDeleted = documentConsumer.deletePictureLinks(userDeleted);
+        documentConsumer.deleteDocument(token.getUserID(), userDeleted.getPicture_id());
         searchConsumer.DeleteIndex(userDeleted.getId());
         return userDeleted;
     }
