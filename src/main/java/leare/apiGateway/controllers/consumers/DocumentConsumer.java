@@ -64,11 +64,15 @@ public class DocumentConsumer {
     }
 
     public DocumentPostSuccess deleteDocument(String userId,String id) {
-        return documentClient.delete()
+        if (id!= null) {
+            return documentClient.delete()
                 .uri("/delete/{userId}/{id}",userId,id)
                 .retrieve()
                 .bodyToMono(DocumentPostSuccess.class)
                 .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        }
+        return new DocumentPostSuccess(true);
+        
 
     }
 

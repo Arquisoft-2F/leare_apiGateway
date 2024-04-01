@@ -192,12 +192,13 @@ public class UserResolver {
         // !auth
         // //String route, String method, String token
 
-        Boolean Auth = authConsumer.CheckRoute("/user/:id", "get", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/users/:id", "get", AuthorizationHeader);
+        System.out.println(Auth);
         if (!Auth) {
             throw new Exception("Auth problem");
         }
         // !document
-        Users x = userConsumer.userById(id, AuthorizationHeader);
+        Users x = userConsumer.userById(id);
         if (x != null && x.getPicture_id() != null) {
             String link = documentConsumer.getDocument(x.getPicture_id()).getValue().getFilePath();
             x.setPicture_id(link);
@@ -301,14 +302,16 @@ public class UserResolver {
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
-        if (!Auth || token==null || !token.getRole().equals("admin")) {
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(id))) {
             throw new Exception("Auth Problem");
         }
+        Users pasUser = userConsumer.userById(id);
         Users editedUser = userConsumer.updateUser(user, id);
         editedUser = documentConsumer.updatePictureLink(editedUser);
-        RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
-        while(updatedAuth.getFlag().equals("false")){
-            updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
+        RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,id);
+        if(updatedAuth.getFlag().equals("false")){
+            Users l = userConsumer.updateUser(pasUser, id);  
+            throw new Exception("Auth Problem");  
         }
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
@@ -350,10 +353,12 @@ public class UserResolver {
         if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
+        Users pasUser = userConsumer.userById(token.getUserID());
         Users editedUser = userConsumer.updateMe(user, token.getUserID());
         RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
-        while(updatedAuth.getFlag().equals("false")){
-            updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
+        if(updatedAuth.getFlag().equals("false")){
+            Users l = userConsumer.updateUser(pasUser, token.getUserID());  
+            throw new Exception("Auth Problem");  
         }
         editedUser = documentConsumer.updatePictureLink(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
@@ -376,8 +381,11 @@ public class UserResolver {
         if(deletedAuth.getFlag().equals("false")){
             throw new Exception("Auth Problem");
         }
+        System.out.println(userDeleted.getPicture_id());
         documentConsumer.deleteDocument(token.getUserID(), userDeleted.getPicture_id());
-        searchConsumer.DeleteIndex(userDeleted.getId());
+        System.out.println("Sapo");
+        Boolean x =searchConsumer.DeleteIndex(userDeleted.getId());
+        System.out.println(x);
         return userDeleted;
     }
 

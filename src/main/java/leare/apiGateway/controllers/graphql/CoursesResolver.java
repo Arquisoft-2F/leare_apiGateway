@@ -266,7 +266,7 @@ public class CoursesResolver {
         String creatorId = coursesConsumer.moduleCreator(id);
         System.out.println(creatorId);
         System.out.println(token.getUserID());
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(creatorId))) {
             throw new Exception("Auth Problem");
         }
         return coursesConsumer.deleteModule(id);

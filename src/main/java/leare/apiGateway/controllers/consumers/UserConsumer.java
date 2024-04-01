@@ -45,7 +45,7 @@ public class UserConsumer {
     }
 
     
-    public Users userById(String id, String AuthorizationHeader) {
+    public Users userById(String id) {
         Users user = usersClient.get()
                 .uri("/users/{id}", id)
                 .retrieve()
