@@ -245,7 +245,11 @@ public class CoursesResolver {
     public CourseModule editModule(@Argument EditModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
         
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
+        
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
             throw new Exception("Auth Problem");
         }
         return coursesConsumer.editModule(input);
@@ -254,8 +258,12 @@ public class CoursesResolver {
     @MutationMapping
     public Boolean deleteModule(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+    
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
-        if (!Auth) {
+        String cretorId = coursesConsumer.moduleCreator(id);
+        
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
             throw new Exception("Auth Problem");
         }
         coursesConsumer.deleteModule(id);
@@ -320,7 +328,11 @@ public class CoursesResolver {
     public ModuleSection createSection(@Argument CreateSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
+        
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
             throw new Exception("Auth Problem");
         }
         ModuleSection section = coursesConsumer.createSection(input);
@@ -332,7 +344,11 @@ public class CoursesResolver {
     public ModuleSection editSection(@Argument EditSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        String cretorId = coursesConsumer.sectionCreator(input.getSection_id());
+        
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
             throw new Exception("Auth Problem");
         }
         ModuleSection section = coursesConsumer.editSection(input);
@@ -345,7 +361,11 @@ public class CoursesResolver {
         
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        String cretorId = coursesConsumer.sectionCreator(id);
+        
+        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
             throw new Exception("Auth Problem");
         }
 
