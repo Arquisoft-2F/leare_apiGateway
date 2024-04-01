@@ -20,28 +20,54 @@ public class AuthConsumer {
     public AuthConsumer(WebClient.Builder webClientBuilder) {
         this.AuthClient = webClientBuilder.baseUrl("http://auth-web:8080").build();
     }
-    public LoginResponse Login(String email,String password){
+    public LoginResponse Login(String username,String password){
         return AuthClient.post()
                         .uri("/api/Account/login")
                         .bodyValue(new HashMap<String, String>() {{
-                            put("email", email);
+                            put("username", username);
                             put("password", password);}})
                         .retrieve()
                         .bodyToMono(LoginResponse.class)
                         .block();
 
     }
-    public RegisterResponse Register(String name, String email, String password, String confirmPassword, String role,String userId){
+    public RegisterResponse Register(String name, String username, String email, String password, String confirmPassword, String role,String userId){
         return AuthClient.post()
                         .uri("/api/Account/register")
                         .bodyValue(new HashMap<String, String>() {{
                             put("name", name);
+                            put("username", username);
                             put("email", email);
                             put("password", password);
                             put("confirmPassword", confirmPassword);
                             put("role", role);
                             put("userId", userId);
                         }})
+                        .retrieve()
+                        .bodyToMono(RegisterResponse.class)
+                        .block();
+    }
+
+    public RegisterResponse updateAuth(String name, String username, String email, String password, String confirmPassword, String role,String userId){
+        return AuthClient.put()
+                        .uri("/api/Account/edit/{userId}",userId)
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("name", name);
+                            put("username", username);
+                            put("email", email);
+                            put("password", "password");
+                            put("confirmPassword", "password");
+                            put("role", "0");
+                            put("userId", userId);
+                        }})
+                        .retrieve()
+                        .bodyToMono(RegisterResponse.class)
+                        .block();
+    }
+
+    public RegisterResponse deleteAuth(String userId){
+        return AuthClient.delete()
+                        .uri("/api/Account/delete/{userId}",userId)
                         .retrieve()
                         .bodyToMono(RegisterResponse.class)
                         .block();

@@ -244,8 +244,12 @@ public class UserResolver {
 
         searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
                 newUser.getPicture_id());
-        RegisterResponse registerResponse = authConsumer.Register(user.getName(), user.getEmail(), password,
+        RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getNickname(), user.getEmail(), password,
                 confirmPassword, rol, newUser.getId());
+        if(registerResponse.getFlag().equals("false")){
+            userConsumer.deleteUser(newUser.getId());
+             throw new Exception("Auth Problem");
+        }
         return new CreateResponse(newUser,registerResponse.getToken());
         // return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
     }
@@ -262,12 +266,11 @@ public class UserResolver {
             throw new Exception("Auth Problem");
         }
         Users editedUser = userConsumer.updateUser(user, id);
-        // if(editedUser!=null && editedUser.getPicture_id()!=null){
-        // String link = documentConsumer.getDocument(editedUser.getPicture_id());
-        // editedUser.setPicture_id(link);
-        // }
         editedUser = documentConsumer.updatePictureLink(editedUser);
-
+        RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
+        while(updatedAuth.getFlag().equals("false")){
+            updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
+        }
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
         return editedUser;
@@ -288,7 +291,11 @@ public class UserResolver {
         // if(deletedUser!=null && deletedUser.getPicture_id()!=null){
         // documentConsumer.deleteDocument(deletedUser.getPicture_id());
         // }
-
+        RegisterResponse deletedAuth=authConsumer.deleteAuth(id);
+        if(deletedAuth.getFlag().equals("false")){
+            userConsumer.createUser(deletedUser);
+            throw new Exception("Auth Problem");
+        }
         deletedUser = documentConsumer.deletePictureLinks(deletedUser);
         searchConsumer.DeleteIndex(deletedUser.getId());
         return deletedUser;
@@ -302,10 +309,15 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/users/me", "patch", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        System.out.println(Auth);
         if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
         Users editedUser = userConsumer.updateMe(user, token.getUserID());
+        RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
+        while(updatedAuth.getFlag().equals("false")){
+            updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
+        }
         editedUser = documentConsumer.updatePictureLink(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
@@ -323,6 +335,11 @@ public class UserResolver {
             throw new Exception("Auth Problem");
         }
         Users userDeleted = userConsumer.deleteMe(token.getUserID());
+        RegisterResponse deletedAuth=authConsumer.deleteAuth(token.getUserID());
+        if(deletedAuth.getFlag().equals("false")){
+            userConsumer.createUser(userDeleted);
+            throw new Exception("Auth Problem");
+        }
         userDeleted = documentConsumer.deletePictureLinks(userDeleted);
         searchConsumer.DeleteIndex(userDeleted.getId());
         return userDeleted;
