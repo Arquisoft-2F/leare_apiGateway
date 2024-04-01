@@ -194,13 +194,18 @@ public class CourseConsumer {
     }
 
     public Boolean deleteModule(String id) {
-        webClient
+        String message =webClient
                 .delete()
                 .uri("/modules/{id}", id)
                 .retrieve()
-                .bodyToMono(Boolean.class)
+                .bodyToMono(Map.class) // Assuming the response is JSON and you're using a Map for deserialization
+                .map(map -> (String) map.get("message"))
                 .block();
-        return true;
+        if(message.equals("deleted successfully"))
+        {
+            return true;
+        }
+        return false;
     }
 
     public ModuleSection[] getModuleSections(String moduleId, int page) {

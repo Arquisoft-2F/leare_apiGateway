@@ -73,6 +73,17 @@ public class AuthConsumer {
                         .block();
     }
 
+    public LoginResponse changePassword(String id,String OldPassword,String NewPassword){
+        return AuthClient.patch()
+                        .uri("/api/Account/editPassword/{id}",id)
+                        .bodyValue(new HashMap<String, String>() {{
+                            put("OldPassword", OldPassword);
+                            put("NewPassword", NewPassword);}})
+                        .retrieve()
+                        .bodyToMono(LoginResponse.class)
+                        .block();
+    }
+
     public Boolean CheckRoute(String route, String method, String token){
         String RouteResponse = AuthClient.post()
                         .uri("/Test/getRoute")
