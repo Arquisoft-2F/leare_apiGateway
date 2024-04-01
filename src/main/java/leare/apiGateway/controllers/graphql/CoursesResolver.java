@@ -82,14 +82,8 @@ public class CoursesResolver {
     @QueryMapping
     public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories) {
         CourseByCategory[] courses = coursesConsumer.getCoursesByCategory(categories);
-        // for (CourseByCategory course : courses) {
-        //     if (course != null && course.getPicture_id() != null) {
-        //         String link = documentConsumer.getDocument(course.getPicture_id());
-        //         course.setPicture_id(link);
-        //     }
-        // }
 
-        courses = documentConsumer.updatePictureLinks(courses);
+        courses = documentConsumer.updatePictureLink(courses);
 
         return courses;
     }
@@ -97,14 +91,16 @@ public class CoursesResolver {
     @QueryMapping
     public Course[] listCourses(@Argument int page) {
         Course[] courses = coursesConsumer.listCourses(page);
-        courses = documentConsumer.updatePictureLinks(courses);
+        courses = documentConsumer.updatePictureLink(courses);
         return courses;
     }
 
     @QueryMapping
     public Course courseById(@Argument String id) {
         Course course = coursesConsumer.getCourseById(id);
-        course = documentConsumer.updatePictureLinks(course);
+        course = documentConsumer.updatePictureLink(course);
+        course.setModules(course.getModules());
+
         return course;
 
     }
@@ -113,7 +109,7 @@ public class CoursesResolver {
     public Course createCourse(@Argument CreateCourseInput input) {
 
         Course course = coursesConsumer.createCourse(input);
-        course = documentConsumer.updatePictureLinks(course);
+        course = documentConsumer.updatePictureLink(course);
         searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
 
         return course;
@@ -123,7 +119,7 @@ public class CoursesResolver {
     @MutationMapping
     public Course editCourse(@Argument EditCourseInput input) {
         Course course = coursesConsumer.editCourse(input);
-        course = documentConsumer.updatePictureLinks(course);
+        course = documentConsumer.updatePictureLink(course);
         searchConsumer.UpdateCourseIndex(course.getCourse_id(), course.getCourse_description(), course.getCourse_name(), course.getPicture_id());
         return course;
     }
@@ -166,15 +162,14 @@ public class CoursesResolver {
 
     // SECTION
 
-    @QueryMapping
-    public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page) { 
-        ModuleSection[] sections = coursesConsumer.getModuleSections(module_id, page);
+    // Funciones auxiliares para obtener los links de los archivos y videos de las secciones
+    private ModuleSection updateSectionLinks(ModuleSection section) { //TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
+        if (section != null && section.getVideo_id() != null) {
+            String link = documentConsumer.getDocument(section.getVideo_id());
+            section.setVideo_id(link);
+            
+            if (section.getFiles_array() != null) {
 
-        for (ModuleSection section : sections) {//TODO: WTF, QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
-            if (section != null && section.getVideo_id() != null) {
-                String link = documentConsumer.getDocument(section.getVideo_id());
-                section.setVideo_id(link);
-                
                 List<String> files_links = new ArrayList<String>();
 
                 for (String file_id : section.getFiles_array()) {
@@ -185,70 +180,41 @@ public class CoursesResolver {
                 section.setFiles_array(files_links);
             }
         }
+        return section;
+    }
 
+    private ModuleSection[] updateSectionLinks(ModuleSection[] sections) { //TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
+        for (ModuleSection section : sections) {
+            this.updateSectionLinks(section);
+        }
+        return sections;
+    }
+
+    @QueryMapping
+    public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page) { 
+        ModuleSection[] sections = coursesConsumer.getModuleSections(module_id, page);
+        sections = this.updateSectionLinks(sections);
         return sections;
     }
 
     @QueryMapping
     public ModuleSection sectionById(@Argument String id) { 
         ModuleSection section = coursesConsumer.getSectionById(id);
-
-        if (section != null && section.getVideo_id() != null) {//TODO: WTF, QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
-            String link = documentConsumer.getDocument(section.getVideo_id());
-            section.setVideo_id(link);
-            
-            List<String> files_links = new ArrayList<String>();
-
-            for (String file_id : section.getFiles_array()) {
-                String file_link = documentConsumer.getDocument(file_id);
-                files_links.add(file_link);
-            }
-
-            section.setFiles_array(files_links);
-        }
-
+        section = this.updateSectionLinks(section);
         return section;
     }
 
     @MutationMapping
     public ModuleSection createSection(@Argument CreateSectionInput input) {
         ModuleSection section = coursesConsumer.createSection(input);
-
-        if (section != null && section.getVideo_id() != null) {//TODO: WTF, QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
-            String link = documentConsumer.getDocument(section.getVideo_id());
-            section.setVideo_id(link);
-            
-            List<String> files_links = new ArrayList<String>();
-
-            for (String file_id : section.getFiles_array()) {
-                String file_link = documentConsumer.getDocument(file_id);
-                files_links.add(file_link);
-            }
-
-            section.setFiles_array(files_links);
-        }
-
+        section = this.updateSectionLinks(section);
         return section;
     }
 
     @MutationMapping
     public ModuleSection editSection(@Argument EditSectionInput input) {
         ModuleSection section = coursesConsumer.editSection(input);
-
-        if (section != null && section.getVideo_id() != null) {//TODO: WTF, QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
-            String link = documentConsumer.getDocument(section.getVideo_id());
-            section.setVideo_id(link);
-            
-            List<String> files_links = new ArrayList<String>();
-
-            for (String file_id : section.getFiles_array()) {
-                String file_link = documentConsumer.getDocument(file_id);
-                files_links.add(file_link);
-            }
-
-            section.setFiles_array(files_links);
-        }
-
+        section = this.updateSectionLinks(section);
         return section;
     }
 
@@ -259,11 +225,13 @@ public class CoursesResolver {
 
         coursesConsumer.deleteSection(id);
 
-        if (section != null && section.getVideo_id() != null) {//TODO: WTF, QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
+        if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
             documentConsumer.deleteDocument(section.getVideo_id());
             
-            for (String file_id : section.getFiles_array()) {
-                documentConsumer.deleteDocument(file_id);
+            if (section.getFiles_array() != null) {
+                for (String file_id : section.getFiles_array()) {
+                    documentConsumer.deleteDocument(file_id);
+                }
             }
         }
         return true;

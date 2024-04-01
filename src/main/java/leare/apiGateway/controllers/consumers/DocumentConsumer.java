@@ -71,7 +71,7 @@ public class DocumentConsumer {
 
     }
 
-        // public <T extends ObjectWhitPicture> List<T> updatePictureLinks(List<T> items) {
+        // public <T extends ObjectWhitPicture> List<T> updatePictureLink(List<T> items) {
     //     for (T item : items) {
     //         if (item != null && item.getPicture_id() != null) {
     //             String link = documentConsumer.getDocument(item.getPicture_id());
@@ -83,13 +83,13 @@ public class DocumentConsumer {
 
 
     
-    public <T extends ObjectWhitPicture> T[] updatePictureLinks(T[] items) {
+    public <T extends ObjectWhitPicture> T[] updatePictureLink(T[] items) {
         for (T item : items) {
-            this.updatePictureLinks(item);
+            this.updatePictureLink(item);
         }
         return items;
     }
-    public <T extends ObjectWhitPicture> T updatePictureLinks(T item) {
+    public <T extends ObjectWhitPicture> T updatePictureLink(T item) {
         if (item != null && item.getPicture_id() != null) {
             String link = this.getDocument(item.getPicture_id());
             item.setPicture_id(link);
