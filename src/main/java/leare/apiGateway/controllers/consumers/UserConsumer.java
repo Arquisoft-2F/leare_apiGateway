@@ -1,6 +1,7 @@
 package leare.apiGateway.controllers.consumers;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -126,14 +127,12 @@ public class UserConsumer {
     }
 
     public Users updateMe(UsersInput user, String id) {
+        Users user1= new Users(user.getNickname(), user.getName(), user.getLastname(), user.getPicture_id(), user.getNationality(), user.getEmail(),
+            user.getWeb_site(), user.getBiography(), user.getTwitter_link(), user.getLinkedin_link(), user.getFacebook_link(),
+            user.getCreated_at(), user.getUpdates_at(), id);
         Users updatedUser = ((RequestBodySpec) usersClient.patch()
                 .uri("/users/me")
-                .bodyValue(user))
-                .bodyValue(new HashMap<String, String>() {
-                    {
-                        put("id", id);
-                    }
-                })
+                .bodyValue(user1))
                 .retrieve()
                 .bodyToMono(Users.class)
                 .block();

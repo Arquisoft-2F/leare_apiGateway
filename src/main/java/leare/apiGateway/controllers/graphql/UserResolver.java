@@ -302,7 +302,6 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/users/me", "patch", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
-        System.out.println(token);
         if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
