@@ -27,6 +27,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
@@ -178,11 +179,15 @@ public class UserResolver {
     public Enrollment[] myCourses(@Argument String user_id, @ContextValue("Authorization") String AuthorizationHeader)
             throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:id/enroll", "get", AuthorizationHeader);
-
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
-        return userConsumer.myCourses(user_id);
+        if(token.getRole()=="admin"){
+            return userConsumer.myCourses(user_id);
+        }else{
+            return userConsumer.myCourses(token.getUserID());
+        }
     }
 
     @QueryMapping
@@ -251,7 +256,9 @@ public class UserResolver {
 
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null || !token.getRole().equals("admin")) {
             throw new Exception("Auth Problem");
         }
         Users editedUser = userConsumer.updateUser(user, id);
@@ -272,7 +279,9 @@ public class UserResolver {
 
         Boolean Auth = authConsumer.CheckRoute("/users/:id", "delete", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null || !token.getRole().equals("admin")) {
             throw new Exception("Auth Problem");
         }
         Users deletedUser = userConsumer.deleteUser(id);
@@ -286,14 +295,18 @@ public class UserResolver {
     }
 
     @MutationMapping
-    public Users updateMe(@Argument UsersInput user, @Argument String id,
+    public Users updateMe(@Argument UsersInput user,
             @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        
+        
         Boolean Auth = authConsumer.CheckRoute("/users/me", "patch", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        System.out.println(token);
+        if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
-        Users editedUser = userConsumer.updateMe(user, id);
+        Users editedUser = userConsumer.updateMe(user, token.getUserID());
         editedUser = documentConsumer.updatePictureLinks(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
@@ -301,14 +314,16 @@ public class UserResolver {
     }
 
     @MutationMapping
-    public Users deleteMe(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader)
+    public Users deleteMe(@ContextValue("Authorization") String AuthorizationHeader)
             throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/me", "delete", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
-        Users userDeleted = userConsumer.deleteMe(id);
+        Users userDeleted = userConsumer.deleteMe(token.getUserID());
         userDeleted = documentConsumer.deletePictureLinks(userDeleted);
         searchConsumer.DeleteIndex(userDeleted.getId());
         return userDeleted;
@@ -319,10 +334,16 @@ public class UserResolver {
             @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/courses_users", "post", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
-        return userConsumer.createEnrollment(course_id, user_id);
+        if(token.getRole().equals("admin")){
+            return userConsumer.createEnrollment(course_id, user_id);
+        }else{
+            return userConsumer.createEnrollment(course_id, token.getUserID());
+        }
     }
 
     @MutationMapping
@@ -330,10 +351,15 @@ public class UserResolver {
             @Argument String user_id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/courses_users/:course_id/:user_id", "patch", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
-        return userConsumer.updateEnrollment(enrollment, course_id, user_id);
+        if(token.getRole().equals("admin")||token.getRole().equals("teacher")){
+            return userConsumer.updateEnrollment(enrollment, course_id, user_id);
+        }
+        return userConsumer.updateEnrollment(enrollment, course_id, token.getUserID());
     }
 
     @MutationMapping
@@ -341,9 +367,14 @@ public class UserResolver {
             @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/courses_users/:course_id/:user_id", "delete", AuthorizationHeader);
 
-        if (!Auth) {
+        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+
+        if (!Auth || token==null) {
             throw new Exception("Auth Problem");
         }
-        return userConsumer.deleteEnrollment(course_id, user_id);
+        if(token.getRole().equals("admin")||token.getRole().equals("teacher")){
+            return userConsumer.deleteEnrollment(course_id, user_id);
+        }
+        return userConsumer.deleteEnrollment(course_id, token.getUserID());
     }
 }
