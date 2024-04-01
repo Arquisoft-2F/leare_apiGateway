@@ -9,10 +9,22 @@ type Course {
     course_description: String!
     creator_id: ID!
     is_public: Boolean!
-    picture_id: ID!
+    picture_id: ID
     created_at: String
     updated_at: String
     modules: [CourseModule]
+    categories: [Category]
+}
+
+type CourseCategory {
+    course_id: ID!
+    course_name: String!
+    course_description: String!
+    creator_id: ID!
+    is_public: Boolean!
+    picture_id: ID
+    created_at: String
+    updated_at: String
     categories: [Category]
 }
 

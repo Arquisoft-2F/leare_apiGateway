@@ -199,8 +199,13 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         coursesConsumer.deleteCourse(id);
-        documentConsumer.deleteDocument(token.getUsername(),id);
         searchConsumer.DeleteIndex(id);
+
+
+        documentConsumer.deleteDocument(token.getUsername(), course.getPicture_id()); // ! Si se edita el curso o se borra el usuario sera imposible borrar la imagen
+
+        // TODO: Remove Section documents
+
         return true;
     }
 
@@ -267,6 +272,8 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         coursesConsumer.deleteModule(id);
+
+        // TODO: Remove section documents
         return true;
     }
 
@@ -282,6 +289,7 @@ public class CoursesResolver {
 
                 List<String> files_links = new ArrayList<String>();
 
+                // TODO : Replace this with documents batch 
                 for (String file_id : section.getFiles_array()) {
                     String file_link = documentConsumer.getDocument(file_id).getValue().getFilePath();
                     files_links.add(file_link);
@@ -308,7 +316,7 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         ModuleSection[] sections = coursesConsumer.getModuleSections(module_id, page);
-        sections = this.updateSectionLinks(sections);
+        sections = this.updateSectionLinks(sections); //!
         return sections;
     }
 
@@ -320,7 +328,7 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         ModuleSection section = coursesConsumer.getSectionById(id);
-        section = this.updateSectionLinks(section);
+        section = this.updateSectionLinks(section); //!
         return section;
     }
 
@@ -336,7 +344,7 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         ModuleSection section = coursesConsumer.createSection(input);
-        section = this.updateSectionLinks(section);
+        section = this.updateSectionLinks(section); //!
         return section;
     }
 
@@ -352,7 +360,7 @@ public class CoursesResolver {
             throw new Exception("Auth Problem");
         }
         ModuleSection section = coursesConsumer.editSection(input);
-        section = this.updateSectionLinks(section);
+        section = this.updateSectionLinks(section); //!
         return section;
     }
 
@@ -373,17 +381,19 @@ public class CoursesResolver {
 
         coursesConsumer.deleteSection(id);
 
-        if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO 
+        // if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO 
 
-            //ACTUALMENTE NO FUNCIONA. TOCA MANDAR USUARIO Y ID
-            // documentConsumer.deleteDocument(section.getVideo_id());
+        //     //ACTUALMENTE NO FUNCIONA. TOCA MANDAR USUARIO Y ID
+        //     // documentConsumer.deleteDocument(section.getVideo_id());
             
-            // if (section.getFiles_array() != null) {
-            //     for (String file_id : section.getFiles_array()) {
-            //         documentConsumer.deleteDocument(file_id);
-            //     }
-            // }
-        }
+        //     // if (section.getFiles_array() != null) {
+        //     //     for (String file_id : section.getFiles_array()) {
+        //     //         documentConsumer.deleteDocument(file_id);
+        //     //     }
+        //     // }
+        // }
+
+        // TODO: Remove Section documents
         return true;
     }
 }
