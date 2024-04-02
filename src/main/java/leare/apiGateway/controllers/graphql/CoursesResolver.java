@@ -166,6 +166,7 @@ public class CoursesResolver {
         }
         Course course = coursesConsumer.createCourse(input);
         course = documentConsumer.updatePictureLink(course);
+        System.out.println(course.getPicture_id());
         searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
 
         return course;
@@ -245,17 +246,17 @@ public class CoursesResolver {
     }
 
     @MutationMapping
-    public CourseModule editModule(@Argument EditModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+    public CourseModule editModule(@Argument EditModuleInput moduleEdit, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/modules/:id", "patch", AuthorizationHeader);
         
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
-        String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
+        String cretorId = coursesConsumer.moduleCreator(moduleEdit.getModule_id());
         
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
-        return coursesConsumer.editModule(input);
+        return coursesConsumer.editModule(moduleEdit);
     }
 
     @MutationMapping

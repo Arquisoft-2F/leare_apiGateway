@@ -78,13 +78,18 @@ public class CourseConsumer {
     }
 
     public Boolean deleteCategory(String id) {
-        webClient
+        String message =webClient
                 .delete()
                 .uri("/categories/{id}", id)
                 .retrieve()
-                .bodyToMono(Boolean.class)
+                .bodyToMono(Map.class)
+                .map(map -> (String) map.get("message"))
                 .block();
-        return true;
+        if(message.equals("deleted successfully"))
+        {
+            return true;
+        }
+        return false;
     }
 
     public CourseByCategory[] getCoursesByCategory(List<String> categories) {
@@ -146,13 +151,18 @@ public class CourseConsumer {
     }
 
     public Boolean deleteCourse(String id) {
-        webClient
+        String message = webClient
                 .delete()
                 .uri("/courses/{id}", id)
                 .retrieve()
-                .bodyToMono(Boolean.class)
+                .bodyToMono(Map.class)
+                .map(map -> (String) map.get("message"))
                 .block();
-        return true;
+        if(message.equals("deleted successfully"))
+        {
+            return true;
+        }
+        return false;
     }
 
     public CourseModule[] getCourseModules(String courseId, int page) {
@@ -247,13 +257,18 @@ public class CourseConsumer {
     }
 
     public Boolean deleteSection(String id) {
-        webClient
+        String message = webClient
                 .delete()
                 .uri("/sections/{id}", id)
                 .retrieve()
-                .bodyToMono(Boolean.class)
+                .bodyToMono(Map.class)
+                .map(map -> (String) map.get("message"))
                 .block();
-        return true;
+        if(message.equals("deleted successfully"))
+        {
+            return true;
+        }
+        return false;
     }
 
     public String moduleCreator(String id) {
