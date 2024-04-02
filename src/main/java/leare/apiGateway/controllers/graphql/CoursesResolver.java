@@ -283,7 +283,11 @@ public class CoursesResolver {
     private ModuleSection updateSectionLinks(ModuleSection section) { //TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO
         if (section != null && section.getVideo_id() != null) {
             String link = documentConsumer.getDocument(section.getVideo_id()).getValue().getFilePath();
-            section.setVideo_id(link);
+            if(link==null){
+                section.setVideo_id("Not found");
+            }else{
+                section.setVideo_id(link);
+            }
             
             if (section.getFiles_array() != null) {
 
@@ -292,7 +296,11 @@ public class CoursesResolver {
                 // TODO : Replace this with documents batch 
                 for (String file_id : section.getFiles_array()) {
                     String file_link = documentConsumer.getDocument(file_id).getValue().getFilePath();
-                    files_links.add(file_link);
+                    if(file_link==null){
+                        files_links.add("Not found");
+                    }else{
+                        files_links.add(file_link);
+                    }
                 }
 
                 section.setFiles_array(files_links);
