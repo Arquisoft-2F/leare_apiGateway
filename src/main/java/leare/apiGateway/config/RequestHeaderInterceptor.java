@@ -33,6 +33,7 @@ public class RequestHeaderInterceptor implements WebGraphQlInterceptor {
 
     private boolean shouldIntercept(WebGraphQlRequest request) {
         // Verifica si el nombre de la operación está en la lista de operaciones excluidas
+        System.out.println(">>>>>>>>>>>>>>" + request.getOperationName());
         return !excludedOperations.contains(request.getOperationName());
     }
 }
