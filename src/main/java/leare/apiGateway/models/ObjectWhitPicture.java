@@ -1,4 +1,4 @@
-package leare.apiGateway.controllers.graphql;
+package leare.apiGateway.models;
 
 
 public interface ObjectWhitPicture {

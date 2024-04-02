@@ -1,6 +1,6 @@
 package leare.apiGateway.models.CoursesModels;
 
-import leare.apiGateway.controllers.graphql.ObjectWhitPicture;
+import leare.apiGateway.models.ObjectWhitPicture;
 
 public class Course implements ObjectWhitPicture {
     private String course_id;
