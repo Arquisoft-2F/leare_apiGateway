@@ -64,14 +64,18 @@ public class DocumentConsumer {
     }
 
     public DocumentPostSuccess deleteDocument(String userId,String id) {
-        if (id!= null) {
-            return documentClient.delete()
-                .uri("/delete/{userId}/{id}",userId,id)
-                .retrieve()
-                .bodyToMono(DocumentPostSuccess.class)
-                .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        try{
+            if (id!= null) {
+                return documentClient.delete()
+                    .uri("/delete/{userId}/{id}",userId,id)
+                    .retrieve()
+                    .bodyToMono(DocumentPostSuccess.class)
+                    .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+            }
+            return new DocumentPostSuccess(true);
+        }catch (Exception e) {
+            return new DocumentPostSuccess(false);
         }
-        return new DocumentPostSuccess(true);
         
 
     }
@@ -130,7 +134,11 @@ public class DocumentConsumer {
         if (item != null && item.getPicture_id() != null) {
             String link = this.getDocument(item.getPicture_id()).getValue().getFilePath();
             System.out.println(link);
+            if(link==null){
+                item.setPicture_id("notFound");
+            }else{
             item.setPicture_id(link);
+            }
             return item;
         }
         item.setPicture_id("notFound");
@@ -140,7 +148,7 @@ public class DocumentConsumer {
     public <T extends ObjectWhitPicture> T deletePictureLinks(T item,String userId) {
         if (item != null && item.getPicture_id() != null) {
             DocumentPostSuccess link = this.deleteDocument(userId,item.getPicture_id());
-            item.setPicture_id(null);
+            item.setPicture_id("Not found");
         }
         return item;
     }

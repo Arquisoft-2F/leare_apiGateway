@@ -27,8 +27,10 @@ public class SearchConsumer {
     }
 
     public Boolean AddCourseIndex(String id, String name, String description, String picture){
+        
         try{
 
+            
             String response =  SearchClient.post()
                         .uri("/posts")
                         .bodyValue(new HashMap<String, String>() {{
@@ -55,7 +57,6 @@ public class SearchConsumer {
 
     public Boolean AddUsersIndex(String id, String name, String lastname, String nickname,String picture){
         try{
-
             String response =  SearchClient.post()
                         .uri("/posts")
                         .bodyValue(new HashMap<String, String>() {{
@@ -80,7 +81,6 @@ public class SearchConsumer {
 
     public Boolean AddCategoryIndex(String id, String name){
         try{
-
             String response =  SearchClient.post()
                         .uri("/posts")
                         .bodyValue(new HashMap<String, String>() {{
