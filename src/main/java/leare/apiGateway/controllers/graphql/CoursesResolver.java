@@ -11,6 +11,7 @@ import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
+import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
@@ -50,7 +51,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/categories", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.getCategories();
     }
@@ -61,7 +62,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/categories/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         return coursesConsumer.getCategoryById(id);
@@ -73,7 +74,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/categories", "post", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         Category category = coursesConsumer.createCategory(category_name);
@@ -88,7 +89,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/categories/:id", "patch", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         Category category = coursesConsumer.editCategory(input);
@@ -103,7 +104,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/categories/:id", "delete", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         coursesConsumer.deleteCategory(id);
@@ -119,7 +120,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/courses/categories", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         CourseByCategory[] courses = coursesConsumer.getCoursesByCategory(categories);
 
@@ -133,7 +134,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/listcourses/:page", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course[] courses = coursesConsumer.listCourses(page);
         courses = documentConsumer.updatePictureLink(courses);
@@ -145,7 +146,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/courses/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.getCourseById(id);
         course = documentConsumer.updatePictureLink(course);
@@ -161,7 +162,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/courses", "post", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.createCourse(input);
         course = documentConsumer.updatePictureLink(course);
@@ -178,7 +179,7 @@ public class CoursesResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(input.getCreator_id()))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.editCourse(input);
         course = documentConsumer.updatePictureLink(course);
@@ -195,7 +196,7 @@ public class CoursesResolver {
         Course course = coursesConsumer.getCourseById(id);
 
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(course.getCreator_id()))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         coursesConsumer.deleteCourse(id);
         searchConsumer.DeleteIndex(id);
@@ -215,7 +216,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/coursemodules/:course/:page", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.getCourseModules(course_id, page);
     }
@@ -225,7 +226,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/modules/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.getModuleById(id);
     }
@@ -237,7 +238,7 @@ public class CoursesResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
         Course course = coursesConsumer.getCourseById(input.getCourse_id());
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(course.getCreator_id()))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         System.out.println("pinga de mapache");    
         return coursesConsumer.createModule(input);
@@ -252,7 +253,7 @@ public class CoursesResolver {
         String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
         
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.editModule(input);
     }
@@ -267,7 +268,7 @@ public class CoursesResolver {
         System.out.println(creatorId);
         System.out.println(token.getUserID());
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(creatorId))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.deleteModule(id);
 
@@ -311,7 +312,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/modules/:module_id/sections/:page", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection[] sections = coursesConsumer.getModuleSections(module_id, page);
         sections = this.updateSectionLinks(sections); //!
@@ -323,7 +324,7 @@ public class CoursesResolver {
         Boolean Auth = authConsumer.CheckRoute("/sections/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.getSectionById(id);
         section = this.updateSectionLinks(section); //!
@@ -339,7 +340,7 @@ public class CoursesResolver {
         String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
         
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.createSection(input);
         section = this.updateSectionLinks(section); //!
@@ -355,7 +356,7 @@ public class CoursesResolver {
         String cretorId = coursesConsumer.sectionCreator(input.getSection_id());
         
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.editSection(input);
         section = this.updateSectionLinks(section); //!
@@ -372,7 +373,7 @@ public class CoursesResolver {
         String cretorId = coursesConsumer.sectionCreator(id);
         
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         ModuleSection section = coursesConsumer.getSectionById(id); // Se debe hacer antes de borrar para obtener los links de los archivos y borrarlos

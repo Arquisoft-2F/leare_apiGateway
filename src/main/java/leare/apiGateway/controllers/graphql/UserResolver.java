@@ -50,6 +50,7 @@ import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.controllers.consumers.UserConsumer;
+import leare.apiGateway.errors.AuthError;
 import graphql.language.Document;
 import graphql.schema.DataFetchingEnvironment;
 import jakarta.validation.constraints.PastOrPresent;
@@ -116,7 +117,7 @@ public class UserResolver {
 
         if (!Auth) {
             // Users[] x = new Users[1];
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         Users[] allUser = userConsumer.users();
@@ -211,7 +212,7 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/courses_users", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return userConsumer.enrollements();
     }
@@ -222,7 +223,7 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/users/:id/enroll", "get", AuthorizationHeader);
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
         if (!Auth || token==null) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         if(token.getRole()=="admin"){
             return userConsumer.myCourses(user_id);
@@ -237,7 +238,7 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/users/:user_id/enroll/:course:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return userConsumer.isEnrolled(user_id, course_id);
     }
@@ -248,7 +249,7 @@ public class UserResolver {
         Boolean Auth = authConsumer.CheckRoute("/courses_users/:course_id/users", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         Students[] students = userConsumer.getCourses(course_id);
@@ -271,7 +272,7 @@ public class UserResolver {
         // Boolean Auth = authConsumer.CheckRoute("/users", "post", AuthorizationHeader);
 
         // if (!Auth) {
-        //     throw new Exception("Auth Problem");
+        //     throw new AuthError("Auth Problem : Acces denied to this route");
         // }
 
         Users newUser = userConsumer.createUser(user);
@@ -288,7 +289,7 @@ public class UserResolver {
                 confirmPassword, rol, newUser.getId());
         if(registerResponse.getFlag().equals("false")){
             userConsumer.deleteUser(newUser.getId());
-             throw new Exception("Auth Problem");
+             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return new CreateResponse(newUser,registerResponse.getToken());
         // return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
@@ -303,7 +304,7 @@ public class UserResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(id))) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Users pasUser = userConsumer.userById(id);
         Users editedUser = userConsumer.updateUser(user, id);
@@ -311,7 +312,7 @@ public class UserResolver {
         RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,id);
         if(updatedAuth.getFlag().equals("false")){
             Users l = userConsumer.updateUser(pasUser, id);  
-            throw new Exception("Auth Problem");  
+            throw new AuthError("Auth Problem : Acces denied to this route");  
         }
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
@@ -326,7 +327,7 @@ public class UserResolver {
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
         if (!Auth || token==null || !token.getRole().equals("admin")) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Users deletedUser = userConsumer.deleteUser(id);
         // if(deletedUser!=null && deletedUser.getPicture_id()!=null){
@@ -334,7 +335,7 @@ public class UserResolver {
         // }
         RegisterResponse deletedAuth=authConsumer.deleteAuth(id);
         if(deletedAuth.getFlag().equals("false")){
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         documentConsumer.deleteDocument(token.getUserID(),deletedUser.getPicture_id());
         searchConsumer.DeleteIndex(deletedUser.getId());
@@ -351,14 +352,14 @@ public class UserResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
         System.out.println(Auth);
         if (!Auth || token==null) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Users pasUser = userConsumer.userById(token.getUserID());
         Users editedUser = userConsumer.updateMe(user, token.getUserID());
         RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,token.getUserID());
         if(updatedAuth.getFlag().equals("false")){
             Users l = userConsumer.updateUser(pasUser, token.getUserID());  
-            throw new Exception("Auth Problem");  
+            throw new AuthError("Auth Problem : Acces denied to this route");  
         }
         editedUser = documentConsumer.updatePictureLink(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
@@ -374,12 +375,12 @@ public class UserResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         if (!Auth || token==null) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Users userDeleted = userConsumer.deleteMe(token.getUserID());
         RegisterResponse deletedAuth=authConsumer.deleteAuth(token.getUserID());
         if(deletedAuth.getFlag().equals("false")){
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         System.out.println(userDeleted.getPicture_id());
         documentConsumer.deleteDocument(token.getUserID(), userDeleted.getPicture_id());
@@ -397,7 +398,7 @@ public class UserResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         if (!Auth || token==null) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         if(token.getRole().equals("admin")){
             return userConsumer.createEnrollment(course_id, user_id);
@@ -414,7 +415,7 @@ public class UserResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         if (!Auth || token==null) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         if(token.getRole().equals("admin")||token.getRole().equals("teacher")){
             return userConsumer.updateEnrollment(enrollment, course_id, user_id);
@@ -430,7 +431,7 @@ public class UserResolver {
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         if (!Auth || token==null) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         if(token.getRole().equals("admin")||token.getRole().equals("teacher")){
             return userConsumer.deleteEnrollment(course_id, user_id);

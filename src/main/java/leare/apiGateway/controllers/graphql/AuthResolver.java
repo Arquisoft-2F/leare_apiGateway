@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 
 import leare.apiGateway.controllers.consumers.AuthConsumer;
+import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.AuthModels.LoginResponse;
 import leare.apiGateway.models.AuthModels.RegisterInput;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
@@ -37,7 +38,7 @@ public class AuthResolver {
     public LoginResponse editPassword(@Argument String id, @Argument String OldPassword, @Argument String NewPassword) throws Exception {
         LoginResponse res = authConsumer.changePassword(id, OldPassword, NewPassword);
         if(res.getFlag().equals("false")){
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem" + res.getMessage());
         }
         return res;
     }

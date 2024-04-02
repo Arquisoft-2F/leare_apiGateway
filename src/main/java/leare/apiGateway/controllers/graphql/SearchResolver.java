@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
+import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.SearchModels.Post;
@@ -33,7 +34,7 @@ public class SearchResolver {
         Boolean Auth = authConsumer.CheckRoute("/posts", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         return searchConsumer.getbyIndex(q);
