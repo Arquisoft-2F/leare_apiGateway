@@ -128,35 +128,37 @@ public class UserResolver {
         System.out.println(Arrays.toString(pictureIds));
         GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
         // Iterate over the values in the map and print each one
-for (VideoInfo videoInfo : allPictures.getValueMap().values()) {
-    System.out.println("VideoInfo: " + videoInfo.getDate());
-    System.out.println("VideoInfo: " + videoInfo.getFileName());
-    System.out.println("VideoInfo: " + videoInfo.getFilePath());
-    System.out.println("VideoInfo: " + videoInfo.getFileType());
-    System.out.println("VideoInfo: " + videoInfo.getUserId());
-    System.out.println("VideoInfo: " + videoInfo.getVideoId());
-}
-
-        // for (Map.Entry<String, VideoInfo> entry : allPictures.getValue().entrySet()) {
-        //     String key = entry.getKey();
-        //     VideoInfo value = entry.getValue();
-        //     System.out.println("Key: " + key);
-        //     System.out.println("Value: " + value);
-        // }
-        for (Users user : allUser) {
-            try {
-                String link = allPictures.getValueMap().get(user.getPicture_id()).getFilePath();
-                // System.out.println(allPictures.getValue().get("14").getUserId());
-                // System.out.println(allPictures.getValue().get("14").getFileName());
-                // System.out.println(allPictures.getValue().get("14").getVideoId());
-                
-                // System.out.println("User picture_id: " + user.getPicture_id());
-                // System.out.println("Link: " + link);
-                user.setPicture_id(link);
-            } catch (Exception e) {
-                user.setPicture_id(null);
-            }
+        Map<String, VideoInfo> valueMap = allPictures.getValue();
+        for (Map.Entry<String, VideoInfo> entry : valueMap.entrySet()) {
+            String key = entry.getKey();
+            VideoInfo videoInfo = entry.getValue();
+        
+            System.out.println("Key: " + key);
+            System.out.println("VideoInfo: " + videoInfo.getDate());
+            System.out.println("VideoInfo: " + videoInfo.getFileName());
+            // ... and so on for the other fields
         }
+
+//         // for (Map.Entry<String, VideoInfo> entry : allPictures.getValue().entrySet()) {
+//         //     String key = entry.getKey();
+//         //     VideoInfo value = entry.getValue();
+//         //     System.out.println("Kxey: " + key);
+//         //     System.out.println("Value: " + value);
+//         // }
+//         for (Users user : allUser) {
+//             try {
+//                 String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
+//                 // System.out.println(allPictures.getValue().get("14").getUserId());
+//                 // System.out.println(allPictures.getValue().get("14").getFileName());
+//                 // System.out.println(allPictures.getValue().get("14").getVideoId());
+                
+//                 // System.out.println("User picture_id: " + user.getPicture_id());
+//                 // System.out.println("Link: " + link);
+//                 user.setPicture_id(link);
+//             } catch (Exception e) {
+//                 user.setPicture_id(null);
+//             }
+//         }
         // for (Users user : allUser) {
         //     if (user != null && user.getPicture_id() != null) {
         //         String link = documentConsumer.getDocument(user.getPicture_id()).getValue().getFilePath();

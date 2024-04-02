@@ -14,15 +14,16 @@ import java.util.HashMap;
 import java.util.Map;
 public class GetBatchResponse {
     private boolean success;
-    @SerializedName("value")
-    @JsonAdapter(ValueDeserializer.class)
-    private Map<String, VideoInfo> valueMap;
+    private Map<String, VideoInfo> value;
+    // @SerializedName("value")
+    // @JsonAdapter(ValueDeserializer.class)
 
 
-    public GetBatchResponse(boolean success, Map<String,VideoInfo> valueMap) {
+    public GetBatchResponse(boolean success, Map<String,VideoInfo> value) {
         this.success = success;
-        this.valueMap = valueMap;
+        this.value = value;
     }
+
 
     public boolean isSuccess() {
         return this.success;
@@ -36,26 +37,27 @@ public class GetBatchResponse {
         this.success = success;
     }
 
-    public Map<String,VideoInfo> getValueMap() {
-        return this.valueMap;
+    public Map<String,VideoInfo> getValue() {
+        return this.value;
     }
 
-    public void setValueMap(Map<String,VideoInfo> valueMap) {
-        this.valueMap = valueMap;
+    public void setValue(Map<String,VideoInfo> value) {
+        this.value = value;
     }
+  
 
-    public static class ValueDeserializer implements JsonDeserializer<Map<String, VideoInfo>> {
-        @Override
-        public Map<String, VideoInfo> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            Map<String, VideoInfo> map = new HashMap<>();
-            JsonObject jsonObject = json.getAsJsonObject();
-            for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-                String key = entry.getKey();
-                JsonObject valueObject = entry.getValue().getAsJsonObject();
-                VideoInfo value = context.deserialize(valueObject, VideoInfo.class);
-                map.put(key, value);
-            }
-            return map;
-        }
-    }
+    // public static class ValueDeserializer implements JsonDeserializer<Map<String, VideoInfo>> {
+    //     @Override
+    //     public Map<String, VideoInfo> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    //         Map<String, VideoInfo> map = new HashMap<>();
+    //         JsonObject jsonObject = json.getAsJsonObject();
+    //         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+    //             String key = entry.getKey();
+    //             JsonObject valueObject = entry.getValue().getAsJsonObject();
+    //             VideoInfo value = context.deserialize(valueObject, VideoInfo.class);
+    //             map.put(key, value);
+    //         }
+    //         return map;
+    //     }
+    // }
 }
