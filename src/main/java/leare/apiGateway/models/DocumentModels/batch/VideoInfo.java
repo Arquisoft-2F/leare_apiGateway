@@ -1,71 +1,70 @@
 package leare.apiGateway.models.DocumentModels.batch;
 
 public class VideoInfo {
-    private String filePath;
-    private String videoId;
-    private String fileName;
-    private String fileType;
-    private String userId;
-    private long date;
+    private String FilePath;
+    private String VideoId;
+    private String FileName;
+    private String FileType;
+    private String UserId;
+    private long Date;
 
 
-    public VideoInfo(String filePath, String videoId, String fileName, String fileType, String userId, long date) {
-        this.filePath = filePath;
-        this.videoId = videoId;
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.userId = userId;
-        this.date = date;
+    public VideoInfo(String FilePath, String VideoId, String FileName, String FileType, String UserId, long Date) {
+        this.FilePath = FilePath;
+        this.VideoId = VideoId;
+        this.FileName = FileName;
+        this.FileType = FileType;
+        this.UserId = UserId;
+        this.Date = Date;
     }
 
 
     public String getFilePath() {
-        return this.filePath;
+        return this.FilePath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFilePath(String FilePath) {
+        this.FilePath = FilePath;
     }
 
     public String getVideoId() {
-        return this.videoId;
+        return this.VideoId;
     }
 
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
+    public void setVideoId(String VideoId) {
+        this.VideoId = VideoId;
     }
 
     public String getFileName() {
-        return this.fileName;
+        return this.FileName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFileName(String FileName) {
+        this.FileName = FileName;
     }
 
     public String getFileType() {
-        return this.fileType;
+        return this.FileType;
     }
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
+    public void setFileType(String FileType) {
+        this.FileType = FileType;
     }
 
     public String getUserId() {
-        return this.userId;
+        return this.UserId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(String UserId) {
+        this.UserId = UserId;
     }
 
     public long getDate() {
-        return this.date;
+        return this.Date;
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public void setDate(long Date) {
+        this.Date = Date;
     }
-
 
 }

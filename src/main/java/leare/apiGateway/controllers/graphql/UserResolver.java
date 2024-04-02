@@ -128,46 +128,15 @@ public class UserResolver {
         }
         System.out.println(Arrays.toString(pictureIds));
         GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
-        // Iterate over the values in the map and print each one
-        Map<String, VideoInfo> valueMap = allPictures.getValue();
-        for (Map.Entry<String, VideoInfo> entry : valueMap.entrySet()) {
-            String key = entry.getKey();
-            VideoInfo videoInfo = entry.getValue();
-        
-            System.out.println("Key: " + key);
-            System.out.println("VideoInfo: " + videoInfo.getDate());
-            System.out.println("VideoInfo: " + videoInfo.getFileName());
-            // ... and so on for the other fields
+        for (Users user : allUser) {
+            try {
+                String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
+                user.setPicture_id(link);
+            } catch (Exception e) {
+                user.setPicture_id(null);
+            }
         }
-
-//         // for (Map.Entry<String, VideoInfo> entry : allPictures.getValue().entrySet()) {
-//         //     String key = entry.getKey();
-//         //     VideoInfo value = entry.getValue();
-//         //     System.out.println("Kxey: " + key);
-//         //     System.out.println("Value: " + value);
-//         // }
-//         for (Users user : allUser) {
-//             try {
-//                 String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
-//                 // System.out.println(allPictures.getValue().get("14").getUserId());
-//                 // System.out.println(allPictures.getValue().get("14").getFileName());
-//                 // System.out.println(allPictures.getValue().get("14").getVideoId());
-                
-//                 // System.out.println("User picture_id: " + user.getPicture_id());
-//                 // System.out.println("Link: " + link);
-//                 user.setPicture_id(link);
-//             } catch (Exception e) {
-//                 user.setPicture_id(null);
-//             }
-//         }
-        // for (Users user : allUser) {
-        //     if (user != null && user.getPicture_id() != null) {
-        //         String link = documentConsumer.getDocument(user.getPicture_id()).getValue().getFilePath();
-        //         user.setPicture_id(link);
-        //     }
-        // }
-        // throw new Exception("NO ESTA AUTENTICADO ");
-
+      
         return allUser;
     }
 
