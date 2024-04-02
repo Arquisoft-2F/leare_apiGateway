@@ -1,4 +1,4 @@
 extend type Mutation {
     login(email: String, password: String): LoginResponse
-    register(registerInput: RegisterInput): RegisterResponse
+    editPassword(id: String, OldPassword: String, NewPassword: String): LoginResponse
 }

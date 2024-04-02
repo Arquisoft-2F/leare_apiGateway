@@ -68,12 +68,16 @@ public class DocumentConsumer {
 
     }
 
-    public DocumentPostSuccess deleteDocument(String userId, String id) {
-        return documentClient.delete()
-                .uri("/delete/{userId}/{id}", userId, id)
+    public DocumentPostSuccess deleteDocument(String userId,String id) {
+        if (id!= null) {
+            return documentClient.delete()
+                .uri("/delete/{userId}/{id}",userId,id)
                 .retrieve()
                 .bodyToMono(DocumentPostSuccess.class)
                 .block(); // .block() se usa por simplicidad pero deberia ser asincrono
+        }
+        return new DocumentPostSuccess(true);
+        
 
     }
 
@@ -156,8 +160,11 @@ public class DocumentConsumer {
     public <T extends ObjectWhitPicture> T updatePictureLink(T item) {
         if (item != null && item.getPicture_id() != null) {
             String link = this.getDocument(item.getPicture_id()).getValue().getFilePath();
+            System.out.println(link);
             item.setPicture_id(link);
+            return item;
         }
+        item.setPicture_id("notFound");
         return item;
     }
 

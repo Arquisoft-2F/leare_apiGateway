@@ -1,6 +1,7 @@
 package leare.apiGateway.controllers.graphql;
 import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.ChatConsumer;
+import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.ChatModels.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class ChatResolver {
     public Chat[] userChats(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
         if (!authConsumer.CheckRoute("/chat/user/:user_id", "get", AuthorizationHeader)) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
@@ -39,7 +40,7 @@ public class ChatResolver {
     public Message[] chatMessages(@ContextValue("Authorization") String AuthorizationHeader , @Argument String chat_id) throws Exception {
 
         if (!authConsumer.CheckRoute("/chat/:chat_id/messages", "get", AuthorizationHeader)) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
@@ -50,7 +51,7 @@ public class ChatResolver {
     public ChatData createChat(@ContextValue("Authorization") String AuthorizationHeader, @Argument ChatInput chat_input) throws Exception {
 
         if (!authConsumer.CheckRoute("/chat", "post", AuthorizationHeader)) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         return chatConsumer.createChat(chat_input);
@@ -60,7 +61,7 @@ public class ChatResolver {
     public ChatUser joinChat(@ContextValue("Authorization") String AuthorizationHeader,  @Argument String chat_id) throws Exception {
 
         if (!authConsumer.CheckRoute("/chat/:chat_id/join", "patch", AuthorizationHeader)) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
@@ -72,7 +73,7 @@ public class ChatResolver {
     public Map<String, String> leaveChat(@ContextValue("Authorization") String AuthorizationHeader, @Argument String chat_id) throws Exception {
 
         if (!authConsumer.CheckRoute("/chat/:chat_id/leave", "patch", AuthorizationHeader)) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
@@ -86,7 +87,7 @@ public class ChatResolver {
     public Map<String, String> deleteChat(@ContextValue("Authorization") String AuthorizationHeader, @Argument String chat_id) throws Exception {
 
         if (!authConsumer.CheckRoute("/chat/chat:id", "delete", AuthorizationHeader)) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         chatConsumer.deleteChat(chat_id).block();

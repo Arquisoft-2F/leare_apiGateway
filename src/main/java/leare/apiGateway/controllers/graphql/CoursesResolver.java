@@ -11,6 +11,7 @@ import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
+import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
@@ -47,10 +48,10 @@ public class CoursesResolver {
 
     @QueryMapping
     public Category[] categories(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/categories", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.getCategories();
     }
@@ -58,10 +59,10 @@ public class CoursesResolver {
     @QueryMapping
     public Category categoryById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/categories/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         return coursesConsumer.getCategoryById(id);
@@ -70,10 +71,10 @@ public class CoursesResolver {
     @MutationMapping
     public Category createCategory(@Argument String category_name, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/categories", "post", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         Category category = coursesConsumer.createCategory(category_name);
@@ -85,10 +86,10 @@ public class CoursesResolver {
     @MutationMapping
     public Category editCategory(@Argument EditCategoryInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/categories/:id", "patch", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         Category category = coursesConsumer.editCategory(input);
@@ -100,10 +101,10 @@ public class CoursesResolver {
     @MutationMapping
     public Boolean deleteCategory(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/categories/:id", "delete", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         coursesConsumer.deleteCategory(id);
@@ -116,10 +117,10 @@ public class CoursesResolver {
 
     @QueryMapping
     public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/courses/categories", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         CourseByCategory[] courses = coursesConsumer.getCoursesByCategory(categories);
 
@@ -130,10 +131,10 @@ public class CoursesResolver {
 
     @QueryMapping
     public Course[] listCourses(@Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/listcourses/:page", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course[] courses = coursesConsumer.listCourses(page);
         courses = documentConsumer.updatePictureLink(courses);
@@ -142,10 +143,10 @@ public class CoursesResolver {
 
     @QueryMapping
     public Course courseById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/courses/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.getCourseById(id);
         course = documentConsumer.updatePictureLink(course);
@@ -158,12 +159,11 @@ public class CoursesResolver {
     @MutationMapping
     public Course createCourse(@Argument CreateCourseInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/courses", "post", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
-
         Course course = coursesConsumer.createCourse(input);
         course = documentConsumer.updatePictureLink(course);
         searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
@@ -174,12 +174,12 @@ public class CoursesResolver {
 
     @MutationMapping
     public Course editCourse(@Argument EditCourseInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/courses/:id", "patch", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=input.getCreator_id())) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(input.getCreator_id()))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.editCourse(input);
         course = documentConsumer.updatePictureLink(course);
@@ -189,18 +189,23 @@ public class CoursesResolver {
 
     @MutationMapping
     public Boolean deleteCourse(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/courses/:id", "delete", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         Course course = coursesConsumer.getCourseById(id);
 
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=course.getCreator_id())) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(course.getCreator_id()))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         coursesConsumer.deleteCourse(id);
-        documentConsumer.deleteDocument(token.getUsername(),id);
         searchConsumer.DeleteIndex(id);
+
+
+        documentConsumer.deleteDocument(token.getUsername(), course.getPicture_id()); // ! Si se edita el curso o se borra el usuario sera imposible borrar la imagen
+
+        // TODO: Remove Section documents
+
         return true;
     }
 
@@ -208,66 +213,67 @@ public class CoursesResolver {
 
     @QueryMapping
     public CourseModule[] courseModules(@Argument String course_id, @Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/coursemodules/:course/:page", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.getCourseModules(course_id, page);
     }
 
     @QueryMapping
     public CourseModule moduleById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/modules/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.getModuleById(id);
     }
 
     @MutationMapping
     public CourseModule createModule(@Argument CreateModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/modules", "post", AuthorizationHeader);
         
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
-
         Course course = coursesConsumer.getCourseById(input.getCourse_id());
-
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=course.getCreator_id())) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(course.getCreator_id()))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
-
+        System.out.println("pinga de mapache");    
         return coursesConsumer.createModule(input);
     }
 
     @MutationMapping
     public CourseModule editModule(@Argument EditModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/modules/:id", "patch", AuthorizationHeader);
         
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.editModule(input);
     }
 
     @MutationMapping
     public Boolean deleteModule(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/modules/:id", "delete", AuthorizationHeader);
     
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
-        String cretorId = coursesConsumer.moduleCreator(id);
-        
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
-            throw new Exception("Auth Problem");
+        String creatorId = coursesConsumer.moduleCreator(id);
+        System.out.println(creatorId);
+        System.out.println(token.getUserID());
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(creatorId))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
-        coursesConsumer.deleteModule(id);
-        return true;
+        return coursesConsumer.deleteModule(id);
+
+        // TODO: Remove section documents
+        // return true;
     }
 
     // SECTION
@@ -282,6 +288,7 @@ public class CoursesResolver {
 
                 List<String> files_links = new ArrayList<String>();
 
+                // TODO : Replace this with documents batch 
                 for (String file_id : section.getFiles_array()) {
                     String file_link = documentConsumer.getDocument(file_id).getValue().getFilePath();
                     files_links.add(file_link);
@@ -302,88 +309,90 @@ public class CoursesResolver {
 
     @QueryMapping
     public ModuleSection[] moduleSections(@Argument String module_id, @Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception { 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/modules/:module_id/sections/:page", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection[] sections = coursesConsumer.getModuleSections(module_id, page);
-        sections = this.updateSectionLinks(sections);
+        sections = this.updateSectionLinks(sections); //!
         return sections;
     }
 
     @QueryMapping
     public ModuleSection sectionById(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception { 
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/sections/:id", "get", AuthorizationHeader);
 
         if (!Auth) {
-            throw new Exception("Auth Problem");
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.getSectionById(id);
-        section = this.updateSectionLinks(section);
+        section = this.updateSectionLinks(section); //!
         return section;
     }
 
     @MutationMapping
     public ModuleSection createSection(@Argument CreateSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/sections", "post", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.createSection(input);
-        section = this.updateSectionLinks(section);
+        section = this.updateSectionLinks(section); //!
         return section;
     }
 
     @MutationMapping
     public ModuleSection editSection(@Argument EditSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/sections/:id", "patch", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.sectionCreator(input.getSection_id());
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.editSection(input);
-        section = this.updateSectionLinks(section);
+        section = this.updateSectionLinks(section); //!
         return section;
     }
 
     @MutationMapping
     public Boolean deleteSection(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         
-        Boolean Auth = authConsumer.CheckRoute("/users/:id", "patch", AuthorizationHeader);
+        Boolean Auth = authConsumer.CheckRoute("/sections/:id", "delete", AuthorizationHeader);
 
         DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.sectionCreator(id);
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && token.getUserID()!=cretorId)) {
-            throw new Exception("Auth Problem");
+        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
         ModuleSection section = coursesConsumer.getSectionById(id); // Se debe hacer antes de borrar para obtener los links de los archivos y borrarlos
 
         coursesConsumer.deleteSection(id);
 
-        if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO 
+        // if (section != null && section.getVideo_id() != null) {//TODO: QUE EL MICROSERVICIO SE ENCARGUE DE ESTO 
 
-            //ACTUALMENTE NO FUNCIONA. TOCA MANDAR USUARIO Y ID
-            // documentConsumer.deleteDocument(section.getVideo_id());
+        //     //ACTUALMENTE NO FUNCIONA. TOCA MANDAR USUARIO Y ID
+        //     // documentConsumer.deleteDocument(section.getVideo_id());
             
-            // if (section.getFiles_array() != null) {
-            //     for (String file_id : section.getFiles_array()) {
-            //         documentConsumer.deleteDocument(file_id);
-            //     }
-            // }
-        }
+        //     // if (section.getFiles_array() != null) {
+        //     //     for (String file_id : section.getFiles_array()) {
+        //     //         documentConsumer.deleteDocument(file_id);
+        //     //     }
+        //     // }
+        // }
+
+        // TODO: Remove Section documents
         return true;
     }
 }
