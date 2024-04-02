@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,10 @@ import com.google.gson.Gson;
 import leare.apiGateway.controllers.consumers.AuthConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.validation.UserValidation;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
+import leare.apiGateway.models.DocumentModels.DocumentGet;
 import leare.apiGateway.models.DocumentModels.DocumentPostError;
 import leare.apiGateway.models.DocumentModels.DocumentPostSuccess;
 import leare.apiGateway.models.DocumentModels.DocumentResponse;
@@ -44,27 +47,31 @@ public class DocumentController {
         this.auth = auth;
     }
 
-    @CrossOrigin
     // @GetMapping("/AddDocument")
+    @CrossOrigin
     @PostMapping(path = "/AddDocument", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public DocumentResponse add(@RequestPart MultipartFile content, @RequestPart String file_name,
             @RequestPart String data_type, @RequestPart String user_id) {
         UUID video_id = UUID.randomUUID();
         
-
+        System.out.println(file_name);
+        System.out.println(data_type);
+        System.out.println(user_id);
         try {
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
             formData.add("content", content);
             formData.add("file_name", file_name);
-            // formData.add("data_type", data_type);
-            // formData.add("user_id", user_id);
+            formData.add("data_type", data_type);
+            formData.add("user_id", user_id);
             formData.add("video_id", video_id.toString());
 
-            documentClient.post()
+            String x = documentClient.post()
             .uri("/create/addVideo/")
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .body(BodyInserters.fromMultipartData(formData))
-            .retrieve();
+            .retrieve()
+            .toString();
+
             // .toBodilessEntity()
             // .block();
             System.out.println("FUNCIONA requset");

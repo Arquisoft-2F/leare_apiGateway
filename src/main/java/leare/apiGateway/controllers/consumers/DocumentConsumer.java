@@ -117,20 +117,6 @@ public class DocumentConsumer {
             .create();
 
         GetBatchResponse BatchResponse = gson.fromJson(jsonString, GetBatchResponse.class);
-        Map<String, VideoInfo> valueMap = BatchResponse.getValue();
-        // Gson gson = new Gson();
-        // GetBatchResponse BatchResponse = gson.fromJson(jsonString,
-        // GetBatchResponse.class);
-        
-        // // Type mapType = new TypeToken<Map<String, VideoInfo>>() {}.getType();
-
-        // // Parsing JSON into your object
-
-        // Gson gson = new GsonBuilder()
-        // .create();
-        System.out.println(BatchResponse.getValue().get("13").getFilePath());
-        System.out.println(BatchResponse.getValue().get("13").getFilePath());
-        System.out.println(BatchResponse.getValue().get("14").getFilePath());
         return BatchResponse;
     }
     catch (Exception e ){
