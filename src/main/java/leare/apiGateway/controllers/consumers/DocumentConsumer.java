@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import leare.apiGateway.controllers.graphql.ObjectWhitPicture;
+import leare.apiGateway.models.ObjectWhitPicture;
 import leare.apiGateway.models.DocumentModels.DocumentGet;
 import leare.apiGateway.models.DocumentModels.DocumentGetValue;
 import leare.apiGateway.models.DocumentModels.DocumentPostSuccess;
