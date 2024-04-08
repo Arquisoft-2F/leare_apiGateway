@@ -25,8 +25,11 @@ jobs:
       env:
         GCP_REGISTRY: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare
       run: |
-        docker build -t $GCP_REGISTRY/apigateway-leare-gateway:$GITHUB_SHA .
+        docker build -f Dockerfile.production -t $GCP_REGISTRY/apigateway-leare-gateway:$GITHUB_SHA .
         docker push $GCP_REGISTRY/apigateway-leare-gateway:$GITHUB_SHA
+#        docker compose -f privateDocker-compose.yaml build
+#        docker tag apigateway-leare-gateway northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
+#        docker push northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
 
 
     - name: Deploy to VM
