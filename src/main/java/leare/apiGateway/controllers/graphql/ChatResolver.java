@@ -54,7 +54,10 @@ public class ChatResolver {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
-        return chatConsumer.createChat(chat_input);
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
+        String user_nickname = authConsumer.DecryptToken(AuthorizationHeader).getUsername();
+
+        return chatConsumer.createChat(chat_input, user_id, user_nickname);
     }
 
     @MutationMapping
@@ -90,7 +93,9 @@ public class ChatResolver {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
 
-        chatConsumer.deleteChat(chat_id).block();
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
+
+        chatConsumer.deleteChat(chat_id, user_id).block();
         Map<String, String> response = new HashMap<>();
         response.put("message", "Chat deleted");
         return response;

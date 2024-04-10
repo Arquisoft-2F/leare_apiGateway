@@ -1,5 +1,8 @@
 package leare.apiGateway.controllers.consumers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -40,10 +43,11 @@ public class ChatConsumer {
                 .block();
     }
 
-    public ChatData createChat(ChatInput chatInput) {
+    public ChatData createChat(ChatInput chatInput, String user_id, String user_nickname) {
+
         return webClient
                 .post()
-                .uri("/")
+                .uri("/?user_id={user_id}&user_nickname={user_nickname}", user_id, user_nickname)
                 .bodyValue(chatInput)
                 .retrieve()
                 .bodyToMono(ChatData.class)
@@ -68,10 +72,10 @@ public class ChatConsumer {
                 .bodyToMono(Void.class);
     }
 
-    public Mono<Void> deleteChat(String chatId) {
+    public Mono<Void> deleteChat(String chatId, String user_id) {
         return webClient
                 .delete()
-                .uri("/{chatId}", chatId)
+                .uri("/{chatId}?user_id={userId}", chatId, user_id)
                 .retrieve()
                 .bodyToMono(Void.class);
     }
