@@ -6,14 +6,16 @@ public class CreateCourseInput {
     private String course_name;
     private String course_description;
     private String creator_id;
+    private String chat_id;
     private String picture_id;
     private List<String> categories;
     
-    public CreateCourseInput(String course_name, String course_description, String creator_id, String picture_id,
+    public CreateCourseInput(String course_name, String course_description, String creator_id, String chat_id, String picture_id,
         List<String> categories) {
         this.course_name = course_name;
         this.course_description = course_description;
         this.creator_id = creator_id;
+        this.chat_id = chat_id;
         this.picture_id = picture_id;
         this.categories = categories;
     }
@@ -57,6 +59,16 @@ public class CreateCourseInput {
     public void setCategories(List<String> categories) {
         this.categories = categories;
     }
+
+    public String getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(String chat_id) {
+        this.chat_id = chat_id;
+    }
+
+    
     
     
 }
