@@ -68,6 +68,8 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
     depends_on:
       - chat-db
+    volumes:
+      - ../leare_chat_ms:/app
     networks:
       - leare-network
 
