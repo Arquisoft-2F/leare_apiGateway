@@ -7,17 +7,19 @@ public class CourseByCategory implements ObjectWhitPicture{
     private String course_name;
     private String course_description;
     private String creator_id;
+    private String chat_id;
     private boolean is_public;
     private String picture_id;
     private String created_at;
     private String updated_at;
     private Category[] categories;
 
-    public CourseByCategory(String course_id, String course_name, String course_description, String creator_id, boolean is_public, String picture_id, String created_at, String updated_at, Category[] categories) {
+    public CourseByCategory(String course_id, String course_name, String course_description, String creator_id, String chat_id, boolean is_public, String picture_id, String created_at, String updated_at, Category[] categories) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.course_description = course_description;
         this.creator_id = creator_id;
+        this.chat_id = chat_id;
         this.is_public = is_public;
         this.picture_id = picture_id;
         this.created_at = created_at;
@@ -95,6 +97,14 @@ public class CourseByCategory implements ObjectWhitPicture{
 
     public void setCategories(Category[] categories) {
         this.categories = categories;
+    }
+
+    public String getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(String chat_id) {
+        this.chat_id = chat_id;
     }
 
     
