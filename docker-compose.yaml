@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  # Gateway
+  #MARK: Gateway
   leare-gateway:
     build:
       context: .
@@ -14,7 +14,7 @@ services:
       - .:/app #SOLO PARA DEV
     networks:
       - leare-network
-  # auth_ms
+  #MARK: auth_ms
 
   auth-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -41,7 +41,7 @@ services:
     networks:
       - leare-network
 
-  # chat_ms
+  #MARK: chat_ms
 
   chat-db:
     image: mongo:7.0
@@ -72,7 +72,7 @@ services:
       - leare-network
 
 
-  # courses_ms
+  #MARK: courses_ms
   courses-db:
     image: postgres:16.2-alpine
     container_name: real-courses-db
@@ -100,7 +100,7 @@ services:
       - leare-network
 
 
-  #document_ms
+  #MARK: document_ms
   document-rabbit:
     image: rabbitmq:management
     ports:
@@ -138,7 +138,7 @@ services:
       - leare-network
 
 
-  # search_ms
+  #MARK: search_ms
 
   search-db:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
@@ -178,7 +178,7 @@ services:
     networks:
       - leare-network
 
-  # user_ms
+  #MARK: user_ms
   users-db:
     image: mariadb
     volumes:
@@ -210,7 +210,7 @@ services:
       - leare-network
 
 
-  # ws
+  #MARK: ws
   ws:
     build:
       context: ../leare_ws
