@@ -8,11 +8,14 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 
 import leare.apiGateway.controllers.consumers.AuthConsumer;
+import leare.apiGateway.controllers.consumers.ChatConsumer;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
 import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
+import leare.apiGateway.models.ChatModels.ChatData;
+import leare.apiGateway.models.ChatModels.ChatInput;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.CoursesModels.CourseByCategory;
@@ -35,13 +38,15 @@ public class CoursesResolver {
     private final SearchConsumer searchConsumer;
     private final DocumentConsumer documentConsumer;
     private final AuthConsumer authConsumer;
+    private final ChatConsumer chatConsumer;
 
     @Autowired
-    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer, AuthConsumer authConsumer) {
+    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer, AuthConsumer authConsumer, ChatConsumer chatConsumer) {
         this.coursesConsumer = coursesConsumer;
         this.searchConsumer = searchConsumer;
         this.documentConsumer = documentConsumer;
         this.authConsumer = authConsumer;
+        this.chatConsumer = chatConsumer;
     }
 
     // CATEGORY
@@ -164,11 +169,15 @@ public class CoursesResolver {
         if (!Auth) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
+        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
+        String user_nickname = authConsumer.DecryptToken(AuthorizationHeader).getUsername();
+        
+        ChatData chatData = chatConsumer.createChat(new ChatInput(input.getCourse_name()), user_id, user_nickname);
+        input.setChat_id(chatData.getId());
         Course course = coursesConsumer.createCourse(input);
         course = documentConsumer.updatePictureLink(course);
-        System.out.println(course.getPicture_id());
-        searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
 
+        searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
         return course;
 
     }
@@ -202,6 +211,7 @@ public class CoursesResolver {
         coursesConsumer.deleteCourse(id);
         searchConsumer.DeleteIndex(id);
 
+        chatConsumer.deleteChat(course.getChat_id(), token.getUserID()).block();
 
         documentConsumer.deleteDocument(token.getUsername(), course.getPicture_id()); // ! Si se edita el curso o se borra el usuario sera imposible borrar la imagen
 

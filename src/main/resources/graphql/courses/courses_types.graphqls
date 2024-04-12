@@ -50,7 +50,6 @@ input CreateCourseInput {
     course_name: String!
     course_description: String!
     creator_id: ID!
-    chat_id: String!
     picture_id: ID!
     categories: [String]!
 }
