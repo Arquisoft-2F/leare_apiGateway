@@ -1,0 +1,217 @@
+version: '3'
+
+services:
+# Gateway
+  leare-gateway:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
+    ports:
+      - "5555:5555"
+    networks:
+      - leare-network
+  # auth_ms
+
+  auth-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    volumes:
+      - ../db/leare_auth_db:/var/opt/mssql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password123
+    ports:
+      - "1433:1433"
+    mem_limit: 2048m
+    networks:
+      - leare-network
+
+  auth-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
+    ports:
+      - 8080:8080
+    depends_on:
+      - auth-db
+    networks:
+      - leare-network
+
+  # chat_ms
+
+  chat-db: # i could not configure the volume as it needs root priviledges and podman does NOT give them( unless :z)
+    image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - chats-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - leare-network
+
+  chat-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
+    ports:
+      - "3002:3002"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
+    depends_on:
+      - chat-db
+    networks:
+      - leare-network
+
+
+  # courses_ms
+  courses-db:
+    image: postgres:16.2-alpine
+    container_name: real-courses-db
+    volumes:
+      - courses-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_PORT: 5490
+    ports:
+      - "5490:5490"
+    networks:
+      - leare-network
+    command: -p 5490
+    
+
+  courses-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
+    ports:
+      - "3003:3003"
+    depends_on:
+      - courses-db
+    networks:
+      - leare-network
+
+
+  #document_ms
+  document-rabbit:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: arquisoft
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - leare-network
+
+
+  document-server:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
+    ports:
+      - "3004:3004"
+    volumes:
+      - ../leare_document_ms/temp:/temp
+      - ../leare_document_ms/logs:/logs
+    networks:
+      - leare-network
+
+  document-sidecar:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-sidecar:gcp
+    volumes:
+      - ../leare_document_ms/temp:/temp
+      - ../leare_document_ms/logs:/logs
+    depends_on:
+      - document-rabbit
+    ports: #never used
+      - "9999:9999"
+    networks:
+      - leare-network
+
+
+  # search_ms
+
+  search-db:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: search-db
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - leare-network
+
+  search-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-search-web:gcp
+    environment:
+      - ROCKET_ADDRESS=0.0.0.0
+      - ROCKET_PORT=3005
+      - ELASTICSEARCH_URL=http://search-db:9200
+      # - ELASTICSEARCH_URL=http://elastic:password@search-db:9200
+      - ES_USERNAME=elastic
+      - ES_PASSWORD=password
+    ports:
+      - "3005:3005"
+    depends_on:
+      - search-db
+    networks:
+      - leare-network
+
+  # user_ms
+  users-db:
+    image: mariadb
+    volumes:
+      - ../db/leare_users_db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: my_app_development
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3307:3307"
+    networks:
+      - leare-network
+
+  users-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
+    container_name: users-web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - users-db
+    environment:
+      # DATABASE_URL: mysql2://root@users-db/my_app_development
+      DATABASE_URL: mysql2://root:password@users-db/my_app_development
+    networks:
+      - leare-network
+
+
+  # ws
+  ws:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-ws:gcp
+    ports:
+      - "8001:8001"
+    environment:
+      CHAT_MS_URL: "http://chat-web:3002"
+    depends_on:
+      - chat-web
+    networks:
+      - leare-network
+
+volumes:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
+  courses-data:
+    driver: local
+  chats-data:
+    driver: local
+
+
+networks:
+  leare-network:
+    driver: bridge
