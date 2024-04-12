@@ -33,6 +33,8 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
     @Override
     protected GraphQLError resolveToSingleError(Throwable throwable, DataFetchingEnvironment env) {
 
+        System.out.println("-------------------->" +throwable.getClass());
+
         // Si la excepción es de tipo WebClientResponseException (Error al consumir el microservicio)
         if (throwable instanceof WebClientResponseException) {
             WebClientResponseException ex = (WebClientResponseException) throwable;

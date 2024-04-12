@@ -169,9 +169,12 @@ public class CoursesResolver {
         if (!Auth) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
-        String user_id = authConsumer.DecryptToken(AuthorizationHeader).getUserID();
-        String user_nickname = authConsumer.DecryptToken(AuthorizationHeader).getUsername();
-        
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
+
+        String user_id = decryptedToken.getUserID();
+        String user_nickname = decryptedToken.getUsername();
+        input.setCreator_id(user_id);
+
         ChatData chatData = chatConsumer.createChat(new ChatInput(input.getCourse_name()), user_id, user_nickname);
         input.setChat_id(chatData.getId());
         Course course = coursesConsumer.createCourse(input);
@@ -186,9 +189,14 @@ public class CoursesResolver {
     public Course editCourse(@Argument EditCourseInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/courses/:id", "patch", AuthorizationHeader);
 
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
+        String user_id = decryptedToken.getUserID();
+        String role = decryptedToken.getRole();
+        input.setCreator_id(user_id);
 
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(input.getCreator_id()))) {
+        Course prevCourse = coursesConsumer.getCourseById(input.getCourse_id());
+
+        if (!Auth || decryptedToken==null || (!role.equals("admin") && !user_id.equals(prevCourse.getCreator_id()))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.editCourse(input);
@@ -201,19 +209,21 @@ public class CoursesResolver {
     public Boolean deleteCourse(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/courses/:id", "delete", AuthorizationHeader);
 
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
+        String user_id = decryptedToken.getUserID();
+        String role = decryptedToken.getRole();
 
         Course course = coursesConsumer.getCourseById(id);
 
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(course.getCreator_id()))) {
+        if (!Auth || decryptedToken==null || (!role.equals("admin") && !user_id.equals(course.getCreator_id()))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         coursesConsumer.deleteCourse(id);
         searchConsumer.DeleteIndex(id);
 
-        chatConsumer.deleteChat(course.getChat_id(), token.getUserID()).block();
+        chatConsumer.deleteChat(course.getChat_id(), decryptedToken.getUserID()).block();
 
-        documentConsumer.deleteDocument(token.getUsername(), course.getPicture_id()); // ! Si se edita el curso o se borra el usuario sera imposible borrar la imagen
+        documentConsumer.deleteDocument(decryptedToken.getUsername(), course.getPicture_id()); // ! Si se edita el curso o se borra el usuario sera imposible borrar la imagen
 
         // TODO: Remove Section documents
 
@@ -246,12 +256,14 @@ public class CoursesResolver {
     public CourseModule createModule(@Argument CreateModuleInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/modules", "post", AuthorizationHeader);
         
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
+        String user_id = decryptedToken.getUserID();
+        String role = decryptedToken.getRole();
+        
         Course course = coursesConsumer.getCourseById(input.getCourse_id());
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(course.getCreator_id()))) {
+        if (!Auth || decryptedToken==null || (!role.equals("admin") && !user_id.equals(course.getCreator_id()))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
-        }
-        System.out.println("pinga de mapache");    
+        }   
         return coursesConsumer.createModule(input);
     }
 
@@ -259,11 +271,11 @@ public class CoursesResolver {
     public CourseModule editModule(@Argument EditModuleInput moduleEdit, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/modules/:id", "patch", AuthorizationHeader);
         
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.moduleCreator(moduleEdit.getModule_id());
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+        if (!Auth || decryptedToken==null || (!decryptedToken.getRole().equals("admin") && !decryptedToken.getUserID().equals(cretorId))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.editModule(moduleEdit);
@@ -273,12 +285,12 @@ public class CoursesResolver {
     public Boolean deleteModule(@Argument String id, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/modules/:id", "delete", AuthorizationHeader);
     
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
 
         String creatorId = coursesConsumer.moduleCreator(id);
         System.out.println(creatorId);
-        System.out.println(token.getUserID());
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(creatorId))) {
+        System.out.println(decryptedToken.getUserID());
+        if (!Auth || decryptedToken==null || (!decryptedToken.getRole().equals("admin") && !decryptedToken.getUserID().equals(creatorId))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         return coursesConsumer.deleteModule(id);
@@ -354,11 +366,11 @@ public class CoursesResolver {
     public ModuleSection createSection(@Argument CreateSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/sections", "post", AuthorizationHeader);
 
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.moduleCreator(input.getModule_id());
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+        if (!Auth || decryptedToken==null || (!decryptedToken.getRole().equals("admin") && !decryptedToken.getUserID().equals(cretorId))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.createSection(input);
@@ -370,11 +382,11 @@ public class CoursesResolver {
     public ModuleSection editSection(@Argument EditSectionInput input, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/sections/:id", "patch", AuthorizationHeader);
 
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.sectionCreator(input.getSection_id());
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+        if (!Auth || decryptedToken==null || (!decryptedToken.getRole().equals("admin") && !decryptedToken.getUserID().equals(cretorId))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         ModuleSection section = coursesConsumer.editSection(input);
@@ -387,11 +399,11 @@ public class CoursesResolver {
         
         Boolean Auth = authConsumer.CheckRoute("/sections/:id", "delete", AuthorizationHeader);
 
-        DecryptedToken token = authConsumer.DecryptToken(AuthorizationHeader);
+        DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
 
         String cretorId = coursesConsumer.sectionCreator(id);
         
-        if (!Auth || token==null || (!token.getRole().equals("admin") && !token.getUserID().equals(cretorId))) {
+        if (!Auth || decryptedToken==null || (!decryptedToken.getRole().equals("admin") && !decryptedToken.getUserID().equals(cretorId))) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
 

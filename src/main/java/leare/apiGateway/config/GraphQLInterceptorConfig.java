@@ -12,7 +12,7 @@ public class GraphQLInterceptorConfig {
 
     @Bean
     public WebGraphQlInterceptor requestHeaderInterceptor() {
-        List<String> excludedOperations = Arrays.asList("login", "CreateUser", "IntrospectionQuery");
+        List<String> excludedOperations = Arrays.asList( "IntrospectionQuery", "login", "CreateUser", "editPassword");
         return new RequestHeaderInterceptor(excludedOperations);
     }
 }
