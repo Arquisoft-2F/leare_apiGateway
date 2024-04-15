@@ -4,12 +4,13 @@ import java.util.Collections;
 import org.springframework.graphql.server.WebGraphQlInterceptor;
 import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.graphql.server.WebGraphQlResponse;
+
+import leare.apiGateway.errors.AuthError;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 public class RequestHeaderInterceptor implements WebGraphQlInterceptor {
-    private String value;
     private final List<String> excludedOperations;
 
     public RequestHeaderInterceptor(List<String> excludedOperations) {
@@ -19,12 +20,13 @@ public class RequestHeaderInterceptor implements WebGraphQlInterceptor {
     @Override
     public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
         if (shouldIntercept(request)) {
-            try {
-                this.value = request.getHeaders().getFirst("Authorization");
-            } catch (Exception e) {
-                this.value = "";
+            String value = request.getHeaders().getFirst("Authorization");
+            System.out.println(">>>>>>>>>>>>>>---------------------" + value);
+            
+            if (value == null) {
+                return Mono.error(new AuthError("Authorization header is missing"));  //TODO: this is not handled   
             }
-            System.out.println(value);
+            
             request.configureExecutionInput((executionInput, builder) ->
                     builder.graphQLContext(Collections.singletonMap("Authorization", value)).build());
         }

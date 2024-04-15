@@ -4,8 +4,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 logs/
+steps.sh
+tags.dockerfile.sh
+tags.podman.sh
+test.sh
 
-
+k8sPodman/db/
 ### STS ###
 .apt_generated
 .classpath

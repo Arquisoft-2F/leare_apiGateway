@@ -8,6 +8,7 @@ type Course {
     course_name: String!
     course_description: String!
     creator_id: ID!
+    chat_id: String
     is_public: Boolean!
     picture_id: ID
     created_at: String
@@ -26,6 +27,7 @@ type CourseCategory {
     course_name: String!
     course_description: String!
     creator_id: ID!
+    chat_id: String
     is_public: Boolean!
     picture_id: ID
     created_at: String
@@ -52,7 +54,6 @@ type ModuleSection {
 input CreateCourseInput {
     course_name: String!
     course_description: String!
-    creator_id: ID!
     picture_id: ID!
     categories: [String]!
 }
@@ -81,7 +82,6 @@ input EditCourseInput {
     course_id: ID!
     course_name: String!
     course_description: String!
-    creator_id: ID!
     is_public: Boolean!
     picture_id: ID!
     categories: [String]!
