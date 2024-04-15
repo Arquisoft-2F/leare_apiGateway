@@ -138,11 +138,7 @@ public class CoursesResolver {
 
     @QueryMapping
     public Course[] listCourses(@Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/listcourses/:page", "get", AuthorizationHeader);
-
-        if (!Auth) {
-            throw new AuthError("Auth Problem : Acces denied to this route");
-        }
+        
         Course[] courses = coursesConsumer.listCourses(page);
         courses = documentConsumer.updatePictureLink(courses);
         return courses;
@@ -150,12 +146,7 @@ public class CoursesResolver {
 
     @QueryMapping
     public CoursesResponse[] listCoursesbyCategories(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/listcourses/:page", "get", AuthorizationHeader);
-
-        if (!Auth) {
-            throw new AuthError("Auth Problem : Acces denied to this route");
-        }
-
+        
         Category[] categories= coursesConsumer.getCategories();
         CoursesResponse[] res = new CoursesResponse[categories.length];
         for(int i=0; i<categories.length;i++){
