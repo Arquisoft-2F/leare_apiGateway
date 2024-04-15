@@ -16,6 +16,11 @@ type Course {
     categories: [Category]
 }
 
+type CoursesResponse{
+    category: Category
+    courses: [CourseCategory]
+}
+
 type CourseCategory {
     course_id: ID!
     course_name: String!

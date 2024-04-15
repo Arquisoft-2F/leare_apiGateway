@@ -32,6 +32,8 @@ public class AuthConsumer {
 
     }
     public RegisterResponse Register(String name, String username, String email, String password, String confirmPassword, String role,String userId){
+        
+        try{
         return AuthClient.post()
                         .uri("/api/Account/register")
                         .bodyValue(new HashMap<String, String>() {{
@@ -46,6 +48,9 @@ public class AuthConsumer {
                         .retrieve()
                         .bodyToMono(RegisterResponse.class)
                         .block();
+        }catch(Exception e){
+            return new RegisterResponse("false","Register error",null);
+        }
     }
 
     public RegisterResponse updateAuth(String name, String username, String email, String password, String confirmPassword, String role,String userId){

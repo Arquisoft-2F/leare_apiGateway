@@ -17,6 +17,7 @@ import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.CoursesModels.CourseByCategory;
 import leare.apiGateway.models.CoursesModels.CourseModule;
+import leare.apiGateway.models.CoursesModels.CoursesResponse;
 import leare.apiGateway.models.CoursesModels.CreateCourseInput;
 import leare.apiGateway.models.CoursesModels.CreateModuleInput;
 import leare.apiGateway.models.CoursesModels.CreateSectionInput;
@@ -28,6 +29,7 @@ import leare.apiGateway.models.CoursesModels.ModuleSection;
 import leare.apiGateway.models.UserModels.Users;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 @Controller
 public class CoursesResolver {
@@ -139,6 +141,45 @@ public class CoursesResolver {
         Course[] courses = coursesConsumer.listCourses(page);
         courses = documentConsumer.updatePictureLink(courses);
         return courses;
+    }
+
+    @QueryMapping
+    public CoursesResponse[] listCoursesbyCategories(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        Boolean Auth = authConsumer.CheckRoute("/listcourses/:page", "get", AuthorizationHeader);
+
+        if (!Auth) {
+            throw new AuthError("Auth Problem : Acces denied to this route");
+        }
+
+        Category[] categories= coursesConsumer.getCategories();
+        CoursesResponse[] res = new CoursesResponse[categories.length];
+        for(int i=0; i<categories.length;i++){
+            res[i]= new CoursesResponse(categories[i]);
+            List<String> myList = new ArrayList<>();
+            myList.add(categories[i].getCategory_id());
+            CourseByCategory[] res1 = coursesConsumer.getCoursesByCategory(myList);
+            res1 = documentConsumer.updatePictureLink(res1);
+            res[i].setCourses(res1);
+        }
+
+        // Course[] courses = coursesConsumer.listCourses(1);
+        // HashMap<Category,List<Course>> res1 = new HashMap<>();
+        // for(Course c: courses){
+        //     for(Category x : c.getCategories()){
+        //         if(res1.get(x) == null){
+        //             res1.put(x, new     ArrayList<Course>());
+        //         }
+        //         res1.get(x).add(c);
+        //     }
+        // }
+        // CoursesResponse[] res = new CoursesResponse[res1.keySet().size()];
+        // int count = 0;
+        // for(Category cat : res1.keySet()){
+        //     res[count]= new CoursesResponse(cat);
+        //     res[count].setCourses(res1.get(cat).toArray(new Course[]()));
+        //     count=count+1;
+        // }
+        return res;
     }
 
     @QueryMapping

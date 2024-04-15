@@ -4,6 +4,7 @@ extend type Query {
 
     coursesByCategory(categories: [String]!): [CourseCategory]
     listCourses(page: Int!): [Course]
+    listCoursesbyCategories: [CoursesResponse]
     courseById(id: ID!): Course
 
     moduleById(id: ID!): CourseModule
