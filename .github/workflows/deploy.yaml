@@ -1,0 +1,19 @@
+name: Deploy to VM
+
+on:
+  workflow_call:
+    inputs:
+      vm-name:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to VM
+      env:
+        VM_NAME: ${{ inputs.vm-name }}
+      run: |
+        gcloud compute ssh --project=mystic-tempo-416400 --zone=northamerica-northeast1-a $VM_NAME -- 'docker-compose up -d --build'

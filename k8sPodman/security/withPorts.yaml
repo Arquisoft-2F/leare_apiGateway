@@ -1,20 +1,14 @@
 version: '3'
 
 services:
-  #MARK: Gateway
+# Gateway
   leare-gateway:
-    build:
-      context: .
-      # dockerfile: Dockerfile.production
-      dockerfile: Dockerfile.dev
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
     ports:
       - "5555:5555"
-    volumes:
-      - ./logs:/logs
-      - .:/app #SOLO PARA DEV
     networks:
       - leare-network
-  #MARK: auth_ms
+  # auth_ms
 
   auth-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -31,9 +25,7 @@ services:
       - leare-network
 
   auth-web:
-    build:
-      context: ../leare_auth_ms
-      dockerfile: Dockerfile
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
     ports:
       - 8080:8080
     depends_on:
@@ -41,25 +33,22 @@ services:
     networks:
       - leare-network
 
-  #MARK: chat_ms
+  # chat_ms
 
-  chat-db:
+  chat-db: # i could not configure the volume as it needs root priviledges and podman does NOT give them( unless :z)
     image: mongo:7.0
-    volumes:
-      - ../db/leare_chat_db:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - chats-data:/data/db
     ports:
       - "27017:27017"
     networks:
       - leare-network
 
   chat-web:
-    build:
-      context: ../leare_chat_ms
-      # dockerfile: Dockerfile
-      dockerfile: Dockerfile.dev
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
     ports:
       - "3002:3002"
     environment:
@@ -68,18 +57,16 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
     depends_on:
       - chat-db
-    volumes:
-      - ../leare_chat_ms:/app
     networks:
       - leare-network
 
 
-  #MARK: courses_ms
+  # courses_ms
   courses-db:
     image: postgres:16.2-alpine
     container_name: real-courses-db
     volumes:
-      - ../db/leare_courses_db:/var/lib/postgresql/data
+      - courses-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: root
       POSTGRES_PORT: 5490
@@ -91,9 +78,7 @@ services:
     
 
   courses-web:
-    build:
-      context: ../leare_courses_ms
-      dockerfile: Dockerfile
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
     ports:
       - "3003:3003"
     depends_on:
@@ -102,7 +87,7 @@ services:
       - leare-network
 
 
-  #MARK: document_ms
+  #document_ms
   document-rabbit:
     image: rabbitmq:management
     ports:
@@ -116,9 +101,7 @@ services:
 
 
   document-server:
-    build:
-      context: ../leare_document_ms
-      dockerfile: Dockerfile.server
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
     ports:
       - "3004:3004"
     volumes:
@@ -128,19 +111,19 @@ services:
       - leare-network
 
   document-sidecar:
-    build:
-      context: ../leare_document_ms
-      dockerfile: Dockerfile.sidecar
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-sidecar:gcp
     volumes:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
     depends_on:
       - document-rabbit
+    ports: #never used
+      - "9999:9999"
     networks:
       - leare-network
 
 
-  #MARK: search_ms
+  # search_ms
 
   search-db:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
@@ -163,9 +146,7 @@ services:
       - leare-network
 
   search-web:
-    build:
-      context: ../leare_search_ms
-      dockerfile: Dockerfile
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-search-web:gcp
     environment:
       - ROCKET_ADDRESS=0.0.0.0
       - ROCKET_PORT=3005
@@ -180,7 +161,7 @@ services:
     networks:
       - leare-network
 
-  #MARK: user_ms
+  # user_ms
   users-db:
     image: mariadb
     volumes:
@@ -195,12 +176,8 @@ services:
       - leare-network
 
   users-web:
-    build:
-      context: ../leare_users_ms
-      dockerfile: Dockerfile
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
     container_name: users-web
-    volumes:
-      - ../leare_users_ms:/app
     ports:
       - "3000:3000"
     depends_on:
@@ -212,11 +189,9 @@ services:
       - leare-network
 
 
-  #MARK: ws
+  # ws
   ws:
-    build:
-      context: ../leare_ws
-      dockerfile: Dockerfile
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-ws:gcp
     ports:
       - "8001:8001"
     environment:
@@ -230,6 +205,10 @@ volumes:
   esdata1:
     driver: local
   esdata2:
+    driver: local
+  courses-data:
+    driver: local
+  chats-data:
     driver: local
 
 
