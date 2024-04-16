@@ -5,7 +5,7 @@ all: migrate-chats migrate-users
 migrate-chats:
 	
 not-used:
-	gcloud compute scp --project=mystic-tempo-416400 --zone=northamerica-northeast1-a  ../leare_courses_ms/migrations.sql  leare-mid:/home/david/leare/migrations.sql
+	gcloud compute scp --project=mystic-tempo-416400 --zone=northamerica-northeast1-a  ../leare_courses_ms/migrations.sql  leare-large:/home/david/leare/migrations.sql
 	docker cp ../leare_courses_ms/migrations.sql real-courses-db:/tmp/
 		docker cp ./migrations.sql real-courses-db:/tmp/
 	docker exec -it real-courses-db /bin/bash
