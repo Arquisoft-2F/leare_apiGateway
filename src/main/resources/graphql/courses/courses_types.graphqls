@@ -19,7 +19,21 @@ type Course {
 
 type CoursesResponse{
     category: Category
-    courses: [CourseCategory]
+    courses: [CourseModify]
+}
+
+type CourseModify {
+    course_id: ID!
+    course_name: String!
+    course_description: String!
+    creator_id: ID!
+    creator: Users
+    chat_id: String
+    is_public: Boolean!
+    picture_id: ID
+    created_at: String
+    updated_at: String
+    categories: [Category]
 }
 
 type CourseCategory {

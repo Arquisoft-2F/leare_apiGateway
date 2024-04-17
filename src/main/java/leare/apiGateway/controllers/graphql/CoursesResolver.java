@@ -12,6 +12,7 @@ import leare.apiGateway.controllers.consumers.ChatConsumer;
 import leare.apiGateway.controllers.consumers.CourseConsumer;
 import leare.apiGateway.controllers.consumers.DocumentConsumer;
 import leare.apiGateway.controllers.consumers.SearchConsumer;
+import leare.apiGateway.controllers.consumers.UserConsumer;
 import leare.apiGateway.errors.AuthError;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.ChatModels.ChatData;
@@ -19,6 +20,7 @@ import leare.apiGateway.models.ChatModels.ChatInput;
 import leare.apiGateway.models.CoursesModels.Category;
 import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.CoursesModels.CourseByCategory;
+import leare.apiGateway.models.CoursesModels.CourseModify;
 import leare.apiGateway.models.CoursesModels.CourseModule;
 import leare.apiGateway.models.CoursesModels.CoursesResponse;
 import leare.apiGateway.models.CoursesModels.CreateCourseInput;
@@ -41,10 +43,12 @@ public class CoursesResolver {
     private final DocumentConsumer documentConsumer;
     private final AuthConsumer authConsumer;
     private final ChatConsumer chatConsumer;
+    private final UserConsumer usersConsumer;
 
     @Autowired
-    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer, AuthConsumer authConsumer, ChatConsumer chatConsumer) {
+    public CoursesResolver(CourseConsumer coursesConsumer, SearchConsumer searchConsumer, DocumentConsumer documentConsumer, AuthConsumer authConsumer, ChatConsumer chatConsumer, UserConsumer userConsumer) {
         this.coursesConsumer = coursesConsumer;
+        this.usersConsumer = userConsumer;
         this.searchConsumer = searchConsumer;
         this.documentConsumer = documentConsumer;
         this.authConsumer = authConsumer;
@@ -148,33 +152,38 @@ public class CoursesResolver {
     public CoursesResponse[] listCoursesbyCategories(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         
         Category[] categories= coursesConsumer.getCategories();
+        Users[] users = usersConsumer.users();
+        HashMap<String, Users> newUsers= new HashMap<>();
+        String[] pictureIds = new String[users.length];
+
+        for (int i = 0; i < users.length; i++) {
+            pictureIds[i] = users[i].getPicture_id();
+        }
+        leare.apiGateway.models.DocumentModels.batch.GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
+        for (Users user : users) {
+            try {
+                String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
+                user.setPicture_id(link);
+            } catch (Exception e) {
+                user.setPicture_id(null);
+            }
+        }
+        for(Users u : users){
+            newUsers.put(u.getId(), u);
+        }
         CoursesResponse[] res = new CoursesResponse[categories.length];
         for(int i=0; i<categories.length;i++){
             res[i]= new CoursesResponse(categories[i]);
             List<String> myList = new ArrayList<>();
             myList.add(categories[i].getCategory_id());
-            CourseByCategory[] res1 = coursesConsumer.getCoursesByCategory(myList);
+            CourseByCategory[] res1 =coursesConsumer.getCoursesByCategory(myList);
             res1 = documentConsumer.updatePictureLink(res1);
-            res[i].setCourses(res1);
+            CourseModify[] res2 = new CourseModify[res1.length];
+            for(int j=0; j<res1.length;j++){
+                res2[j]=new CourseModify(res1[j], newUsers.get(res1[j].getCreator_id()));
+            }
+            res[i].setCourses(res2);
         }
-
-        // Course[] courses = coursesConsumer.listCourses(1);
-        // HashMap<Category,List<Course>> res1 = new HashMap<>();
-        // for(Course c: courses){
-        //     for(Category x : c.getCategories()){
-        //         if(res1.get(x) == null){
-        //             res1.put(x, new     ArrayList<Course>());
-        //         }
-        //         res1.get(x).add(c);
-        //     }
-        // }
-        // CoursesResponse[] res = new CoursesResponse[res1.keySet().size()];
-        // int count = 0;
-        // for(Category cat : res1.keySet()){
-        //     res[count]= new CoursesResponse(cat);
-        //     res[count].setCourses(res1.get(cat).toArray(new Course[]()));
-        //     count=count+1;
-        // }
         return res;
     }
 

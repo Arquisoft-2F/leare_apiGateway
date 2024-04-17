@@ -1,9 +1,10 @@
 package leare.apiGateway.models.CoursesModels;
 
+
 public class CoursesResponse  {
 
     private Category category;
-    private CourseByCategory[] courses;
+    private CourseModify[] courses;
 
 
     public CoursesResponse(Category category) {
@@ -16,10 +17,10 @@ public class CoursesResponse  {
     public void setCategory(Category category) {
         this.category = category;
     }
-    public CourseByCategory[] getCourses() {
+    public CourseModify[] getCourses() {
         return courses;
     }
-    public void setCourses(CourseByCategory[] courses) {
+    public void setCourses(CourseModify[] courses) {
         this.courses = courses;
     }
    
