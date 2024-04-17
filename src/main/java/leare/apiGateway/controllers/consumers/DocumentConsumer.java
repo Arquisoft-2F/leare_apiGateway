@@ -148,7 +148,7 @@ public class DocumentConsumer {
     }
 
     public <T extends ObjectWhitPicture> T updatePictureLink(T item) {
-        if (item != null && item.getPicture_id() != null) {
+        if (item != null && item.getPicture_id() != null && item.getPicture_id()!="" && item.getPicture_id()!=" ") {
             String link = this.getDocument(item.getPicture_id()).getValue().getFilePath();
             System.out.println(link);
             if(link==null){
