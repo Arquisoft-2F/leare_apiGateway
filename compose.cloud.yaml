@@ -7,7 +7,7 @@ services:
     ports:
       - "5555:5555"
     volumes:
-      - ./logs:/logs
+      - ./logs:/app/logs
       # - .:/app #SOLO PARA DEV
     networks:
       - leare-network

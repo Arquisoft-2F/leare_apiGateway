@@ -10,8 +10,7 @@ services:
     ports:
       - "5555:5555"
     volumes:
-      - ./logs:/logs
-      - .:/app #SOLO PARA DEV
+      - ./logs:/app/logs
     networks:
       - leare-network
   # auth_ms

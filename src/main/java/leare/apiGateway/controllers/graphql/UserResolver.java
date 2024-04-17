@@ -28,6 +28,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import leare.apiGateway.models.error;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
 import leare.apiGateway.models.DocumentModels.batch.GetBatchResponse;
@@ -171,9 +172,15 @@ public class UserResolver {
         }
         // !document
         Users x = userConsumer.userById(id);
-        if (x != null && x.getPicture_id() != null) {
-            String link = documentConsumer.getDocument(x.getPicture_id()).getValue().getFilePath();
-            x.setPicture_id(link);
+        if (x != null && x.getPicture_id() != null && x.getPicture_id()!="" && x.getPicture_id()!=" ") {
+            try{
+
+                String link = documentConsumer.getDocument(x.getPicture_id()).getValue().getFilePath();
+                x.setPicture_id(link);
+            }
+            catch(Error e){
+                x.setPicture_id(null);
+            }
         }
         return x;
     }
@@ -325,8 +332,13 @@ public class UserResolver {
         }
         Users user = userConsumer.userById(decryptedToken.getUserID());
         if (user != null && user.getPicture_id() != null) {
-            String link = documentConsumer.getDocument(user.getPicture_id()).getValue().getFilePath();
-            user.setPicture_id(link);
+            try{
+                String link = documentConsumer.getDocument(user.getPicture_id()).getValue().getFilePath();
+                user.setPicture_id(link);
+            }
+            catch(Error e){
+                user.setPicture_id(null);
+            }
         }
         return user;
     }
