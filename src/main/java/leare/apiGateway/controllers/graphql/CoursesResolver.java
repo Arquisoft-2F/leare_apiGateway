@@ -31,6 +31,8 @@ import leare.apiGateway.models.CoursesModels.EditCourseInput;
 import leare.apiGateway.models.CoursesModels.EditModuleInput;
 import leare.apiGateway.models.CoursesModels.EditSectionInput;
 import leare.apiGateway.models.CoursesModels.ModuleSection;
+import leare.apiGateway.models.DocumentModels.DocumentGet;
+import leare.apiGateway.models.DocumentModels.batch.GetBatchResponse;
 import leare.apiGateway.models.UserModels.Users;
 
 import java.util.ArrayList;
@@ -159,7 +161,7 @@ public class CoursesResolver {
         for (int i = 0; i < users.length; i++) {
             pictureIds[i] = users[i].getPicture_id();
         }
-        leare.apiGateway.models.DocumentModels.batch.GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
+        GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
         for (Users user : users) {
             try {
                 String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
@@ -198,6 +200,30 @@ public class CoursesResolver {
         course = documentConsumer.updatePictureLink(course);
         course.setModules(course.getModules());
 
+        for (CourseModule module : course.getModules()){
+            for(ModuleSection section: module.getSections()){
+                if (section.getVideo_id()!= null && !section.getVideo_id().isEmpty()){
+                    DocumentGet link = documentConsumer.getDocument(section.getVideo_id());
+                    section.setVideo_id(link.getValue().getFilePath());
+                }
+
+                if (section.getFiles_array()!=null && !section.getFiles_array().isEmpty()){
+                    List<String> fileList = section.getFiles_array();
+                    String[] fileArray = fileList.toArray(new String[0]);
+
+                    GetBatchResponse documents = documentConsumer.batchGetDocuments(fileArray);
+                    List<String> linkList = new ArrayList<>();
+                    for (String files: fileList){
+                        String link = documents.getValue().get(files).getFilePath();
+                        linkList.add(link);
+                    }
+                    section.setFiles_array(linkList);
+                    
+                }
+            }
+        }
+
+        
         return course;
 
     }
