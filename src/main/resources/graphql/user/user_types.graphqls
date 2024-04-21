@@ -43,6 +43,17 @@ type Enrollment{
     user_id: ID!
 }
 
+type EnrollmentResponse{
+    course: Course!
+    progress: Float!
+    score: Float!
+    listed_on: String!
+    last_seen: String!
+    created_at: String
+    updated_at: String
+    user_id: ID!
+}
+
 input EnrollInput{
     progress: Float
     score: Float

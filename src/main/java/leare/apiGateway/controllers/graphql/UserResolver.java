@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import leare.apiGateway.models.error;
 import leare.apiGateway.models.AuthModels.DecryptedToken;
 import leare.apiGateway.models.AuthModels.RegisterResponse;
+import leare.apiGateway.models.CoursesModels.Course;
 import leare.apiGateway.models.DocumentModels.batch.GetBatchResponse;
 import leare.apiGateway.models.DocumentModels.batch.VideoInfo;
 import leare.apiGateway.models.UserModels.EnrollInput;
@@ -43,6 +44,7 @@ import leare.apiGateway.models.UserModels.EnrollInput;
 import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Users;
 import leare.apiGateway.models.UserModels.responses.CreateResponse;
+import leare.apiGateway.models.UserModels.responses.EnrollmentResponse;
 import leare.apiGateway.models.UserModels.responses.UserResponse;
 import leare.apiGateway.validation.UserValidation;
 import reactor.core.publisher.Mono;
@@ -100,14 +102,16 @@ public class UserResolver {
     private final DocumentConsumer documentConsumer;
     private final SearchConsumer searchConsumer;
     private final AuthConsumer authConsumer;
+    private final CourseConsumer courseConsumer;
 
     @Autowired
     public UserResolver(UserConsumer userConsumer, DocumentConsumer documentConsumer, SearchConsumer searchConsumer,
-            AuthConsumer authConsumer) {
+            AuthConsumer authConsumer, CourseConsumer courseConsumer) {
         this.userConsumer = userConsumer;
         this.documentConsumer = documentConsumer;
         this.searchConsumer = searchConsumer;
         this.authConsumer = authConsumer;
+        this.courseConsumer = courseConsumer;
     }
 
     @QueryMapping
@@ -196,18 +200,26 @@ public class UserResolver {
     }
 
     @QueryMapping
-    public Enrollment[] myCourses(@Argument String user_id, @ContextValue("Authorization") String AuthorizationHeader)
+    public EnrollmentResponse[] myCourses(@Argument String user_id, @ContextValue("Authorization") String AuthorizationHeader)
             throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:id/enroll", "get", AuthorizationHeader);
         DecryptedToken decryptedToken = authConsumer.DecryptToken(AuthorizationHeader);
         if (!Auth || decryptedToken==null) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
+        Enrollment[] res;
         if(decryptedToken.getRole()=="admin"){
-            return userConsumer.myCourses(user_id);
+            res= userConsumer.myCourses(user_id);
         }else{
-            return userConsumer.myCourses(decryptedToken.getUserID());
+            res= userConsumer.myCourses(decryptedToken.getUserID());
         }
+        EnrollmentResponse[] response = new EnrollmentResponse[res.length];
+        for(int i=0; i<response.length;i++ ){
+            Course x= courseConsumer.getCourseById(res[i].getCourse_id());
+            response[i]=new EnrollmentResponse(res[i], x);
+        }
+        return response;
+        
     }
 
     @QueryMapping
