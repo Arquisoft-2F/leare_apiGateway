@@ -9,10 +9,11 @@ public class EditCourseInput {
     private String creator_id;
     private Boolean is_public;
     private String picture_id;
+    private String chat_id;
     private List<String> categories;
 
     public EditCourseInput(String course_id, String course_name, String course_description, String creator_id,
-            Boolean is_public, String picture_id, List<String> categories) {
+            Boolean is_public, String picture_id, List<String> categories, String chat_id) {
 
         this.course_id = course_id;
         this.course_name = course_name;
@@ -20,6 +21,7 @@ public class EditCourseInput {
         this.creator_id = creator_id;
         this.is_public = is_public;
         this.picture_id = picture_id;
+        this.chat_id = chat_id;
         this.categories = categories;
     }
 
@@ -77,6 +79,14 @@ public class EditCourseInput {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public String getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(String chat_id) {
+        this.chat_id = chat_id;
     }
 
     
