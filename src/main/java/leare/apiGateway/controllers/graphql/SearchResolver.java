@@ -47,17 +47,13 @@ public class SearchResolver {
         String[] pictureIds = new String[res.length];
 
         for (int i = 0; i < res.length; i++) {
-            if(res[i].getPost().getPicture()==null){
-                pictureIds[i] = "";
-            }else{
-                pictureIds[i] = res[i].getPost().getPicture().get();
-            }
+            pictureIds[i] = res[i].getPost().getPicture().get();
         }
         
         leare.apiGateway.models.DocumentModels.batch.GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
         for (ResponsePost user : res) {
             try {
-                Optional<String> link = Optional.of(allPictures.getValue().get(user.getPost().getPicture()).getFilePath());
+                Optional<String> link = Optional.of(allPictures.getValue().get(user.getPost().getPicture().get()).getFilePath());
                 user.getPost().setPicture(link);
             } catch (Exception e) {
                 user.getPost().setPicture(Optional.of("notFound"));
