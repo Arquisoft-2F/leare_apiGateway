@@ -50,7 +50,7 @@ public class SearchResolver {
             if(res[i].getPost().getPicture()==null){
                 pictureIds[i] = "";
             }else{
-                pictureIds[i] = res[i].getPost().getPicture().toString();
+                pictureIds[i] = res[i].getPost().getPicture().get();
             }
         }
         

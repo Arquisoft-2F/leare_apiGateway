@@ -272,15 +272,20 @@ public class UserResolver {
         // }
 
         
-
-        searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
-                newUser.getPicture_id());
+        if(newUser.getPicture_id()==null){
+            searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
+                    "");
+        }else{
+            searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
+                    newUser.getPicture_id());
+        }
         RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getNickname(), user.getEmail(), password,
                 confirmPassword, rol, newUser.getId());
         if(registerResponse.getFlag().equals("false")){
             userConsumer.deleteUser(newUser.getId());
              throw new AuthError("Auth Problem : Acces denied to this route");
         }
+        
         newUser = documentConsumer.updatePictureLink(newUser);
         return new CreateResponse(newUser,registerResponse.getToken());
         // return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
