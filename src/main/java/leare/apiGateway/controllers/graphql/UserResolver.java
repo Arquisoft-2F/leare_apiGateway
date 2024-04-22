@@ -271,7 +271,7 @@ public class UserResolver {
         // newUser.setPicture_id(link);
         // }
 
-        newUser = documentConsumer.updatePictureLink(newUser);
+        
 
         searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
                 newUser.getPicture_id());
@@ -281,6 +281,7 @@ public class UserResolver {
             userConsumer.deleteUser(newUser.getId());
              throw new AuthError("Auth Problem : Acces denied to this route");
         }
+        newUser = documentConsumer.updatePictureLink(newUser);
         return new CreateResponse(newUser,registerResponse.getToken());
         // return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
     }
@@ -298,7 +299,6 @@ public class UserResolver {
         }
         Users pasUser = userConsumer.userById(id);
         Users editedUser = userConsumer.updateUser(user, id);
-        editedUser = documentConsumer.updatePictureLink(editedUser);
         RegisterResponse updatedAuth=authConsumer.updateAuth(editedUser.getName(),editedUser.getNickname(),editedUser.getEmail(),null,null,null,id);
         if(updatedAuth.getFlag().equals("false")){
             Users l = userConsumer.updateUser(pasUser, id);  
@@ -306,6 +306,7 @@ public class UserResolver {
         }
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
+        editedUser = documentConsumer.updatePictureLink(editedUser);
         return editedUser;
     }
 
@@ -374,9 +375,9 @@ public class UserResolver {
             Users l = userConsumer.updateUser(pasUser, decryptedToken.getUserID());  
             throw new AuthError("Auth Problem : Acces denied to this route");  
         }
-        editedUser = documentConsumer.updatePictureLink(editedUser);
         searchConsumer.UpdateUsersIndex(editedUser.getId(), editedUser.getName(), editedUser.getLastname(),
                 editedUser.getNickname(), editedUser.getPicture_id());
+        editedUser = documentConsumer.updatePictureLink(editedUser);
         return editedUser;
     }
 

@@ -219,9 +219,9 @@ public class CoursesResolver {
         ChatData chatData = chatConsumer.createChat(new ChatInput(input.getCourse_name()), user_id, user_nickname);
         input.setChat_id(chatData.getId());
         Course course = coursesConsumer.createCourse(input);
-        course = documentConsumer.updatePictureLink(course);
 
         searchConsumer.AddCourseIndex(course.getCourse_id(), course.getCourse_name(), course.getCourse_description(), course.getPicture_id());
+        course = documentConsumer.updatePictureLink(course);
         return course;
 
     }
@@ -241,8 +241,8 @@ public class CoursesResolver {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
         Course course = coursesConsumer.editCourse(input);
-        course = documentConsumer.updatePictureLink(course);
         searchConsumer.UpdateCourseIndex(course.getCourse_id(), course.getCourse_description(), course.getCourse_name(), course.getPicture_id());
+        course = documentConsumer.updatePictureLink(course);
         return course;
     }
 
