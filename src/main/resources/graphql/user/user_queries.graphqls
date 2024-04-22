@@ -3,7 +3,7 @@ extend type Query {
     userById(id: ID!): Users
     enrollements: [Enrollment]
     myCourses(user_id:ID!): [EnrollmentResponse]
-    isEnrolled(user_id:ID!, course_id:ID!): Enrollment
+    isEnrolled(user_id:ID!, course_id:ID!): isEnrolled
     getCourses(course_id:ID!): [Students]
     getUser: Users
 }

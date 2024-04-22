@@ -42,6 +42,11 @@ type Enrollment{
     updated_at: String
     user_id: ID!
 }
+type isEnrolled{
+    isEnrolled: Boolean!
+    message: String
+    enrollment: Enrollment
+}
 
 type EnrollmentResponse{
     course: Course!

@@ -45,6 +45,7 @@ import leare.apiGateway.models.UserModels.Enrollment;
 import leare.apiGateway.models.UserModels.Users;
 import leare.apiGateway.models.UserModels.responses.CreateResponse;
 import leare.apiGateway.models.UserModels.responses.EnrollmentResponse;
+import leare.apiGateway.models.UserModels.responses.IsEnrolled;
 import leare.apiGateway.models.UserModels.responses.UserResponse;
 import leare.apiGateway.validation.UserValidation;
 import reactor.core.publisher.Mono;
@@ -223,14 +224,18 @@ public class UserResolver {
     }
 
     @QueryMapping
-    public Enrollment isEnrolled(@Argument String user_id, @Argument String course_id,
+    public IsEnrolled isEnrolled(@Argument String user_id, @Argument String course_id,
             @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/users/:user_id/enroll/:course:id", "get", AuthorizationHeader);
 
         if (!Auth) {
             throw new AuthError("Auth Problem : Acces denied to this route");
         }
-        return userConsumer.isEnrolled(user_id, course_id);
+        Enrollment enrolled = userConsumer.isEnrolled(user_id, course_id);
+        if (enrolled!= null){
+            return new IsEnrolled(true,"Enrolled", enrolled);
+        }
+        return new IsEnrolled(false,"Not Enrolled", null);
     }
 
     @QueryMapping

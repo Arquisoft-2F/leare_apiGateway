@@ -9,6 +9,6 @@ extend type Mutation {
     createEnrollment(course_id:String!, user_id:String!): Enrollment
     updateEnrollment(enrollment: EnrollInput, course_id: ID!, user_id: ID!): Enrollment
     deleteEnrollment(course_id:String!, user_id:String!): Enrollment
-    isEnrolled(user_id:ID!, course_id:ID!): Enrollment
+    isEnrolled(user_id:ID!, course_id:ID!): isEnrolled
 }
 
