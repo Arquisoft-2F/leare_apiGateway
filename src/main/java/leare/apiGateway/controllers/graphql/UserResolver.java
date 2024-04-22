@@ -226,13 +226,15 @@ public class UserResolver {
     @QueryMapping
     public IsEnrolled isEnrolled(@Argument String user_id, @Argument String course_id,
             @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        Boolean Auth = authConsumer.CheckRoute("/users/:user_id/enroll/:course:id", "get", AuthorizationHeader);
+        // Boolean Auth = authConsumer.CheckRoute("/users/:user_id/enroll/:course:id", "get", AuthorizationHeader);
 
-        if (!Auth) {
-            throw new AuthError("Auth Problem : Acces denied to this route");
-        }
+        // if (!Auth) {
+        //     throw new AuthError("Auth Problem : Acces denied to this route");
+        // }
         Enrollment enrolled = userConsumer.isEnrolled(user_id, course_id);
-        if (enrolled!= null){
+        System.out.println("enrolled.getCourse_id()");
+        System.out.println(enrolled.getCourse_id());
+        if (enrolled.getCourse_id()!= null){
             return new IsEnrolled(true,"Enrolled", enrolled);
         }
         return new IsEnrolled(false,"Not Enrolled", null);
