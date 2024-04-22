@@ -96,6 +96,7 @@ input EditCourseInput {
     course_id: ID!
     course_name: String!
     course_description: String!
+    chat_id: String!
     is_public: Boolean!
     picture_id: ID!
     categories: [String]!
