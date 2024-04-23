@@ -99,8 +99,8 @@ services:
     image: "amazon/dynamodb-local:latest"
     container_name: document-db
     working_dir: /home/dynamodblocal
-    # volumes:
-    #   - "../db/leare_document_db:/home/dynamodblocal/shared-local-instance.db:rw"
+    volumes:
+     - dynamodb_data:/home/dynamodblocal
     healthcheck:
       test: ["CMD-SHELL", "curl -s -o /dev/null -w '%{http_code}' http://localhost:3014 | grep -E '400|200'"]
       interval: 5s
@@ -213,7 +213,7 @@ volumes:
     driver: local
   esdata2:
     driver: local
-  finalTest:
+  dynamodb_data:
     driver: local
 
 
