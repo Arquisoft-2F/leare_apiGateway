@@ -2,9 +2,9 @@ extend type Query {
     categories: [Category]
     categoryById(id: ID!): Category
 
-    coursesByCategory(categories: [String]!): [CourseCategory]
+    coursesByCategory(categories: [String]!): [CourseModify]
     listCourses(page: Int!): [Course]
-    listCoursesbyCategories: [CoursesResponse]
+    listCoursesbyCategories(amount: Int!): [CoursesResponse]
     courseById(id: ID!): Course
 
     moduleById(id: ID!): CourseModule

@@ -34,6 +34,7 @@ import leare.apiGateway.models.CoursesModels.ModuleSection;
 import leare.apiGateway.models.UserModels.Users;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 @Controller
@@ -127,7 +128,7 @@ public class CoursesResolver {
     // COURSE
 
     @QueryMapping
-    public CourseByCategory[] coursesByCategory(@Argument("categories") List<String> categories, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+    public CourseModify[] coursesByCategory(@Argument("categories") List<String> categories, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
         Boolean Auth = authConsumer.CheckRoute("/courses/categories", "get", AuthorizationHeader);
 
         if (!Auth) {
@@ -137,22 +138,9 @@ public class CoursesResolver {
 
         courses = documentConsumer.updatePictureLink(courses);
 
-        return courses;
-    }
-
-    @QueryMapping
-    public Course[] listCourses(@Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        
-        Course[] courses = coursesConsumer.listCourses(page);
-        courses = documentConsumer.updatePictureLink(courses);
-        return courses;
-    }
-
-    @QueryMapping
-    public CoursesResponse[] listCoursesbyCategories(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
-        
-        Category[] categories= coursesConsumer.getCategories();
-        Users[] users = usersConsumer.users();
+        //////////////////////////////// WTFFFFFFFFFFFFFFFFFFFFF
+        // TODO: Que esta joda la haga el microservicio
+        Users[] users = usersConsumer.users(); 
         HashMap<String, Users> newUsers= new HashMap<>();
         String[] pictureIds = new String[users.length];
 
@@ -171,6 +159,53 @@ public class CoursesResolver {
         for(Users u : users){
             newUsers.put(u.getId(), u);
         }
+
+        // Update creator to not be a user id but a user object using CoursesModify
+        CourseModify[] coursesModify = new CourseModify[courses.length];
+        for (int i = 0; i < courses.length; i++) {
+            coursesModify[i] = new CourseModify(courses[i], newUsers.get(courses[i].getCreator_id()));
+        }
+
+        //////////////////////////////
+
+        return coursesModify;
+    }
+
+    @QueryMapping
+    public Course[] listCourses(@Argument int page, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        
+        Course[] courses = coursesConsumer.listCourses(page);
+        courses = documentConsumer.updatePictureLink(courses);
+        return courses;
+    }
+
+    @QueryMapping
+    public CoursesResponse[] listCoursesbyCategories(@Argument int amount, @ContextValue("Authorization") String AuthorizationHeader) throws Exception {
+        
+        Category[] categories= coursesConsumer.getCategories();
+
+        //////////////////////////////
+        // TODO: Que esta joda la haga el microservicio
+        Users[] users = usersConsumer.users(); 
+        HashMap<String, Users> newUsers= new HashMap<>();
+        String[] pictureIds = new String[users.length];
+
+        for (int i = 0; i < users.length; i++) {
+            pictureIds[i] = users[i].getPicture_id();
+        }
+        leare.apiGateway.models.DocumentModels.batch.GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
+        for (Users user : users) {
+            try {
+                String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
+                user.setPicture_id(link);
+            } catch (Exception e) {
+                user.setPicture_id(null);
+            }
+        }
+        for(Users u : users){
+            newUsers.put(u.getId(), u);
+        }
+        
         CoursesResponse[] res = new CoursesResponse[categories.length];
         for(int i=0; i<categories.length;i++){
             res[i]= new CoursesResponse(categories[i]);
@@ -184,6 +219,15 @@ public class CoursesResolver {
             }
             res[i].setCourses(res2);
         }
+        //////////////////////////////
+
+        
+        //TODO: El micro debe encargarse de traer solo lo necesario, no hacer el recorte aca
+        // Limit the amount of courses to show
+        if (amount < res.length) {
+            return Arrays.copyOfRange(res, 0, amount);
+        }
+
         return res;
     }
 
