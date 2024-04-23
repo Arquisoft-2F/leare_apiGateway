@@ -24,7 +24,6 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123
-    mem_limit: 2048m
     networks:
       - leare-network
 
@@ -34,7 +33,7 @@ services:
       - auth-db
     deploy:
       mode: replicated
-      replicas: 3
+      replicas: 1
     networks:
       - leare-network
 
@@ -58,7 +57,7 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
     depends_on:
       - chat-db
     networks:
@@ -68,7 +67,6 @@ services:
   # courses_ms
   courses-db:
     image: postgres:16.2-alpine
-    container_name: real-courses-db
     volumes:
       - ../db/leare_courses_db:/var/lib/postgresql/data
     environment:
@@ -85,7 +83,7 @@ services:
       - courses-db
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
     networks:
       - leare-network
 
@@ -108,7 +106,6 @@ services:
   document-db:
     command: "-jar DynamoDBLocal.jar -sharedDb -port 3014"
     image: "amazon/dynamodb-local:latest"
-    container_name: document-db
     working_dir: /home/dynamodblocal
     volumes:
      - dynamodb_data:/home/dynamodblocal
@@ -130,11 +127,10 @@ services:
     ports:
       - "3004:3004"
     depends_on:
-      document-db:
-        condition: service_healthy
+      - document-db
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
     networks:
       - leare-network
 
@@ -144,10 +140,8 @@ services:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
     depends_on:
-      document-db:
-        condition: service_healthy
-      document-rabbit:
-        condition: service_healthy
+      - document-db
+      - document-rabbit
     networks:
       - leare-network
 
@@ -156,7 +150,6 @@ services:
 
   search-db:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
-    container_name: search-db
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -207,7 +200,7 @@ services:
       DATABASE_URL: mysql2://root:password@users-db/my_app_development
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
     networks:
       - leare-network
 
@@ -223,7 +216,7 @@ services:
       - chat-web
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
     networks:
       - leare-network
 
@@ -238,4 +231,4 @@ volumes:
 
 networks:
   leare-network:
-    driver: bridge
+    driver: overlay
