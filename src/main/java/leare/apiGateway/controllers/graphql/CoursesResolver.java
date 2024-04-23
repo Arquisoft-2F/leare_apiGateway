@@ -221,12 +221,15 @@ public class CoursesResolver {
         }
         //////////////////////////////
 
-        
+
         //TODO: El micro debe encargarse de traer solo lo necesario, no hacer el recorte aca
-        // Limit the amount of courses to show
-        if (amount < res.length) {
-            return Arrays.copyOfRange(res, 0, amount);
+        // Limit the amount of courses to show by category
+        for (CoursesResponse category : res) {
+            if (category.getCourses().length > amount) {
+                category.setCourses(Arrays.copyOfRange(category.getCourses(), 0, amount));
+            }
         }
+        
 
         return res;
     }
