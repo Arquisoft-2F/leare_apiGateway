@@ -214,11 +214,29 @@ public class UserResolver {
         }else{
             res= userConsumer.myCourses(decryptedToken.getUserID());
         }
+
         EnrollmentResponse[] response = new EnrollmentResponse[res.length];
         for(int i=0; i<response.length;i++ ){
             Course x= courseConsumer.getCourseById(res[i].getCourse_id());
             response[i]=new EnrollmentResponse(res[i], x);
         }
+
+        String[] pictureIds = new String[response.length];
+
+        for (int i = 0; i < response.length; i++) {
+            pictureIds[i] = response[i].getCourse().getPicture_id();
+        }
+        System.out.println(Arrays.toString(pictureIds));
+        GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
+        for (EnrollmentResponse user : response) {
+            try {
+                String link = allPictures.getValue().get(user.getCourse().getPicture_id()).getFilePath();
+                user.getCourse().setPicture_id(link);
+            } catch (Exception e) {
+                user.getCourse().setPicture_id("notFound");
+            }
+        }
+
         return response;
         
     }
