@@ -140,8 +140,6 @@ services:
     build:
       context: ../leare_document_ms
       dockerfile: Dockerfile.server
-    ports:
-      - "3004:3004"
     volumes:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs

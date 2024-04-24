@@ -118,8 +118,6 @@ services:
     volumes:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
-    ports:
-      - "3004:3004"
     depends_on:
       document-db:
         condition: service_healthy

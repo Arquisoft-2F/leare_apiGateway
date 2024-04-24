@@ -1,28 +1,49 @@
 version: '3.8'
 
 services:
+# visualizer
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8888:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - leare-network
+
 # Gateway
   leare-gateway:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
     ports:
       - "5555:5555"
-      - "9010:9010"
     volumes:
-      - ./logs:/app/logs
-      # - .:/app #SOLO PARA DEV
+      - gateway_logs:/app/logs
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-gateway
+          - node.role == manager
     networks:
       - leare-network
   # auth_ms
 
   auth-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    user: root
     volumes:
-      - ../db/leare_auth_db:/var/opt/mssql/data
+      - auth_data:/var/opt/mssql/data
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123
-    mem_limit: 2048m
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     networks:
       - leare-network
 
@@ -30,6 +51,11 @@ services:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
     depends_on:
       - auth-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -38,21 +64,27 @@ services:
   chat-db:
     image: mongo:7.0
     volumes:
-      - ../db/leare_chat_db:/data/db
+      - chat_data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     networks:
       - leare-network
 
   chat-web:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_URL: mongodb://root:password@mongo:27017/
     depends_on:
       - chat-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -60,21 +92,29 @@ services:
   # courses_ms
   courses-db:
     image: postgres:16.2-alpine
-    container_name: real-courses-db
     volumes:
-      - ../db/leare_courses_db:/var/lib/postgresql/data
+      - courses_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_PORT: 5490
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_PORT=5490
+    command: -p 5490
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     networks:
       - leare-network
-    command: -p 5490
-    
 
   courses-web:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
     depends_on:
       - courses-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -83,21 +123,25 @@ services:
   document-rabbit:
     image: rabbitmq:management
     environment:
-      RABBITMQ_DEFAULT_USER: arquisoft
-      RABBITMQ_DEFAULT_PASS: password
-    healthcheck:   
+      - RABBITMQ_DEFAULT_USER=arquisoft
+      - RABBITMQ_DEFAULT_PASS=password
+    healthcheck:
       test: ["CMD-SHELL", "rabbitmq-diagnostics -q check_running"]
       interval: 50s
       timeout: 4s
       retries: 5
       start_period: 3m
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     networks:
       - leare-network
 
   document-db:
-    command: "-jar DynamoDBLocal.jar -sharedDb -port 3014"
     image: "amazon/dynamodb-local:latest"
-    container_name: document-db
+    command: "-jar DynamoDBLocal.jar -sharedDb -port 3014"
     working_dir: /home/dynamodblocal
     volumes:
      - dynamodb_data:/home/dynamodblocal
@@ -107,33 +151,44 @@ services:
       timeout: 1s
       retries: 5
       start_period: 40s
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     networks:
       - leare-network
 
-
   document-server:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
+    command: "mkdir temp && mkdir logs"
     volumes:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
-    ports:
-      - "3004:3004"
     depends_on:
-      document-db:
-        condition: service_healthy
+      - document-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
   document-sidecar:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-sidecar:gcp
+    command: "mkdir temp && mkdir logs"
     volumes:
       - ../leare_document_ms/temp:/temp
       - ../leare_document_ms/logs:/logs
     depends_on:
-      document-db:
-        condition: service_healthy
-      document-rabbit:
-        condition: service_healthy
+      - document-db
+      - document-rabbit
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -142,7 +197,6 @@ services:
 
   search-db:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
-    container_name: search-db
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -153,6 +207,11 @@ services:
       memlock:
         soft: -1
         hard: -1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     volumes:
       - esdata1:/usr/share/elasticsearch/data
     networks:
@@ -167,6 +226,11 @@ services:
       # - ELASTICSEARCH_URL=http://elastic:password@search-db:9200
       - ES_USERNAME=elastic
       - ES_PASSWORD=password
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     depends_on:
       - search-db
     networks:
@@ -176,22 +240,31 @@ services:
   users-db:
     image: mariadb
     volumes:
-      - ../db/leare_users_db:/var/lib/mysql
+      - users_data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: my_app_development
       # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_PASSWORD: password
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
     networks:
       - leare-network
 
   users-web:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
-    container_name: users-web
     depends_on:
       - users-db
     environment:
       # DATABASE_URL: mysql2://root@users-db/my_app_development
       DATABASE_URL: mysql2://root:password@users-db/my_app_development
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -205,6 +278,12 @@ services:
       CHAT_MS_URL: "http://chat-web:3002"
     depends_on:
       - chat-web
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-gateway
+          - node.role == manager
     networks:
       - leare-network
 
@@ -215,8 +294,19 @@ volumes:
     driver: local
   dynamodb_data:
     driver: local
+  gateway_logs:
+    driver: local
+  courses_data:
+    driver: local
+  auth_data:
+    driver: local
+  chat_data:
+    driver: local
+  users_data:
+    driver: local
+    
 
 
 networks:
   leare-network:
-    driver: bridge
+    external: true
