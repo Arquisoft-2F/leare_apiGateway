@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-# visualizer
+  #MARK: Manager
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -30,8 +30,28 @@ services:
           - node.role == manager
     networks:
       - leare-network
-  # auth_ms
+ 
+ # ws
+  ws:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-ws:gcp
+    ports:
+      - "8001:8001"
+    environment:
+      CHAT_MS_URL: "http://chat-web:3002"
+    depends_on:
+      - chat-web
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-gateway
+          - node.role == manager
+    networks:
+      - leare-network
+ 
+ #MARK: leare-db
 
+ # auth_ms
   auth-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     volumes:
@@ -47,20 +67,8 @@ services:
     networks:
       - leare-network
 
-  auth-web:
-    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
-    depends_on:
-      - auth-db
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-ms
-    networks:
-      - leare-network
 
   # chat_ms
-
   chat-db:
     image: mongo:7.0
     volumes:
@@ -73,18 +81,6 @@ services:
       placement:
         constraints:
           - node.labels.rack == leare-db
-    networks:
-      - leare-network
-
-  chat-web:
-    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
-    depends_on:
-      - chat-db
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -103,18 +99,6 @@ services:
       placement:
         constraints:
           - node.labels.rack == leare-db
-    networks:
-      - leare-network
-
-  courses-web:
-    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
-    depends_on:
-      - courses-db
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-ms
     networks:
       - leare-network
 
@@ -176,6 +160,91 @@ services:
     networks:
       - leare-network
 
+# search_ms
+
+  search-db:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    networks:
+      - leare-network
+# user_ms
+  users-db:
+    image: mariadb
+    volumes:
+      - users_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: my_app_development
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
+    networks:
+      - leare-network
+
+
+ #MARK: leare-ms
+  
+ # auth_ms
+  auth-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
+    depends_on:
+      - auth-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+    networks:
+      - leare-network
+
+  # chat_ms
+  chat-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
+    depends_on:
+      - chat-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+    networks:
+      - leare-network
+
+
+  # courses_ms
+  courses-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
+    depends_on:
+      - courses-db
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+    networks:
+      - leare-network
+
+
+  #document_ms
   document-server:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
     command: "mkdir temp && mkdir logs"
@@ -211,29 +280,6 @@ services:
 
 
   # search_ms
-
-  search-db:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-db
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
-    networks:
-      - leare-network
-
   search-web:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-search-web:gcp
     environment:
@@ -254,22 +300,6 @@ services:
       - leare-network
 
   # user_ms
-  users-db:
-    image: mariadb
-    volumes:
-      - users_data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: my_app_development
-      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-      MYSQL_ROOT_PASSWORD: password
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-db
-    networks:
-      - leare-network
-
   users-web:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
     depends_on:
@@ -286,23 +316,7 @@ services:
       - leare-network
 
 
-  # ws
-  ws:
-    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-ws:gcp
-    ports:
-      - "8001:8001"
-    environment:
-      CHAT_MS_URL: "http://chat-web:3002"
-    depends_on:
-      - chat-web
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-gateway
-          - node.role == manager
-    networks:
-      - leare-network
+  
 
 volumes:
   esdata1:
@@ -310,6 +324,8 @@ volumes:
   esdata2:
     driver: local
   dynamodb_data:
+    driver: local
+  file_storage_data:
     driver: local
   gateway_logs:
     driver: local

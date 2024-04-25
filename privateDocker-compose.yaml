@@ -269,6 +269,8 @@ volumes:
     driver: local
   dynamodb_data:
     driver: local
+  file_storage_data:
+    driver: local
 
 
 networks:
