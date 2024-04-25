@@ -41,7 +41,10 @@ services:
   ws:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-ws:gcp
     ports:
-      - "8001:8001"
+      - target: 8001
+        published: 8001
+        protocol: tcp
+        mode: host
     environment:
       CHAT_MS_URL: "http://chat-web:3002"
     depends_on:
