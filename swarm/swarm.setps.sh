@@ -8,7 +8,8 @@ docker swarm init
         #si quiero que el maestro del swarm (y todo el swarm por consecuente) este en un contenedor 
         docker exec -it dind-manager docker swarm init  
 # get token to join master as worker
-docker exec dind-manager docker swarm join-token worker
+        docker exec dind-manager docker swarm join-token worker
+docker swarm join-token worker
 # join from the workers  the docker swarm part is from the last command
 docker exec -it dind-worker1  docker swarm join --token SWMTKN-1-2tbi0jtw6j2m1asankbv8f3zen5a2yd6gwa4u7zrfpktwc7fny-agrpikysdrzp2sk2bq4fpn3gw 192.168.65.9:2377
 docker exec -it dind-worker2  docker swarm join --token SWMTKN-1-2tbi0jtw6j2m1asankbv8f3zen5a2yd6gwa4u7zrfpktwc7fny-agrpikysdrzp2sk2bq4fpn3gw 192.168.65.9:2377
@@ -21,14 +22,16 @@ docker node update --label-add rack=leare-db <node-id>
 #create the network
 docker network create --driver overlay leare-network
 # deploy
-docker stack deploy -c swarm.yaml leare
+docker stack deploy -c small.yaml leare
+        docker stack deploy -c swarm.yaml leare
 
 
 
 #test
-docker stack services ls
-docker stack services ps
+docker stack ls
+docker stack ps
 docker stack services leare
+docker stack service
 #better logging
 docker service ps --no-trunc <service-name>
 
@@ -38,6 +41,7 @@ docker exec -it dind-manager docker node ls
 #stoping stack
 docker stack rm leare
 #leave swarm
-docker exec -it dind-manager docker swarm leave --force
+        docker exec -it dind-manager docker swarm leave --force
+docker swarm leave --force
 docker exec -it dind-worker1 docker swarm leave --force
 docker exec -it dind-worker2 docker swarm leave --force
