@@ -121,18 +121,31 @@ services:
       - leare-network
   
   document-db:
-    command: "-jar DynamoDBLocal.jar -sharedDb -port 3014"
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data -port 3014"
     image: "amazon/dynamodb-local:latest"
     container_name: document-db
     working_dir: /home/dynamodblocal
-    volumes:
-     - dynamodb_data:/home/dynamodblocal
     healthcheck:
       test: ["CMD-SHELL", "curl -s -o /dev/null -w '%{http_code}' http://localhost:3014 | grep -E '400|200'"]
       interval: 5s
       timeout: 1s
       retries: 5
       start_period: 40s
+    volumes:
+     - dynamodb_data:/home/dynamodblocal/data
+    networks:
+      - leare-network
+
+
+
+  file-storage:
+    image: localstack/localstack:s3-latest
+    environment:
+      - services=s3
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "file_storage_data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - leare-network
 

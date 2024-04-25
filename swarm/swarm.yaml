@@ -159,6 +159,23 @@ services:
     networks:
       - leare-network
 
+    
+  file-storage:
+    image: localstack/localstack:s3-latest
+    environment:
+      - services=s3
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "file_storage_data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
+    networks:
+      - leare-network
+
   document-server:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
     command: "mkdir temp && mkdir logs"
