@@ -2,6 +2,21 @@ version: '3.8'
 
 services:
   #MARK: Manager
+  movil-proxy:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-movil-proxy:gcp
+    ports:
+      - "80:80"
+      - "443:443"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-gateway
+          - node.role == manager
+    networks:
+      - leare-network
+
+
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -63,11 +78,12 @@ services:
  # auth_ms
   auth-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    volumes:
-      - auth_data:/var/opt/mssql/data
+    # volumes:
+    #   - auth_data:/var/opt/mssql/data
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123
+    # command: /bin/bash -c "chown -R mssql:mssql /var/opt/mssql && chmod -R 770 /var/opt/mssql && su - mssql -c '/opt/mssql/bin/sqlservr'"
     deploy:
       replicas: 1
       placement:
@@ -256,10 +272,10 @@ services:
   #document_ms
   document-server:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
-    command: "mkdir temp && mkdir logs"
-    volumes:
-      - ../leare_document_ms/temp:/temp
-      - ../leare_document_ms/logs:/logs
+    # command: "mkdir temp && mkdir logs"
+    # volumes:
+    #   - document_temp:/temp
+    #   - document_logs:/logs
     depends_on:
       - document-db
     deploy:
@@ -272,10 +288,10 @@ services:
 
   document-sidecar:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-sidecar:gcp
-    command: "mkdir temp && mkdir logs"
-    volumes:
-      - ../leare_document_ms/temp:/temp
-      - ../leare_document_ms/logs:/logs
+    # command: "mkdir temp && mkdir logs"
+    # volumes:
+    #   - document_temp:/temp
+    #   - document_logs:/logs
     depends_on:
       - document-db
       - document-rabbit
@@ -325,7 +341,7 @@ services:
       - leare-network
 
 
-  
+# MARK: volumes  
 
 volumes:
   esdata1:
@@ -345,6 +361,10 @@ volumes:
   chat_data:
     driver: local
   users_data:
+    driver: local
+  document_temp:
+    driver: local
+  document_logs:
     driver: local
     
 
