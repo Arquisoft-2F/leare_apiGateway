@@ -59,7 +59,6 @@ services:
   # courses_ms
   courses-db:
     image: postgres:16.2-alpine
-    container_name: real-courses-db
     volumes:
       - ../db/leare_courses_db:/var/lib/postgresql/data
     environment:

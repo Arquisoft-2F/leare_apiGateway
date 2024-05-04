@@ -84,7 +84,6 @@ services:
   # courses_ms
   courses-db:
     image: postgres:16.2-alpine
-    container_name: real-courses-db
     volumes:
       - ../db/leare_courses_db:/var/lib/postgresql/data
     environment:
@@ -271,6 +270,54 @@ services:
       - chat-web
     networks:
       - leare-network
+
+  leare-ldap:
+    image: osixia/openldap:1.1.8
+    environment:
+      COMPOSE_HTTP_TIMEOUT: 200
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Leare"
+      LDAP_DOMAIN: "leare.co"
+      LDAP_BASE_DN: ""
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "config"
+      LDAP_READONLY_USER: "false"
+      LDAP_BACKEND: "hdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_PROTOCOL_MIN: "3.1"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    hostname: "leare.co"
+    networks:
+      - leare-network
+  
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "leare-ldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+        - "8085:80"
+    links:
+        - leare-ldap
+    networks:
+        - leare-network
 
 volumes:
   esdata1:
