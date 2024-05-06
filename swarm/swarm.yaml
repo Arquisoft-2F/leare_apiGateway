@@ -271,9 +271,9 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - /var/lib/ldap
-      - /etc/ldap/slapd.d
-      - /container/service/slapd/assets/certs/
+      - ldap_data_1:/var/lib/ldap
+      - ldap_data_2:/etc/ldap/slapd.d
+      - ldap_data_3:/container/service/slapd/assets/certs/
     ports:
       - "389:389"
       - "636:636"
@@ -428,6 +428,12 @@ volumes:
       type: nfs
       o: addr=35.203.64.5,rw
       device: ":/leare_document_ms/temp"
+  ldap_data_1:
+    driver: local
+  ldap_data_2:
+    driver: local
+  ldap_data_3:
+    driver: local
   # document_logs:
   #   driver_opts:
   #     type: nfs
