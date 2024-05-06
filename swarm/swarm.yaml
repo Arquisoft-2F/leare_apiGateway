@@ -40,7 +40,7 @@ services:
       - target: 5555
         published: 5555
         protocol: tcp
-        mode: host
+        mode: ingress
     volumes:
       - gateway_logs:/app/logs
     deploy:
@@ -59,7 +59,7 @@ services:
       - target: 8001
         published: 8001
         protocol: tcp
-        mode: host
+        mode: ingress
     environment:
       CHAT_MS_URL: "http://chat-web:3002"
     depends_on:
@@ -95,9 +95,10 @@ services:
 
  # auth_ms
   auth-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    # volumes:
-    #   - auth_data:/var/opt/mssql/data
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-db:gcp
+    user: root
+    volumes:
+      - auth_data:/var/opt/mssql/data
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123
@@ -187,21 +188,21 @@ services:
       - leare-network
 
     
-  file-storage:
-    image: localstack/localstack:s3-latest
-    environment:
-      - services=s3
-      - DEBUG=${DEBUG:-0}
-    volumes:
-      - "file_storage_data:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-db
-    networks:
-      - leare-network
+  # file-storage:
+  #   image: localstack/localstack:s3-latest
+  #   environment:
+  #     - services=s3
+  #     - DEBUG=${DEBUG:-0}
+  #   volumes:
+  #     - "file_storage_data:/var/lib/localstack"
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #   deploy:
+  #     replicas: 1
+  #     placement:
+  #       constraints:
+  #         - node.labels.rack == leare-db
+  #   networks:
+  #     - leare-network
 
 # search_ms
 

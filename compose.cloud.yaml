@@ -14,7 +14,7 @@ services:
   # auth_ms
 
   auth-db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-db:gcp
     user: root
     volumes:
       - ../db/leare_auth_db:/var/opt/mssql/data

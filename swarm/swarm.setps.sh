@@ -27,8 +27,8 @@ docker stack service
 docker service ps --no-trunc <service-name>
 
 #stoping stack
-sudodocker stack rm leare
+sudo docker stack rm leare
 #leave swarm
-sudodocker swarm leave --force
-sudodocker swarm leave --force
-sudodocker swarm leave --force
+sudo docker swarm leave --force
+sudo docker swarm leave --force
+sudo docker swarm leave --force
