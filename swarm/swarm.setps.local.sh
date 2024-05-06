@@ -20,7 +20,7 @@ docker node update --label-add rack=leare-gateway <node-id>
 docker node update --label-add rack=leare-ms <node-id>
 docker node update --label-add rack=leare-db <node-id>
 #create the network
-docker network create --scope=swarm --driver overlay leare-network
+docker network create --scope=swarm --driver overlay --attachable leare-network
 # deploy
 docker stack deploy -c swarm.yaml leare
         docker stack deploy -c small.yaml leare

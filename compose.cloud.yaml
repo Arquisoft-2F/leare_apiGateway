@@ -109,18 +109,6 @@ services:
       - leare-network
 
 
-  file-storage:
-    image: localstack/localstack:s3-latest
-    environment:
-      - services=s3
-      - DEBUG=${DEBUG:-0}
-    volumes:
-      - "file_storage_data:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    networks:
-      - leare-network
-
-
   document-server:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
     volumes:
@@ -216,6 +204,22 @@ services:
     networks:
       - leare-network
 
+  int-rp:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-int-rp:gcp
+    ports:
+      - "3048:3048"
+      - "3047:3047"
+    networks:
+      - leare-network
+
+  leare-int:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-int:gcp
+    ports:
+      - "5000:5000"
+    networks:
+      - leare-network
+
+
 volumes:
   esdata1:
     driver: local
@@ -227,4 +231,4 @@ volumes:
 
 networks:
   leare-network:
-    driver: bridge
+    external: true

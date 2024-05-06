@@ -263,6 +263,7 @@ services:
     networks:
       - leare-network
 
+  #MARK: ldap
   leare-ldap:
     image: osixia/openldap:1.1.8
     environment:
@@ -309,6 +310,25 @@ services:
         - leare-ldap
     networks:
         - leare-network
+  #MARK: inter
+  int-rp:
+    build:
+      context: ../leare_int
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "3048:3048"
+      - "3047:3047"
+    networks:
+      - leare-network
+
+  leare-int:
+    build:
+      context: ../leare_int
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - leare-network
 
 volumes:
   esdata1:
