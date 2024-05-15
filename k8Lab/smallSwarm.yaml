@@ -2,20 +2,17 @@ version: '3.8'
 
 services:
   #MARK: Manager
-  visualizer:
-    image: dockersamples/visualizer:stable
+  movil-proxy:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-movil-proxy:gcp
     ports:
-      - target: 8080
-        published: 8888
-        protocol: tcp
-        mode: ingress
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "80:80"
+      - "443:443"
     deploy:
+      replicas: 1
       placement:
         constraints:
+          - node.labels.rack == leare-gateway
           - node.role == manager
-    hostname: visualizer
     networks:
       - leare-network
 
@@ -35,66 +32,55 @@ services:
         constraints:
           - node.labels.rack == leare-gateway
           - node.role == manager
-    hostname: leare-gateway
     networks:
       - leare-network
  
  #MARK: leare-db
 
-  # courses_ms
-  courses-db:
-    image: postgres:16.2-alpine
+# user_ms
+  users-db:
+    image: mariadb
     volumes:
-      - courses_data:/var/lib/postgresql/data
+      - users_data:/var/lib/mysql
     environment:
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_PORT=5490
-    command: -p 5490
+      MYSQL_DATABASE: my_app_development
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
     deploy:
       replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-db
-    ports:
-      - target: 5490
-        published: 5490
-        protocol: tcp
-        mode: ingress
-    hostname: courses-db
     networks:
       - leare-network
 
-
- #MARK: leare-ms
-  
-  # courses_ms
-  courses-web:
-    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
+  # user_ms
+  users-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
     depends_on:
-      - courses-db
+      - users-db
+    environment:
+      # DATABASE_URL: mysql2://root@users-db/my_app_development
+      DATABASE_URL: mysql2://root:password@users-db/my_app_development
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
-    ports:
-      - target: 3003
-        published: 3003
-        protocol: tcp
-        mode: ingress
-    hostname: courses-web
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
-  
+
+# MARK: volumes  
 
 volumes:
   gateway_logs:
     driver: local
-  courses_data:
-    driver: local  
-
-
+  users_data:
+    driver: local
+ 
 networks:
   leare-network:
-    external: true
+    driver: overlay

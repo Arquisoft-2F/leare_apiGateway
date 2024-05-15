@@ -1,0 +1,1430 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: leare-gateway
+  name: leare-gateway
+spec:
+  ports:
+    - name: "5555"
+      port: 5555
+      targetPort: 5555
+  selector:
+    io.kompose.service: leare-gateway
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: leare-ldap
+  name: leare-ldap
+spec:
+  ports:
+    - name: "389"
+      port: 389
+      targetPort: 389
+    - name: "636"
+      port: 636
+      targetPort: 636
+  selector:
+    io.kompose.service: leare-ldap
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: movil-proxy
+  name: movil-proxy
+spec:
+  ports:
+    - name: "80"
+      port: 80
+      targetPort: 80
+    - name: "443"
+      port: 443
+      targetPort: 443
+  selector:
+    io.kompose.service: movil-proxy
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: phpldapadmin
+  name: phpldapadmin
+spec:
+  ports:
+    - name: "8085"
+      port: 8085
+      targetPort: 80
+  selector:
+    io.kompose.service: phpldapadmin
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: visualizer
+  name: visualizer
+spec:
+  ports:
+    - name: "8888"
+      port: 8888
+      targetPort: 8080
+  selector:
+    io.kompose.service: visualizer
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ws
+  name: ws
+spec:
+  ports:
+    - name: "8001"
+      port: 8001
+      targetPort: 8001
+  selector:
+    io.kompose.service: ws
+status:
+  loadBalancer: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth-db
+  name: auth-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: auth-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: auth-db
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: MSSQL_SA_PASSWORD
+              value: Password123
+          image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-db:gcp
+          name: auth-db
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/opt/mssql/data
+              name: auth-data
+      restartPolicy: Always
+      volumes:
+        - name: auth-data
+          persistentVolumeClaim:
+            claimName: auth-data
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth-data
+  name: auth-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: auth-web
+  name: auth-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: auth-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: auth-web
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
+          name: auth-web
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chat-db
+  name: chat-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: chat-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: chat-db
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: password
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+          image: mongo:7.0
+          name: chat-db
+          resources: {}
+          volumeMounts:
+            - mountPath: /data/db
+              name: chat-data
+      restartPolicy: Always
+      volumes:
+        - name: chat-data
+          persistentVolumeClaim:
+            claimName: chat-data
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chat-data
+  name: chat-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chat-web
+  name: chat-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: chat-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: chat-web
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
+          name: chat-web
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: courses-db
+  name: courses-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: courses-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: courses-db
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - args:
+            - -p
+            - "5490"
+          env:
+            - name: POSTGRES_PASSWORD
+              value: root
+            - name: POSTGRES_PORT
+              value: "5490"
+          image: postgres:16.2-alpine
+          name: courses-db
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: courses-data
+      restartPolicy: Always
+      volumes:
+        - name: courses-data
+          persistentVolumeClaim:
+            claimName: courses-data
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: courses-data
+  name: courses-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: courses-web
+  name: courses-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: courses-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: courses-web
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
+          name: courses-web
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-db
+  name: document-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: document-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: document-db
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - args:
+            - -jar
+            - DynamoDBLocal.jar
+            - -sharedDb
+            - -port
+            - "3014"
+          image: amazon/dynamodb-local:latest
+          livenessProbe:
+            exec:
+              command:
+                - curl -s -o /dev/null -w '%{http_code}' http://localhost:3014 | grep -E '400|200'
+            failureThreshold: 5
+            initialDelaySeconds: 40
+            periodSeconds: 5
+            timeoutSeconds: 1
+          name: document-db
+          resources: {}
+          volumeMounts:
+            - mountPath: /home/dynamodblocal
+              name: dynamodb-data
+          workingDir: /home/dynamodblocal
+      restartPolicy: Always
+      volumes:
+        - name: dynamodb-data
+          persistentVolumeClaim:
+            claimName: dynamodb-data
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dynamodb-data
+  name: dynamodb-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-rabbit
+  name: document-rabbit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: document-rabbit
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: document-rabbit
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - env:
+            - name: RABBITMQ_DEFAULT_PASS
+              value: password
+            - name: RABBITMQ_DEFAULT_USER
+              value: arquisoft
+          image: rabbitmq:management
+          livenessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics -q check_running
+            failureThreshold: 5
+            initialDelaySeconds: 180
+            periodSeconds: 50
+            timeoutSeconds: 4
+          name: document-rabbit
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-server
+  name: document-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: document-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: document-server
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
+          name: document-server
+          resources: {}
+          volumeMounts:
+            - mountPath: /temp
+              name: document-temp
+      restartPolicy: Always
+      volumes:
+        - name: document-temp
+          persistentVolumeClaim:
+            claimName: document-temp
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-temp
+  name: document-temp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-sidecar
+  name: document-sidecar
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: document-sidecar
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: document-sidecar
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-sidecar:gcp
+          name: document-sidecar
+          resources: {}
+          volumeMounts:
+            - mountPath: /temp
+              name: document-temp
+      restartPolicy: Always
+      volumes:
+        - name: document-temp
+          persistentVolumeClaim:
+            claimName: document-temp
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: leare-gateway
+  name: leare-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: leare-gateway
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: leare-gateway
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-gateway
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
+          name: leare-gateway
+          ports:
+            - containerPort: 5555
+              hostPort: 5555
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /app/logs
+              name: gateway-logs
+      restartPolicy: Always
+      volumes:
+        - name: gateway-logs
+          persistentVolumeClaim:
+            claimName: gateway-logs
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gateway-logs
+  name: gateway-logs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: leare-ldap
+  name: leare-ldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: leare-ldap
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: leare-ldap
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - env:
+            - name: COMPOSE_HTTP_TIMEOUT
+              value: "200"
+            - name: LDAP_ADMIN_PASSWORD
+              value: admin
+            - name: LDAP_BACKEND
+              value: hdb
+            - name: LDAP_BASE_DN
+            - name: LDAP_CONFIG_PASSWORD
+              value: config
+            - name: LDAP_DOMAIN
+              value: leare.co
+            - name: LDAP_LOG_LEVEL
+              value: "256"
+            - name: LDAP_ORGANISATION
+              value: Leare
+            - name: LDAP_READONLY_USER
+              value: "false"
+            - name: LDAP_REMOVE_CONFIG_AFTER_SETUP
+              value: "true"
+            - name: LDAP_REPLICATION
+              value: "false"
+            - name: LDAP_SSL_HELPER_PREFIX
+              value: ldap
+            - name: LDAP_TLS
+              value: "true"
+            - name: LDAP_TLS_CA_CRT_FILENAME
+              value: ca.crt
+            - name: LDAP_TLS_CIPHER_SUITE
+              value: SECURE256:-VERS-SSL3.0
+            - name: LDAP_TLS_CRT_FILENAME
+              value: ldap.crt
+            - name: LDAP_TLS_ENFORCE
+              value: "false"
+            - name: LDAP_TLS_KEY_FILENAME
+              value: ldap.key
+            - name: LDAP_TLS_PROTOCOL_MIN
+              value: "3.1"
+            - name: LDAP_TLS_VERIFY_CLIENT
+              value: demand
+          image: osixia/openldap:1.1.8
+          name: leare-ldap
+          ports:
+            - containerPort: 389
+              hostPort: 389
+              protocol: TCP
+            - containerPort: 636
+              hostPort: 636
+              protocol: TCP
+          resources: {}
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /var/lib/ldap
+              name: ldap-data-1
+            - mountPath: /etc/ldap/slapd.d
+              name: ldap-data-2
+            - mountPath: /container/service/slapd/assets/certs
+              name: ldap-data-3
+      hostname: leare.co
+      restartPolicy: Always
+      volumes:
+        - name: ldap-data-1
+          persistentVolumeClaim:
+            claimName: ldap-data-1
+        - name: ldap-data-2
+          persistentVolumeClaim:
+            claimName: ldap-data-2
+        - name: ldap-data-3
+          persistentVolumeClaim:
+            claimName: ldap-data-3
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ldap-data-1
+  name: ldap-data-1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ldap-data-2
+  name: ldap-data-2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ldap-data-3
+  name: ldap-data-3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: movil-proxy
+  name: movil-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: movil-proxy
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: movil-proxy
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-gateway
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-movil-proxy:gcp
+          name: movil-proxy
+          ports:
+            - containerPort: 80
+              hostPort: 80
+              protocol: TCP
+            - containerPort: 443
+              hostPort: 443
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: phpldapadmin
+  name: phpldapadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: phpldapadmin
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: phpldapadmin
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-gateway
+      containers:
+        - env:
+            - name: PHPLDAPADMIN_HTTPS
+              value: "false"
+            - name: PHPLDAPADMIN_LDAP_HOSTS
+              value: leare-ldap
+          image: osixia/phpldapadmin:latest
+          name: phpldapadmin
+          ports:
+            - containerPort: 80
+              hostPort: 8085
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: search-db
+  name: search-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: search-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: search-db
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - env:
+            - name: ES_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: bootstrap.memory_lock
+              value: "true"
+            - name: cluster.name
+              value: docker-cluster
+            - name: discovery.type
+              value: single-node
+            - name: xpack.security.enabled
+              value: "false"
+          image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+          name: search-db
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: esdata1
+      restartPolicy: Always
+      volumes:
+        - name: esdata1
+          persistentVolumeClaim:
+            claimName: esdata1
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: esdata1
+  name: esdata1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: search-web
+  name: search-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: search-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: search-web
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - env:
+            - name: ELASTICSEARCH_URL
+              value: http://search-db:9200
+            - name: ES_PASSWORD
+              value: password
+            - name: ES_USERNAME
+              value: elastic
+            - name: ROCKET_ADDRESS
+              value: 0.0.0.0
+            - name: ROCKET_PORT
+              value: "3005"
+          image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-search-web:gcp
+          name: search-web
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: users-db
+  name: users-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: users-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: users-db
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-db
+      containers:
+        - env:
+            - name: MYSQL_DATABASE
+              value: my_app_development
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          image: mariadb
+          name: users-db
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: users-data
+      restartPolicy: Always
+      volumes:
+        - name: users-data
+          persistentVolumeClaim:
+            claimName: users-data
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: users-data
+  name: users-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: users-web
+  name: users-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: users-web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: users-web
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-ms
+      containers:
+        - env:
+            - name: DATABASE_URL
+              value: mysql2://root:password@users-db/my_app_development
+          image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
+          name: users-web
+          resources: {}
+      restartPolicy: Always
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: visualizer
+  name: visualizer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: visualizer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: visualizer
+    spec:
+      containers:
+        - image: dockersamples/visualizer:stable
+          name: visualizer
+          ports:
+            - containerPort: 8080
+              hostPort: 8888
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/run/docker.sock
+              name: visualizer-claim0
+      restartPolicy: Always
+      volumes:
+        - name: visualizer-claim0
+          persistentVolumeClaim:
+            claimName: visualizer-claim0
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: visualizer-claim0
+  name: visualizer-claim0
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+    kompose.version: 1.31.2 (a92241f79)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ws
+  name: ws
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ws
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\Users\david\AppData\Local\Microsoft\WinGet\Packages\Kubernetes.kompose_Microsoft.Winget.Source_8wekyb3d8bbwe\kompose.exe convert -f .\swarm.yaml -o .\kubernetes.yaml
+        kompose.version: 1.31.2 (a92241f79)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/k8lab-leare-network: "true"
+        io.kompose.service: ws
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: rack
+                    operator: In
+                    values:
+                      - leare-gateway
+      containers:
+        - env:
+            - name: CHAT_MS_URL
+              value: http://chat-web:3002
+          image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-ws:gcp
+          name: ws
+          ports:
+            - containerPort: 8001
+              hostPort: 8001
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}
+

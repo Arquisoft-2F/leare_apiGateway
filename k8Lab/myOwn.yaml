@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leare-gateway
+spec:
+  selector:
+    matchLabels:
+      app: leare-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: leare-gateway
+    spec:
+      containers:
+      - name: leare-gateway
+        image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:k8s
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: leare-gateway
+spec:
+  type: LoadBalancer
+  selector:
+    app: leare-gateway
+  ports:
+    - protocol: TCP
+      port: 5555
+      targetPort: 5555
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-db
+spec:
+  selector:
+    matchLabels:
+      app: users-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: users-db
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb
+        env:
+        - name: MYSQL_DATABASE
+          value: "my_app_development"
+        - name: MYSQL_ROOT_PASSWORD
+          value: "password"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-db
+spec:
+  selector:
+    app: users-db
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+    - name: custom
+      protocol: TCP
+      port: 3307
+      targetPort: 3307
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-web
+spec:
+  selector:
+    matchLabels:
+      app: users-web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: users-web
+    spec:
+      containers:
+      - name: users-web
+        image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
+        env:
+        - name: DATABASE_URL
+          value: "mysql2://root:password@users-db/my_app_development"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-web
+spec:
+  selector:
+    app: users-web
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

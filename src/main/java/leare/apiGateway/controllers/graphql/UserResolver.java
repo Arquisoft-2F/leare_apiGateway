@@ -119,29 +119,29 @@ public class UserResolver {
     public Users[] users(@ContextValue("Authorization") String AuthorizationHeader) throws Exception {
 
         // System.out.println(authConsumer.Login("david3@example.com","User@123"));
-        Boolean Auth = authConsumer.CheckRoute("/users", "get", AuthorizationHeader);
+        // Boolean Auth = authConsumer.CheckRoute("/users", "get", AuthorizationHeader);
 
-        if (!Auth) {
-            // Users[] x = new Users[1];
-            throw new AuthError("Auth Problem : Acces denied to this route");
-        }
+        // if (!Auth) {
+        //     // Users[] x = new Users[1];
+        //     throw new AuthError("Auth Problem : Acces denied to this route");
+        // }
 
         Users[] allUser = userConsumer.users();
-        String[] pictureIds = new String[allUser.length];
+        // String[] pictureIds = new String[allUser.length];
 
-        for (int i = 0; i < allUser.length; i++) {
-            pictureIds[i] = allUser[i].getPicture_id();
-        }
-        System.out.println(Arrays.toString(pictureIds));
-        GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
-        for (Users user : allUser) {
-            try {
-                String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
-                user.setPicture_id(link);
-            } catch (Exception e) {
-                user.setPicture_id(null);
-            }
-        }
+        // for (int i = 0; i < allUser.length; i++) {
+        //     pictureIds[i] = allUser[i].getPicture_id();
+        // }
+        // System.out.println(Arrays.toString(pictureIds));
+        // GetBatchResponse allPictures = documentConsumer.batchGetDocuments(pictureIds);
+        // for (Users user : allUser) {
+        //     try {
+        //         String link = allPictures.getValue().get(user.getPicture_id()).getFilePath();
+        //         user.setPicture_id(link);
+        //     } catch (Exception e) {
+        //         user.setPicture_id(null);
+        //     }
+        // }
       
         return allUser;
     }
@@ -297,23 +297,23 @@ public class UserResolver {
         // }
 
         
-        if(newUser.getPicture_id()==null){
-            searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
-                    "");
-        }else{
-            searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
-                    newUser.getPicture_id());
-        }
-        RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getNickname(), user.getEmail(), password,
-                confirmPassword, rol, newUser.getId());
-        if(registerResponse.getFlag().equals("false")){
-            userConsumer.deleteUser(newUser.getId());
-             throw new AuthError("Auth Problem : Acces denied to this route");
-        }
+        // if(newUser.getPicture_id()==null){
+        //     searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
+        //             "");
+        // }else{
+        //     searchConsumer.AddUsersIndex(newUser.getId(), newUser.getName(), newUser.getLastname(), newUser.getNickname(),
+        //             newUser.getPicture_id());
+        // }
+        // RegisterResponse registerResponse = authConsumer.Register(user.getName(),user.getNickname(), user.getEmail(), password,
+        //         confirmPassword, rol, newUser.getId());
+        // if(registerResponse.getFlag().equals("false")){
+        //     userConsumer.deleteUser(newUser.getId());
+        //      throw new AuthError("Auth Problem : Acces denied to this route");
+        // }
         
-        newUser = documentConsumer.updatePictureLink(newUser);
-        return new CreateResponse(newUser,registerResponse.getToken());
-        // return new CreateResponse(newUser, "ESTEBAN METE TOKEN");
+        // newUser = documentConsumer.updatePictureLink(newUser);
+        // return new CreateResponse(newUser,registerResponse.getToken());
+        return new CreateResponse(newUser, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiI4MTlmZmE0NS1kOGNhLTQzMWEtYmViZi1lZjFiMWJhNTc4MWYiLCJVc2VybmFtZSI6ImRhY2FzNCIsIlJvbGUiOiJhZG1pbiIsImV4cCI6MTcxMzQwNjIwOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzIwMiIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDIifQ.mhcqskwS7Xh_awF-Rlg31ZFun2fyxaoyAyoRr2wuCns");
     }
 
     @MutationMapping

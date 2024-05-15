@@ -287,7 +287,7 @@ services:
       - leare-network
   
 
- #MARK: leare-ms
+  #MARK: leare-ms
   
  # auth_ms
   auth-web:
@@ -295,10 +295,12 @@ services:
     depends_on:
       - auth-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -308,10 +310,12 @@ services:
     depends_on:
       - chat-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -322,10 +326,12 @@ services:
     depends_on:
       - courses-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -340,10 +346,12 @@ services:
     depends_on:
       - document-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -357,10 +365,12 @@ services:
       - document-db
       - document-rabbit
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -376,10 +386,12 @@ services:
       - ES_USERNAME=elastic
       - ES_PASSWORD=password
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     depends_on:
       - search-db
     networks:
@@ -394,10 +406,12 @@ services:
       # DATABASE_URL: mysql2://root@users-db/my_app_development
       DATABASE_URL: mysql2://root:password@users-db/my_app_development
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -405,15 +419,13 @@ services:
 # MARK: volumes  
 
 volumes:
+  gateway_logs:
+    driver: local
   esdata1:
     driver: local
   esdata2:
     driver: local
   dynamodb_data:
-    driver: local
-  file_storage_data:
-    driver: local
-  gateway_logs:
     driver: local
   courses_data:
     driver: local
@@ -423,17 +435,17 @@ volumes:
     driver: local
   users_data:
     driver: local
-  document_temp:
-    driver_opts:
-      type: nfs
-      o: addr=35.203.64.5,rw
-      device: ":/leare_document_ms/temp"
   ldap_data_1:
     driver: local
   ldap_data_2:
     driver: local
   ldap_data_3:
     driver: local
+  document_temp:
+    driver_opts:
+      type: nfs
+      o: addr=35.203.64.5,rw
+      device: ":/leare_document_ms/temp"
   # document_logs:
   #   driver_opts:
   #     type: nfs

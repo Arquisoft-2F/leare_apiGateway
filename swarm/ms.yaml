@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+ #MARK: leare-ms
+  
+ # auth_ms
+  auth-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-auth-web:gcp
+    depends_on:
+      - auth-db
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+  # chat_ms
+  chat-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-chat-web:gcp
+    depends_on:
+      - chat-db
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+
+  # courses_ms
+  courses-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-courses-web:gcp
+    depends_on:
+      - courses-db
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+
+  #document_ms
+  document-server:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-server:gcp
+    # command: "mkdir temp && mkdir logs"
+    volumes:
+      - document_temp:/temp
+    #   - document_logs:/logs
+    depends_on:
+      - document-db
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+  document-sidecar:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-document-sidecar:gcp
+    # command: "mkdir temp && mkdir logs"
+    volumes:
+      - document_temp:/temp
+    #   - document_logs:/logs
+    depends_on:
+      - document-db
+      - document-rabbit
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+
+  # search_ms
+  search-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-search-web:gcp
+    environment:
+      - ROCKET_ADDRESS=0.0.0.0
+      - ROCKET_PORT=3005
+      - ELASTICSEARCH_URL=http://search-db:9200
+      # - ELASTICSEARCH_URL=http://elastic:password@search-db:9200
+      - ES_USERNAME=elastic
+      - ES_PASSWORD=password
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    depends_on:
+      - search-db
+    networks:
+      - leare-network
+
+  # user_ms
+  users-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
+    depends_on:
+      - users-db
+    environment:
+      # DATABASE_URL: mysql2://root@users-db/my_app_development
+      DATABASE_URL: mysql2://root:password@users-db/my_app_development
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+
+# MARK: volumes  
+
+volumes:
+  document_temp:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=35.203.64.5,rw
+      device: ":/leare_document_ms/temp"
+  # document_logs:
+  #   driver_opts:
+  #     type: nfs
+  #     o: addr=nfs-server-ip,rw
+  #     device: ":/path/to/document_logs"  
+
+
+networks:
+  leare-network:
+    external: true

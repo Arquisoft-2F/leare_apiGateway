@@ -1,0 +1,50 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: leare-gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /  # Optional: Adjust based on your application routing needs
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: leare-gateway
+                port:
+                  number: 5555  # Your deployment's container port
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: movil-proxy-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Redirects HTTP to HTTPS
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  # Communicates with the backend using HTTPS
+spec:
+  defaultBackend:  # This will handle all traffic not matching other specified rules
+    service:
+      name: movil-proxy
+      port:
+        number: 443  # Default to HTTPS port
+  rules:
+    - http:
+        paths:
+          # - path: /
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: movil-proxy
+          #       port:
+          #         number: 80  # HTTP traffic
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: movil-proxy
+                port:
+                  number: 443  # HTTPS traffic
