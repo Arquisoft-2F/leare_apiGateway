@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  #MARK: Manager
+  movil-proxy:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-movil-proxy:gcp
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-gateway
+          - node.role == manager
+    networks:
+      - leare-network
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - target: 8080
+        published: 8888
+        protocol: tcp
+        mode: ingress
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.rack == leare-gateway
+    networks:
+      - leare-network
+
+# Gateway
+  leare-gateway:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:k8s
+    ports:
+      - target: 5555
+        published: 5555
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-gateway
+          - node.role == manager
+    networks:
+      - leare-network
+  # MARK: front
+  front:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/front:gcp
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-front
+    networks:
+      - leare-network
+
+ #MARK: leare-ms
+
+  # user_ms
+  users-web:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-users-web:gcp
+    environment:
+      # DATABASE_URL: mysql2://root@users-db/my_app_development
+      DATABASE_URL: mysql2://root:password@users-db/my_app_development
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-ms
+        preferences:
+            - spread: node.id
+    networks:
+      - leare-network
+
+# user_ms
+  users-db:
+    image: mariadb
+    volumes:
+      - users_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: my_app_development
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
+    networks:
+      - leare-network
+
+
+
+# MARK: volumes  
+
+volumes:
+  users_data:
+    driver: local
+ 
+networks:
+  leare-network:
+    driver: overlay
