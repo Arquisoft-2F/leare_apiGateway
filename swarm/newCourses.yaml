@@ -1,0 +1,16 @@
+services:
+  courses-db:
+    image: postgres:16.2-alpine
+    volumes:
+      - courses_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_PORT=5432
+    command: ["sh", "-c", "while true; do sleep 1000; done"]
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.rack == leare-db
+    networks:
+      - leare-network

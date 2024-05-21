@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+
+  courses-db:
+    image: postgres:16.2-alpine
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_PORT=5490
+    command: ["sh", "-c", "while true; do sleep 1000; done"]
+    ports: 
+      - 5490:5490
+    networks:
+      - leare-network
+
+  slave:
+    image: postgres:16.2-alpine
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_PORT=5491
+    command: ["sh", "-c", "while true; do sleep 1000; done"]
+    ports: 
+      - 5491:5491
+    networks:
+      - leare-network
+
+  users-db:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: my_app_development
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - leare-network
+
+  users-slave:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: my_app_development
+      # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - leare-network
+
+
+
+networks:
+  leare-network:
+    driver: bridge
