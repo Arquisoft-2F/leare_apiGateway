@@ -6,11 +6,11 @@ services:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-movil-proxy:gcp
     ports:
       - target: 80
-        published: 80
+        published: 3009
         protocol: tcp
         mode: host
       - target: 443
-        published: 443
+        published: 3010
         protocol: tcp
         mode: host
     deploy:
@@ -39,6 +39,27 @@ services:
     networks:
       - leare-network
 
+# Load Balancer
+  leare-balancer:
+    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-balancer:gcp 
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-balancer
+          - node.role == manager
+    networks:
+      - leare-network
+
 # Gateway
   leare-gateway:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-gateway:gcp
@@ -50,11 +71,10 @@ services:
     volumes:
       - gateway_logs:/app/logs
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-gateway
-          - node.role == manager
     networks:
       - leare-network
  
