@@ -322,7 +322,7 @@ services:
     depends_on:
       - auth-db
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -337,7 +337,7 @@ services:
     depends_on:
       - chat-db
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -353,7 +353,7 @@ services:
     depends_on:
       - courses-db
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -373,7 +373,7 @@ services:
     depends_on:
       - document-db
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -392,7 +392,7 @@ services:
       - document-db
       - document-rabbit
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -413,7 +413,7 @@ services:
       - ES_USERNAME=elastic
       - ES_PASSWORD=password
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -433,7 +433,7 @@ services:
       # DATABASE_URL: mysql2://root@users-db/my_app_development
       DATABASE_URL: mysql2://root:password@users-db/my_app_development
     deploy:
-      replicas: 2
+      replicas: 1
       placement:
         constraints:
           - node.labels.rack == leare-ms
