@@ -12,5 +12,7 @@ services:
       placement:
         constraints:
           - node.labels.rack == leare-db
+        preferences:
+            - spread: node.id
     networks:
       - leare-network

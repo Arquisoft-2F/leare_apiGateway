@@ -8,11 +8,12 @@ sudo docker swarm join --token SWMTKN-1-2tbi0jtw6j2m1asankbv8f3zen5a2yd6gwa4u7zr
 # get nodes id
 sudo docker node ls
 # add labels to nodes   the number is the node id that you get from the last command
-sudo docker node update --label-add rack=leare-balancer <node-id>
+sudo docker node update --label-add rack=leare-master <node-id>
 sudo docker node update --label-add rack=leare-gateway <node-id>
 sudo docker node update --label-add rack=leare-front <node-id>
 sudo docker node update --label-add rack=leare-ms <node-id>
 sudo docker node update --label-add rack=leare-db <node-id>
+sudo docker node update --label-add rack=leare-db-replicas <node-id>
 #create the network
 sudo docker network create --scope=swarm --driver overlay --attachable leare-network
 # deploy

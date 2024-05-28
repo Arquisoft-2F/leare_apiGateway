@@ -16,10 +16,12 @@ docker exec -it dind-worker2  docker swarm join --token SWMTKN-1-2tbi0jtw6j2m1as
 # get nodes id
 docker node ls
 # add labels to nodes   the number is the node id that you get from the last command
+docker node update --label-add rack=leare-master <node-id>
 docker node update --label-add rack=leare-gateway <node-id>
 docker node update --label-add rack=leare-front <node-id>
 docker node update --label-add rack=leare-ms <node-id>
 docker node update --label-add rack=leare-db <node-id>
+docker node update --label-add rack=leare-db-replicas <node-id>
 #create the network
 docker network create --scope=swarm --driver overlay --attachable leare-network
 # deploy

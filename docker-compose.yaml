@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  #MARK: Balancer
-  leate-balancer:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
-    ports:
-      - "443:443"
-      - "80:80"
-    networks:
-      - leare-network
-
   #MARK: Gateway
   leare-gateway:
     build:

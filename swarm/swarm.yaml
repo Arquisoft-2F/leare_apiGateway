@@ -1,47 +1,8 @@
 version: '3.8'
-
 services:
-  #MARK: Manager
+  #MARK: Master
   movil-proxy:
     image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-movil-proxy:gcp
-    ports:
-      - target: 80
-        published: 3009
-        protocol: tcp
-        mode: host
-      - target: 443
-        published: 3010
-        protocol: tcp
-        mode: host
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.labels.rack == leare-gateway
-          - node.role == manager
-    networks:
-      - leare-network
-
-
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - target: 8080
-        published: 8888
-        protocol: tcp
-        mode: host
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-    networks:
-      - leare-network
-
-# Load Balancer
-  leare-balancer:
-    image: northamerica-northeast1-docker.pkg.dev/mystic-tempo-416400/leare/apigateway-leare-balancer:gcp 
     ports:
       - target: 80
         published: 80
@@ -55,10 +16,91 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.labels.rack == leare-balancer
+          - node.labels.rack == leare-master
           - node.role == manager
     networks:
       - leare-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8080:8080"
+    volumes: 
+      - "/:/rootfs"
+      - "/var/run:/var/run"
+      - "/sys:/sys"
+      - "/var/lib/docker/:/var/lib/docker"
+      - "/dev/disk/:/dev/disk"
+    privileged: true
+    devices: 
+      - "/dev/kmsg"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-master
+          - node.role == manager
+    networks:
+      - leare-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes: 
+      - /home/david/leare/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:z
+    privileged: true
+    depends_on:
+      - cadvisor
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-master
+          - node.role == manager
+    networks:
+      - leare-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - DS_PROMETHEUS=prometheus
+    volumes: 
+      - grafana-data:/var/lib/grafana
+      - /home/david/leare/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:z
+      # - /home/david/leare/grafana/dashboard.json:/var/lib/grafana/dashboards/dashboard.json:z
+      - /home/david/leare/grafana/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml:z
+    privileged: true
+    depends_on:
+      - prometheus
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-master
+          - node.role == manager
+    networks:
+      - leare-network
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - target: 8080
+        published: 8888
+        protocol: tcp
+        mode: ingress
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - leare-network
+#MARK: API
 
 # Gateway
   leare-gateway:
@@ -75,6 +117,8 @@ services:
       placement:
         constraints:
           - node.labels.rack == leare-gateway
+        preferences:
+          - spread: node.id
     networks:
       - leare-network
  
@@ -91,11 +135,12 @@ services:
     depends_on:
       - chat-web
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-gateway
-          - node.role == manager
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -184,12 +229,19 @@ services:
     environment:
       - POSTGRES_PASSWORD=root
       - POSTGRES_PORT=5490
-    command: -p 5490
+    ports:
+      - 5490:5490
+    command: ["sh", "-c", "while true; do sleep 1000; done"]
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
-          - node.labels.rack == leare-db
+          - node.labels.rack != leare-master
+          - node.labels.rack != leare-gateway
+          - node.labels.rack != leare-front
+          - node.labels.rack != leare-ms
+        preferences:
+          - spread: node.id
     networks:
       - leare-network
 
@@ -279,15 +331,22 @@ services:
     image: mariadb
     volumes:
       - users_data:/var/lib/mysql
+      - users_master:/etc/mysql
     environment:
       MYSQL_DATABASE: my_app_development
       # MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_PASSWORD: password
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
-          - node.labels.rack == leare-db
+          - node.labels.rack != leare-master
+          - node.labels.rack != leare-gateway
+          - node.labels.rack != leare-front
+          - node.labels.rack != leare-ms
+        
+        preferences:
+            - spread: node.id
     networks:
       - leare-network
 
@@ -342,7 +401,7 @@ services:
     depends_on:
       - auth-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -357,7 +416,7 @@ services:
     depends_on:
       - chat-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -373,7 +432,7 @@ services:
     depends_on:
       - courses-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -393,7 +452,7 @@ services:
     depends_on:
       - document-db
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -412,7 +471,7 @@ services:
       - document-db
       - document-rabbit
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -433,7 +492,7 @@ services:
       - ES_USERNAME=elastic
       - ES_PASSWORD=password
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -453,7 +512,7 @@ services:
       # DATABASE_URL: mysql2://root@users-db/my_app_development
       DATABASE_URL: mysql2://root:password@users-db/my_app_development
     deploy:
-      replicas: 1
+      replicas: 2
       placement:
         constraints:
           - node.labels.rack == leare-ms
@@ -482,11 +541,15 @@ volumes:
     driver: local
   users_data:
     driver: local
+  users_master:
+    driver: local
   ldap_data_1:
     driver: local
   ldap_data_2:
     driver: local
   ldap_data_3:
+    driver: local
+  grafana-data:
     driver: local
   document_temp:
     external: true

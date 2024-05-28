@@ -7,13 +7,19 @@ psql -p 5490
 CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD 'replica';
 \q
 
+psql -p 5490 -c "ALTER USER postgres PASSWORD 'root';"
+
+
 echo "listen_addresses = '*'" >> /var/lib/postgresql/data/postgresql.conf
 echo "wal_level = replica" >> /var/lib/postgresql/data/postgresql.conf
 echo "max_wal_senders = 10" >> /var/lib/postgresql/data/postgresql.conf
 echo "wal_keep_size = 64" >> /var/lib/postgresql/data/postgresql.conf
+echo "host all all 0.0.0.0/0 md5" >>/var/lib/postgresql/data/pg_hba.conf
 echo "host replication replicator 0.0.0.0/0 md5" >> /var/lib/postgresql/data/pg_hba.conf
 exit
 pg_ctl restart -D /var/lib/postgresql/data
+
+
     #if db is not up
     su - postgres
     pg_ctl -o "-p 5490" start -D /var/lib/postgresql/data
@@ -28,4 +34,4 @@ echo "primary_conninfo = 'host=<master-dns-name> port=5490 user=replicator passw
 chown -R postgres:postgres /var/lib/postgresql/data
 chmod -R 700 /var/lib/postgresql/data
 su - postgres
-pg_ctl -o "-p 5491" start -D /var/lib/postgresql/data
+pg_ctl -o "-p 5490" start -D /var/lib/postgresql/data
