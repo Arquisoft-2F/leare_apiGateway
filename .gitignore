@@ -6,6 +6,7 @@ target/
 logs/
 locustfile.py
 
+leare_proxy_movil/certs/
 k8sPodman/db/
 ### STS ###
 .apt_generated
