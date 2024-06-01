@@ -60,6 +60,34 @@ services:
           - node.role == manager
     networks:
       - leare-network
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-master
+          - node.role == manager
+    networks:
+      - leare-network
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    volumes:
+      - /var/log:/var/log
+      - /home/david/leare/loki/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.rack == leare-master
+          - node.role == manager
+    networks:
+      - leare-network
 
   grafana:
     image: grafana/grafana:latest
@@ -74,8 +102,6 @@ services:
       # - /home/david/leare/grafana/dashboard.json:/var/lib/grafana/dashboards/dashboard.json:z
       - /home/david/leare/grafana/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml:z
     privileged: true
-    depends_on:
-      - prometheus
     deploy:
       replicas: 1
       placement:

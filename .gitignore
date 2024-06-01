@@ -5,10 +5,6 @@ target/
 !**/src/test/**/target/
 logs/
 locustfile.py
-steps.sh
-tags.dockerfile.sh
-tags.podman.sh
-test.sh
 
 k8sPodman/db/
 ### STS ###

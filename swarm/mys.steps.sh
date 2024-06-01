@@ -50,22 +50,22 @@ sudo docker network inspect <the network name>
 mariadb -u root -p'password'
 STOP SLAVE;
 CHANGE MASTER TO #remember that this is from the other guy
-    MASTER_HOST='<SLAVE-FULL-DNS-NAME>', #change
+    MASTER_HOST='<DNS-Name-2>', #change
     MASTER_USER='replicator',
     MASTER_PASSWORD='replica',
-    MASTER_LOG_FILE='<log-file-name>', #change (this is the file name from the show master status, normally mysql-bin.000001 )
-    MASTER_LOG_POS=<log-file-pos>; #change same from above
+    MASTER_LOG_FILE='<log-file-name-2>', #change (this is the file name from the show master status, normally mysql-bin.000001 )
+    MASTER_LOG_POS=<log-position-2>; #change same from above
 
 # Slave
 <INSIDE-CONTAINER>
 mariadb -u root -p'password'
 STOP SLAVE;
 CHANGE MASTER TO
-    MASTER_HOST='<SLAVE-FULL-DNS-NAME>', #change
+    MASTER_HOST='<DNS-Name-2>', #change
     MASTER_USER='replicator',
     MASTER_PASSWORD='replica',
-    MASTER_LOG_FILE='<log-file-name>', #change (this is the file name from the show master status, normally mysql-bin.000001 )
-    MASTER_LOG_POS=<log-file-pos>; #change same from above
+    MASTER_LOG_FILE='<log-file-name-1>', #change (this is the file name from the show master status, normally mysql-bin.000001 )
+    MASTER_LOG_POS=<log-position-1>; #change same from above
 START SLAVE;
 exit
 sudo docker restart <container-id>
