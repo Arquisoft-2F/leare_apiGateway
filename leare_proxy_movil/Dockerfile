@@ -1,0 +1,9 @@
+FROM nginx:latest
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY nginx.conf /etc/nginx/conf.d/
+
+COPY certs/ /etc/nginx/ssl/
+
+EXPOSE 80 443
